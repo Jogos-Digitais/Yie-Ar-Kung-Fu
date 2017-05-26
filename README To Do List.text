@@ -1,0 +1,35 @@
+
+	///
+	///TO DO LIST 
+	///
+	///Yie Ar Kung-Fu
+	///
+	///Gabriel Sehna | Gabriel Rebello | Vander Costa
+	///
+	
+	//Movimentação
+	prototipoMecanica1
+	{
+	 Limites da tela, colisão com a parede;
+	 Movimentação;
+	 Se baixar;
+	 Salto;
+	 Salto para frente;
+	 Gravidade;
+	}
+	
+	//Golpes
+	prototipoMecanica2
+	{
+	 Socos;
+	 Chutes;
+	 Voadoras;
+	}
+	
+	//Colisões
+	prototipoMecanica3
+	{
+	 Hitboxes;
+	 Saco de pancada sem IA;
+	 Pontuações;
+	}

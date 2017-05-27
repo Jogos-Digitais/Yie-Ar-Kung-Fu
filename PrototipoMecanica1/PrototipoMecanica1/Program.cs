@@ -14,7 +14,7 @@ namespace PrototipoMecanica1
         [STAThread]
         static void Main()
         {
-            using (var game = new Game1())
+            using (var game = new World())
                 game.Run();
         }
     }

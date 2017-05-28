@@ -14,6 +14,8 @@ namespace PrototipoMecanica1
         public static Texture2D bulletTex;
         public static Texture2D debugCircleTex;
 
+        public static Texture2D stageTexture;
+
         public static SpriteFont fontNormal;
 
         public static SpriteBatch spriteBatch;
@@ -47,6 +49,8 @@ namespace PrototipoMecanica1
             playerTex = Content.Load<Texture2D>("Sprites/Char19");
             enemyTex = Content.Load<Texture2D>("Sprites/Char02");
             bulletTex = Content.Load<Texture2D>("Sprites/Char35");
+
+            stageTexture = Content.Load<Texture2D>("Sprites/Stage");
 
             debugCircleTex = Content.Load<Texture2D>("Sprites/debug_circle");
 
@@ -87,6 +91,8 @@ namespace PrototipoMecanica1
 
             spriteBatch.Begin(SpriteSortMode.BackToFront,
                         BlendState.NonPremultiplied);
+
+            spriteBatch.Draw(stageTexture, new Vector2(0f, 0f), Color.White);
 
             spriteBatch.DrawString(
               fontNormal,

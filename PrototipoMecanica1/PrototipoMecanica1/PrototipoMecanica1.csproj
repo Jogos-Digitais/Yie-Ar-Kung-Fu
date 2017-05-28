@@ -51,10 +51,12 @@
     <Compile Include="Entity\Body\Projectile\Jar.cs" />
     <Compile Include="Entity\Entity.cs" />
     <Compile Include="Entity\Interface\Button.cs" />
+    <Compile Include="Entity\Interface\Lifebar.cs" />
     <Compile Include="Game.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Screens\Menu.cs" />
+    <Compile Include="Screens\Stage.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="MonoGame.Framework">

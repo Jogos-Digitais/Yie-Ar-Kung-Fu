@@ -13,7 +13,7 @@ namespace PrototipoMecanica1
   {
     public float visionRadius = 64f;
 
-    public Enemy(Vector2 initPos) : base(initPos)
+    public Enemy(Vector2 initPos, Vector2 size) : base(initPos, size)
     {
       speed /= 2f;
     }

@@ -11,7 +11,7 @@ namespace PrototipoMecanica1
 {
   public class Human : Character
   {
-    public Human(Vector2 initPos) : base(initPos) { }
+    public Human(Vector2 initPos, Vector2 size) : base(initPos, size) { }
 
     public override Vector2 GetDir()
     {

@@ -19,7 +19,7 @@ namespace PrototipoMecanica1
 
     Vector2 shootDir = new Vector2(1, 0);
 
-    public Character(Vector2 initPos) : base(initPos) { }
+    public Character(Vector2 initPos, Vector2 size) : base(initPos, size) { }
 
     public virtual bool WantsToFire() { return false; }
 
@@ -39,7 +39,7 @@ namespace PrototipoMecanica1
 
         if (WantsToFire())
         {
-          World.entities.Add(new Fire(this, pos, shootDir));
+          World.entities.Add(new Fire(this, pos, shootDir, new Vector2(32, 32)));
         }
       }
       else

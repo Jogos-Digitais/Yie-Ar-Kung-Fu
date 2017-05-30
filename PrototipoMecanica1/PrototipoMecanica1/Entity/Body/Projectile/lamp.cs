@@ -11,7 +11,7 @@ namespace PrototipoMecanica1
 {
     public class Lamp : Body
     {
-        public Lamp(Vector2 initPos) : base(initPos)
+        public Lamp(Vector2 initPos, Vector2 size) : base(initPos, size)
         {
         }
     }

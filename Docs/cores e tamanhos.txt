@@ -1,0 +1,13 @@
+Barra de vida no "vermelho"
+
+Red 216
+Green 64
+Blue 96
+
+#d84060
+
+---
+
+97 começa da arena / 928 termina o limite da arena
+
+768 limite inferior (192 limite de baixo para cima)

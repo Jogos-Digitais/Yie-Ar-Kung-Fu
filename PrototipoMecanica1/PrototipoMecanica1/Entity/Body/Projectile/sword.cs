@@ -11,7 +11,7 @@ namespace PrototipoMecanica1
 {
     public class Sword : Body
     {
-        public Sword(Vector2 initPos) : base(initPos)
+        public Sword(Vector2 initPos, Vector2 size) : base(initPos, size)
         {
         }
     }

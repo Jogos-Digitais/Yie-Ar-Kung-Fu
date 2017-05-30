@@ -17,7 +17,7 @@ namespace PrototipoMecanica1
 
     public Character myShooter = null;
 
-    public Fire(Character shooter, Vector2 initPos, Vector2 initDir) : base(initPos)
+    public Fire(Character shooter, Vector2 initPos, Vector2 initDir, Vector2 size) : base(initPos, size)
     {
       myShooter = shooter;
       dir = initDir;

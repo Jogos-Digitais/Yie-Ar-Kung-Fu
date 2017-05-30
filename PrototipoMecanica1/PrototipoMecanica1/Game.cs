@@ -46,8 +46,8 @@ namespace PrototipoMecanica1
         {
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
-            playerTex = Content.Load<Texture2D>("Sprites/Char19");
-            enemyTex = Content.Load<Texture2D>("Sprites/Char02");
+            playerTex = Content.Load<Texture2D>("Sprites/Player");
+            enemyTex = Content.Load<Texture2D>("Sprites/FirstEnemy");
             bulletTex = Content.Load<Texture2D>("Sprites/Char35");
 
             stageTexture = Content.Load<Texture2D>("Sprites/Stage");
@@ -56,12 +56,9 @@ namespace PrototipoMecanica1
 
             fontNormal = Content.Load<SpriteFont>("Fonts/Normal");
 
-            entities.Add(new Human(new Vector2(320, 100)));
+            entities.Add(new Human(new Vector2(320, 100), new Vector2(88, 128)));
 
-            entities.Add(new Enemy(new Vector2(220, 300)));
-            entities.Add(new Enemy(new Vector2(420, 300)));
-            entities.Add(new Enemy(new Vector2(220, 200)));
-            entities.Add(new Enemy(new Vector2(420, 200)));
+            entities.Add(new Enemy(new Vector2(220, 300), new Vector2(108, 160)));
         }
 
         protected override void UnloadContent()

@@ -11,7 +11,8 @@ namespace PrototipoMecanica1
 {
     public class Jar : Body
     {
-        public Jar(Vector2 initPos, Vector2 size) : base(initPos, size)
+        public Jar(Vector2 initPos, Vector2 size)
+            : base(initPos, size)
         {
         }
     }

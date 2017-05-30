@@ -8,6 +8,6 @@ Blue 96
 
 ---
 
-97 começa da arena / 928 termina o limite da arena
+96 começo da arena / 928 termina o limite da arena
 
-768 limite inferior (192 limite de baixo para cima)
+768 limite inferior (519 limite de baixo para cima)

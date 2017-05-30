@@ -9,22 +9,33 @@ namespace PrototipoMecanica1
     {
         GraphicsDeviceManager graphics;
 
-        public static Texture2D playerTex;
-        public static Texture2D enemyTex;
-        public static Texture2D bulletTex;
-        public static Texture2D debugCircleTex;
-
-        public static Texture2D stageTexture;
-
+        //Sprites - Fonts
         public static SpriteFont fontNormal;
 
+        //Sprites - Characters
+        public static Texture2D playerTexture;
+        public static Texture2D enemy001Texture;
+
+        //Sprites - Projectiles
+        public static Texture2D fireTexture;
+
+        //Sprites - Stages
+        public static Texture2D stageTexture;
+
+        //Sprites - Debugs
+        public static Texture2D debugCircleTex;
+
+        //Sprite Batches
         public static SpriteBatch spriteBatch;
 
-        public static List<Entity> entities = new List<Entity>();
-
+        //Keyboard state
         public static KeyboardState prevKeyState = Keyboard.GetState();
 
+        //Debug mode
         public static bool debugMode = false;
+
+        //World entities
+        public static List<Entity> entities = new List<Entity>();
 
         public World()
         {
@@ -44,20 +55,27 @@ namespace PrototipoMecanica1
 
         protected override void LoadContent()
         {
+            //Create new sprite batch
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
-            playerTex = Content.Load<Texture2D>("Sprites/Player");
-            enemyTex = Content.Load<Texture2D>("Sprites/FirstEnemy");
-            bulletTex = Content.Load<Texture2D>("Sprites/Char35");
-
-            stageTexture = Content.Load<Texture2D>("Sprites/Stage");
-
-            debugCircleTex = Content.Load<Texture2D>("Sprites/debug_circle");
-
+            //Load fonts
             fontNormal = Content.Load<SpriteFont>("Fonts/Normal");
 
-            entities.Add(new Human(new Vector2(320, 100), new Vector2(88, 128)));
+            //Load sprites - Characters
+            playerTexture = Content.Load<Texture2D>("Sprites/Player");
+            enemy001Texture = Content.Load<Texture2D>("Sprites/Enemy001");
 
+            //Load sprites - Objects
+            fireTexture = Content.Load<Texture2D>("Sprites/Char35");
+
+            //Load sprites - Stages
+            stageTexture = Content.Load<Texture2D>("Sprites/Stage");
+
+            //Load sprites - Debugs
+            debugCircleTex = Content.Load<Texture2D>("Sprites/debug_circle");
+
+            //Adding entities
+            entities.Add(new Human(new Vector2(320, 100), new Vector2(88, 128)));
             entities.Add(new Enemy(new Vector2(220, 300), new Vector2(108, 160)));
         }
 
@@ -81,20 +99,23 @@ namespace PrototipoMecanica1
 
             base.Update(gameTime);
         }
-        
+
         protected override void Draw(GameTime gameTime)
         {
+            //Clear screen
             GraphicsDevice.Clear(Color.Black);
 
-            spriteBatch.Begin(SpriteSortMode.BackToFront,
-                        BlendState.NonPremultiplied);
+            //Begin draws
+            spriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.NonPremultiplied);
 
-            spriteBatch.Draw(stageTexture, new Vector2(0f, 0f), Color.White);
+            //Draw stage
+            spriteBatch.Draw(stageTexture, new Vector2(0f, 0f), null, Color.White, 0.0f, Vector2.Zero, Vector2.One, SpriteEffects.None, 0.3f);
 
+            //Draw texts
             spriteBatch.DrawString(
               fontNormal,
               "F1 - Debug Mode (" + (debugMode ? "DEBUG ON" : "DEBUG OFF") + ")\n" +
-			  "Control - Shoot!",
+              "Control - Shoot!",
               new Vector2(10, 10),  //position
               Color.White,          //color
               0.0f,                 //rotation
@@ -104,9 +125,11 @@ namespace PrototipoMecanica1
               0.0f
             );
 
+            //Draw each entity
             foreach (Entity e in entities)
                 e.Draw(gameTime);
 
+            //End draws
             spriteBatch.End();
 
             base.Draw(gameTime);

@@ -13,12 +13,10 @@ namespace PrototipoMecanica1
     {
         public virtual void Update(GameTime gametime)
         {
-
         }
 
         public virtual void Draw(GameTime gametime)
         {
-
         }
     }
 }

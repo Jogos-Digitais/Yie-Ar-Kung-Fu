@@ -58,19 +58,6 @@ namespace PrototipoMecanica1
             if (s > 0)
                 dir = dir / s;
 
-            //Arena limits
-            if (pos.X <= 97)
-                pos.X = 97;
-
-            if (pos.Y <= 520)
-                pos.Y = 520;
-
-            if (pos.X >= 928)
-                pos.X = 928;
-
-            if (pos.Y >= 768)
-                pos.Y = 768;
-
             //simulate physics independently in two axis
             for (int axis = 0; axis < 2; axis++)
             {
@@ -103,6 +90,19 @@ namespace PrototipoMecanica1
                 if (collider != null) //undo movement!
                     pos = bkpPos;
             }
+
+            //Arena limits
+            if (pos.X <= size.X / 2f + 96f) //(char width / 2) + limit
+                pos.X = size.X / 2f + 96f;
+
+            if (pos.Y <= size.Y / 2f + 519f) //(char height / 2) + limit
+                pos.Y = size.Y / 2f + 519f;
+
+            if (pos.X >= size.X / 2f + (928f - size.X)) //(char width / 2) + (limit - char width)
+                pos.X = size.X / 2f + (928f - size.X);
+
+            if (pos.Y >= size.Y / 2f + (768f - size.Y)) //(char height / 2) + (limit - char height)
+                pos.Y = size.Y / 2f + (768f - size.Y);
         }
 
         public override void Draw(GameTime gameTime)
@@ -121,7 +121,7 @@ namespace PrototipoMecanica1
               new Vector2(size.X / sprite.Width,
                           size.Y / sprite.Height), //scale
               SpriteEffects.None,
-              0.0f
+              0.1f
             );
         }
 

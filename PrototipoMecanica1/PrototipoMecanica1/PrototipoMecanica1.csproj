@@ -41,6 +41,7 @@
     <ApplicationManifest>app.manifest</ApplicationManifest>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="CheckStates.cs" />
     <Compile Include="Entity\Body\Body.cs" />
     <Compile Include="Entity\Body\Character\Character.cs" />
     <Compile Include="Entity\Body\Character\Enemy\Enemy.cs" />

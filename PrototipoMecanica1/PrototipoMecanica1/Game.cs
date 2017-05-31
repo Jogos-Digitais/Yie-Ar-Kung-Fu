@@ -36,6 +36,12 @@ namespace PrototipoMecanica1
 
         //World entities
         public static List<Entity> entities = new List<Entity>();
+		
+		//Machine states
+		public enum GameState { Null, Menu, Stage };
+		
+		//Current State
+		public static GameState currentState = GameState.Null;
 
         public World()
         {

@@ -121,7 +121,7 @@ namespace PrototipoMecanica1
               new Vector2(size.X / sprite.Width,
                           size.Y / sprite.Height), //scale
               SpriteEffects.None,
-              0.1f
+              0.2f
             );
         }
 

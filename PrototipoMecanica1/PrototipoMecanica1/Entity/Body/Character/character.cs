@@ -20,14 +20,147 @@ namespace PrototipoMecanica1
         Vector2 shootDir = new Vector2(1, 0);
 
         //Machine states
-        public enum CharacterState { Null, Standing, Moving, Jumping, Attacking, Recoiling, Dead }; //Nenhum estado, parado, movendo-se, saltando, atacando, recuo, morto
+        public enum CharacterState { Null, Standing, Moving, Jumping, Attacking, Recoiling, Dead }; //Nenhum estado, parado, movendo-se, saltando, atacando, recuando, morto
 
         //Current State
-        public CharacterState currentState = CharacterState.Null;
+        public static CharacterState currentState = CharacterState.Null;
 
-        public Character(Vector2 initPos, Vector2 size) : base(initPos, size) { }
+        public Character(Vector2 initPos, Vector2 size) : base(initPos, size)
+        {
+            //New position
+            EnterCharacterState(CharacterState.Standing);
+        }
 
+        //States
+        public static void EnterCharacterState(CharacterState newState)
+        {
+            LeaveCharacterState();
 
+            currentState = newState;
+
+            switch (currentState)
+            {
+                case CharacterState.Standing:
+                    { }
+                    break;
+
+                case CharacterState.Moving:
+                    { }
+                    break;
+
+                case CharacterState.Jumping:
+                    { }
+                    break;
+
+                case CharacterState.Attacking:
+                    { }
+                    break;
+
+                case CharacterState.Recoiling:
+                    { }
+                    break;
+
+                case CharacterState.Dead:
+                    { };
+                    break;
+            }
+        }
+
+        public static void UpdateCharacterState(GameTime gameTime)
+        {
+            //Timer
+            float deltaTime = (float)gameTime.ElapsedGameTime.TotalSeconds;
+
+            switch (currentState)
+            {
+                case CharacterState.Standing:
+                    { }
+                    break;
+
+                case CharacterState.Moving:
+                    { }
+                    break;
+
+                case CharacterState.Jumping:
+                    { }
+                    break;
+
+                case CharacterState.Attacking:
+                    { }
+                    break;
+
+                case CharacterState.Recoiling:
+                    { }
+                    break;
+
+                case CharacterState.Dead:
+                    { };
+                    break;
+            }
+        }
+
+        public static void DrawCharacterState(GameTime gameTime)
+        {
+            //Timer
+            float deltaTime = (float)gameTime.ElapsedGameTime.TotalSeconds;
+
+            switch (currentState)
+            {
+                case CharacterState.Standing:
+                    { }
+                    break;
+
+                case CharacterState.Moving:
+                    { }
+                    break;
+
+                case CharacterState.Jumping:
+                    { }
+                    break;
+
+                case CharacterState.Attacking:
+                    { }
+                    break;
+
+                case CharacterState.Recoiling:
+                    { }
+                    break;
+
+                case CharacterState.Dead:
+                    { };
+                    break;
+            }
+        }
+
+        public static void LeaveCharacterState()
+        {
+            switch (currentState)
+            {
+                case CharacterState.Standing:
+                    { }
+                    break;
+
+                case CharacterState.Moving:
+                    { }
+                    break;
+
+                case CharacterState.Jumping:
+                    { }
+                    break;
+
+                case CharacterState.Attacking:
+                    { }
+                    break;
+
+                case CharacterState.Recoiling:
+                    { }
+                    break;
+
+                case CharacterState.Dead:
+                    { };
+                    break;
+            }
+        }
 
         public virtual bool WantsToFire() { return false; }
 
@@ -57,6 +190,14 @@ namespace PrototipoMecanica1
 
             if (health <= 0.0f)
                 World.entities.Remove(this);
+        }
+
+        public override bool IgnoreCollision(Entity other)
+        {
+            if (other is Enemy) //ignore collision against my enemy!
+                return true;
+
+            return false;
         }
     }
 }

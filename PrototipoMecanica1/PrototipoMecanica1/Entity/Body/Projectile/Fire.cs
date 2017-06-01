@@ -17,6 +17,8 @@ namespace PrototipoMecanica1
 
         public Character myShooter = null;
 
+        public float lifeTime = 5f;
+
         public Fire(Character shooter, Vector2 initPos, Vector2 initDir, Vector2 size)
             : base(initPos, size)
         {
@@ -34,6 +36,30 @@ namespace PrototipoMecanica1
         public override Texture2D GetSprite()
         {
             return World.fireTexture;
+        }
+
+        public override void Update(GameTime gameTime)
+        {
+            float deltaTime = (float)gameTime.ElapsedGameTime.TotalSeconds;
+
+            base.Update(gameTime);
+
+            lifeTime -= deltaTime;
+
+            if (lifeTime <= 0)
+            {
+                World.entities.Remove(this);
+            }
+        }
+
+        public override void Draw(GameTime gameTime)
+        {
+            if (World.debugMode)
+            {
+                World.spriteBatch.DrawString(World.fontNormal, "Expire time: " + lifeTime, new Vector2(this.pos.X, this.pos.Y + 50f), Color.White, 0.0f, Vector2.Zero, 1f, SpriteEffects.None, 0.0f);
+            }
+
+            base.Draw(gameTime);
         }
 
         public override void CollisionDetected(Entity other)

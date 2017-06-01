@@ -24,6 +24,7 @@ namespace PrototipoMecanica1
 
         //Sprites - Debugs
         public static Texture2D debugCircleTex;
+        public static Texture2D debugRectangleTex;
 
         //Sprite Batches
         public static SpriteBatch spriteBatch;
@@ -72,17 +73,21 @@ namespace PrototipoMecanica1
             enemy001Texture = Content.Load<Texture2D>("Sprites/Enemy001");
 
             //Load sprites - Objects
-            fireTexture = Content.Load<Texture2D>("Sprites/Char35");
+            fireTexture = Content.Load<Texture2D>("Sprites/Fire");
 
             //Load sprites - Stages
             stageTexture = Content.Load<Texture2D>("Sprites/Stage");
 
             //Load sprites - Debugs
             debugCircleTex = Content.Load<Texture2D>("Sprites/debug_circle");
+            debugRectangleTex = Content.Load<Texture2D>("Sprites/debug_rectangle");
 
             //Adding entities
             entities.Add(new Human(new Vector2(260, 704), new Vector2(88, 128)));
             entities.Add(new Enemy(new Vector2(642, 688), new Vector2(108, 160)));
+
+            //Enter in initial state
+            GameStates.EnterGameState(GameState.Stage);
         }
 
         protected override void UnloadContent()
@@ -115,7 +120,7 @@ namespace PrototipoMecanica1
             spriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.NonPremultiplied);
 
             //Draw stage
-            spriteBatch.Draw(stageTexture, new Vector2(0f, 0f), null, Color.White, 0.0f, Vector2.Zero, Vector2.One, SpriteEffects.None, 0.3f);
+            spriteBatch.Draw(stageTexture, new Vector2(0f, 0f), null, Color.White, 0.0f, Vector2.Zero, Vector2.One, SpriteEffects.None, 0.4f);
 
             //Draw texts
             spriteBatch.DrawString(

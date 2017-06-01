@@ -65,10 +65,10 @@ namespace PrototipoMecanica1
                   0.0f,
                   new Vector2(World.debugCircleTex.Width,
                               World.debugCircleTex.Height) / 2f, //pivot
-                  new Vector2(2 * visionRadius / World.debugCircleTex.Width,
-                              2 * visionRadius / World.debugCircleTex.Height), //scale
+                  new Vector2(2f * visionRadius / (float)World.debugCircleTex.Width,
+                              2f * visionRadius / (float)World.debugCircleTex.Height), //scale
                   SpriteEffects.None,
-                  0.2f
+                  0.3f
                 );
             }
 

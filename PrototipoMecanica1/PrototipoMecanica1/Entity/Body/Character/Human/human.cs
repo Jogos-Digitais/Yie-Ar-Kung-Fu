@@ -11,7 +11,10 @@ namespace PrototipoMecanica1
 {
     public class Human : Character
     {
-        public Human(Vector2 initPos, Vector2 size) : base(initPos, size) { }
+        public Human(Vector2 initPos, Vector2 size) : base(initPos, size)
+        {
+            speed *= 2;
+        }
 
         public override Vector2 GetDir()
         {
@@ -23,8 +26,8 @@ namespace PrototipoMecanica1
             if (Keyboard.GetState().IsKeyDown(Keys.Left))
                 dir.X += -1.0f;
 
-            if (Keyboard.GetState().IsKeyDown(Keys.Up))
-                dir.Y += -1.0f;
+            //if (Keyboard.GetState().IsKeyDown(Keys.Up))
+            //    dir.Y += -1.0f;
 
             if (Keyboard.GetState().IsKeyDown(Keys.Down))
                 dir.Y += 1.0f;

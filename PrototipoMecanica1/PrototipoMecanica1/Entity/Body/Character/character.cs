@@ -19,7 +19,15 @@ namespace PrototipoMecanica1
 
         Vector2 shootDir = new Vector2(1, 0);
 
+        //Machine states
+        public enum CharacterState { Null, Standing, Moving, Jumping, Attacking, Recoiling, Dead }; //Nenhum estado, parado, movendo-se, saltando, atacando, recuo, morto
+
+        //Current State
+        public CharacterState currentState = CharacterState.Null;
+
         public Character(Vector2 initPos, Vector2 size) : base(initPos, size) { }
+
+
 
         public virtual bool WantsToFire() { return false; }
 

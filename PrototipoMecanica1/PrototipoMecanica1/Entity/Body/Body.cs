@@ -95,8 +95,8 @@ namespace PrototipoMecanica1
             if (pos.X <= size.X / 2f + 96f) //(char width / 2) + limit
                 pos.X = size.X / 2f + 96f;
 
-            if (pos.Y <= size.Y / 2f + 519f) //(char height / 2) + limit
-                pos.Y = size.Y / 2f + 519f;
+            //if (pos.Y <= size.Y / 2f + 519f) //(char height / 2) + limit
+            //    pos.Y = size.Y / 2f + 519f;
 
             if (pos.X >= size.X / 2f + (928f - size.X)) //(char width / 2) + (limit - char width)
                 pos.X = size.X / 2f + (928f - size.X);

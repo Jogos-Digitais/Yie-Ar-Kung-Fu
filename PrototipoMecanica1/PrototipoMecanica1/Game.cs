@@ -81,8 +81,8 @@ namespace PrototipoMecanica1
             debugCircleTex = Content.Load<Texture2D>("Sprites/debug_circle");
 
             //Adding entities
-            entities.Add(new Human(new Vector2(320, 100), new Vector2(88, 128)));
-            entities.Add(new Enemy(new Vector2(220, 300), new Vector2(108, 160)));
+            entities.Add(new Human(new Vector2(260, 704), new Vector2(88, 128)));
+            entities.Add(new Enemy(new Vector2(642, 688), new Vector2(108, 160)));
         }
 
         protected override void UnloadContent()

@@ -19,8 +19,17 @@ namespace PrototipoMecanica1
         float t;  //valor de tempo para calcular o seno
         float dy; //efeito de pulo
 
+        //Machine states
+        public enum CharacterState { Null, Standing, Moving, Crouching, Jumping, Attacking, Recoiling, Dead }; //Nenhum estado, parado, movendo-se, saltando, atacando, recuando, morto
+
+        //Current State
+        public static CharacterState currentState = CharacterState.Null;
+
         public Human(Vector2 initPos, Vector2 size) : base(initPos, size)
         {
+            //New position
+            EnterCharacterState(CharacterState.Standing);
+
             speed *= 2;
         }
 
@@ -43,11 +52,11 @@ namespace PrototipoMecanica1
             if (Keyboard.GetState().IsKeyDown(Keys.Left))
                 dir.X += -1.0f;
 
-            if (Keyboard.GetState().IsKeyDown(Keys.Up) && pos.Y == size.Y / 2f + (768f - size.Y))
-                dir.Y += -1.0f;
-
-            if (Keyboard.GetState().IsKeyDown(Keys.Down))
-                dir.Y += 1.0f;
+            //if (Keyboard.GetState().IsKeyDown(Keys.Up) && pos.Y == size.Y / 2f + (768f - size.Y))
+            //    dir.Y += -1.0f;
+            //
+            //if (Keyboard.GetState().IsKeyDown(Keys.Down))
+            //    dir.Y += 1.0f;
 
             return dir;
         }
@@ -61,14 +70,16 @@ namespace PrototipoMecanica1
         {
             float deltaTime = (float)gameTime.ElapsedGameTime.TotalSeconds;
 
-            //Keyboard.GetState().IsKeyDown(Keys.Up) && pos.Y == size.Y / 2f + (768f - size.Y)
-            if (TC >= 0)
-            {
-                t = (TC / JT) * (float)Math.PI;
-                dy = JH * (float)Math.Sin(t);
-                pos.Y -= dy;
 
-                TC += deltaTime;
+
+            //Keyboard.GetState().IsKeyDown(Keys.Up) && pos.Y == size.Y / 2f + (768f - size.Y)
+            //if (TC >= 0)
+            //{
+                //t = (TC / JT) * (float)Math.PI;
+                //dy = JH * (float)Math.Sin(t);
+                //pos.Y -= dy;
+
+                //TC += deltaTime;
                 //y - dy;
                 //dy = JH * Math.Sin(t);
                 //t = (TC / JT) * phi();
@@ -76,7 +87,7 @@ namespace PrototipoMecanica1
                 //{
                 //    pos.Y -= 1;
                 //}
-            }
+            //}
 
             //if (pos.Y < size.Y / 2f + (768f - size.Y))
             //    pos.Y += 10;
@@ -114,6 +125,196 @@ namespace PrototipoMecanica1
                   SpriteEffects.None,
                   0.3f
                 );
+            }
+        }
+
+        //States
+        public void EnterCharacterState(CharacterState newState)
+        {
+            LeaveCharacterState();
+
+            currentState = newState;
+
+            switch (currentState)
+            {
+                case CharacterState.Standing:
+                    { }
+                    break;
+
+                case CharacterState.Moving:
+                    { }
+                    break;
+
+                case CharacterState.Crouching:
+                    { }
+                    break;
+
+                case CharacterState.Jumping:
+                    { }
+                    break;
+
+                case CharacterState.Attacking:
+                    { }
+                    break;
+
+                case CharacterState.Recoiling:
+                    { }
+                    break;
+
+                case CharacterState.Dead:
+                    { };
+                    break;
+            }
+        }
+
+        public void UpdateCharacterState(GameTime gameTime)
+        {
+            //Timer
+            float deltaTime = (float)gameTime.ElapsedGameTime.TotalSeconds;
+
+            switch (currentState)
+            {
+                case CharacterState.Standing:
+                    {
+                        /*
+                         * 
+                         * 
+                         * 
+                         * Vector2 dir = Vector2.Zero;
+
+            if (Keyboard.GetState().IsKeyDown(Keys.Right))
+                dir.X += 1.0f;
+
+            if (Keyboard.GetState().IsKeyDown(Keys.Left))
+                dir.X += -1.0f;
+
+            if (Keyboard.GetState().IsKeyDown(Keys.Up) && pos.Y == size.Y / 2f + (768f - size.Y))
+                dir.Y += -1.0f;
+
+            if (Keyboard.GetState().IsKeyDown(Keys.Down))
+                dir.Y += 1.0f;
+
+            return dir;
+                         * 
+                         * 
+                         * 
+                         * 
+                         * 
+                         * 
+                         * 
+                         * */
+                        if (Keyboard.GetState().IsKeyDown(Keys.Right) || Keyboard.GetState().IsKeyDown(Keys.Left))
+                        {
+                            EnterCharacterState(CharacterState.Moving);
+                        }
+                    }
+                    break;
+
+                case CharacterState.Moving:
+                    {
+                        GetDir();
+                    }
+                    break;
+
+                case CharacterState.Crouching:
+                    { }
+                    break;
+
+                case CharacterState.Jumping:
+                    {
+                        if (TC >= 0)
+                        {
+                            t = (TC / JT) * (float)Math.PI;
+                            dy = JH * (float)Math.Sin(t);
+                            pos.Y -= dy;
+
+                            TC += deltaTime;
+                        }
+                    }
+                    break;
+
+                case CharacterState.Attacking:
+                    { }
+                    break;
+
+                case CharacterState.Recoiling:
+                    { }
+                    break;
+
+                case CharacterState.Dead:
+                    { };
+                    break;
+            }
+        }
+
+        public void DrawCharacterState(GameTime gameTime)
+        {
+            //Timer
+            float deltaTime = (float)gameTime.ElapsedGameTime.TotalSeconds;
+
+            switch (currentState)
+            {
+                case CharacterState.Standing:
+                    { }
+                    break;
+
+                case CharacterState.Moving:
+                    { }
+                    break;
+
+                case CharacterState.Crouching:
+                    { }
+                    break;
+
+                case CharacterState.Jumping:
+                    { }
+                    break;
+
+                case CharacterState.Attacking:
+                    { }
+                    break;
+
+                case CharacterState.Recoiling:
+                    { }
+                    break;
+
+                case CharacterState.Dead:
+                    { };
+                    break;
+            }
+        }
+
+        public void LeaveCharacterState()
+        {
+            switch (currentState)
+            {
+                case CharacterState.Standing:
+                    { }
+                    break;
+
+                case CharacterState.Moving:
+                    { }
+                    break;
+
+                case CharacterState.Crouching:
+                    { }
+                    break;
+
+                case CharacterState.Jumping:
+                    { }
+                    break;
+
+                case CharacterState.Attacking:
+                    { }
+                    break;
+
+                case CharacterState.Recoiling:
+                    { }
+                    break;
+
+                case CharacterState.Dead:
+                    { };
+                    break;
             }
         }
 

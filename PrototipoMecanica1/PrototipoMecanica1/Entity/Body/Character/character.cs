@@ -32,9 +32,9 @@ namespace PrototipoMecanica1
 
             base.Update(gameTime);
 
-            Vector2 dir = GetDir();
-            if (dir.Length() > 0)
-                shootDir = dir;
+            //Vector2 dir = GetDir();
+            //if (dir.Length() > 0)
+            //    shootDir = dir;
 
             if (fireTimer <= 0)
             {

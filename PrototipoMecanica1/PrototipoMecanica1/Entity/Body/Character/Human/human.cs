@@ -11,10 +11,27 @@ namespace PrototipoMecanica1
 {
     public class Human : Character
     {
+        float TC = 0; //Timer Counter
+        float JT = 0.500f; //Jump Time
+        float JH = 7f; //Jump height
+        float dx = 0; //direção do salto
+
+        float t;  //valor de tempo para calcular o seno
+        float dy; //efeito de pulo
+
         public Human(Vector2 initPos, Vector2 size) : base(initPos, size)
         {
             speed *= 2;
         }
+
+        /*
+         JT = 1;      Tempo de Pulo
+         JH = 100f;  100 pixels
+         TC = 
+         y-dy;
+         dy = JH * Math.Sin(t)
+         t = (TC/JT) * phi()
+        */
 
         public override Vector2 GetDir()
         {
@@ -42,16 +59,27 @@ namespace PrototipoMecanica1
 
         public override void Update(GameTime gameTime)
         {
-            if (Keyboard.GetState().IsKeyDown(Keys.Up) && pos.Y == size.Y / 2f + (768f - size.Y))
+            float deltaTime = (float)gameTime.ElapsedGameTime.TotalSeconds;
+
+            //Keyboard.GetState().IsKeyDown(Keys.Up) && pos.Y == size.Y / 2f + (768f - size.Y)
+            if (TC >= 0)
             {
-                while (pos.Y != (size.Y / 2f) + 452f)
-                {
-                    pos.Y -= 1;
-                }
+                t = (TC / JT) * (float)Math.PI;
+                dy = JH * (float)Math.Sin(t);
+                pos.Y -= dy;
+
+                TC += deltaTime;
+                //y - dy;
+                //dy = JH * Math.Sin(t);
+                //t = (TC / JT) * phi();
+                //while (pos.Y != (size.Y / 2f) + 452f)
+                //{
+                //    pos.Y -= 1;
+                //}
             }
 
-            if (pos.Y < size.Y / 2f + (768f - size.Y))
-                pos.Y += 10;
+            //if (pos.Y < size.Y / 2f + (768f - size.Y))
+            //    pos.Y += 10;
 
             base.Update(gameTime);
         }

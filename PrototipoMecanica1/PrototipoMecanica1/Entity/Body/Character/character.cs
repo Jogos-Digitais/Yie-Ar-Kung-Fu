@@ -17,10 +17,25 @@ namespace PrototipoMecanica1
 
         float fireTimer = 0;
 
+        float TC = 0; //Timer Counter
+        float JT = 0.333f; //Jump Time
+        float JH = 100f; //Jump height
+        float t;  //valor de tempo para calcular o seno
+        float dy; //efeito de pulo
+        float dx; //direção do salto
+
+         /* JT = 1;      Tempo de Pulo
+          * JH = 100f;  100 pixels
+          * TC = 
+          * y-dy;
+          *dy = JH * Math.Sin(t)
+          *t = (TC/JT) * phi()
+                      */
+
         Vector2 shootDir = new Vector2(1, 0);
 
         //Machine states
-        public enum CharacterState { Null, Standing, Moving, Jumping, Attacking, Recoiling, Dead }; //Nenhum estado, parado, movendo-se, saltando, atacando, recuando, morto
+        public enum CharacterState { Null, Standing, Moving, Crouching, Jumping, Attacking, Recoiling, Dead }; //Nenhum estado, parado, movendo-se, saltando, atacando, recuando, morto
 
         //Current State
         public static CharacterState currentState = CharacterState.Null;
@@ -45,6 +60,10 @@ namespace PrototipoMecanica1
                     break;
 
                 case CharacterState.Moving:
+                    { }
+                    break;
+
+                case CharacterState.Crouching:
                     { }
                     break;
 
@@ -81,6 +100,10 @@ namespace PrototipoMecanica1
                     { }
                     break;
 
+                case CharacterState.Crouching:
+                    { }
+                    break;
+
                 case CharacterState.Jumping:
                     { }
                     break;
@@ -114,6 +137,10 @@ namespace PrototipoMecanica1
                     { }
                     break;
 
+                case CharacterState.Crouching:
+                    { }
+                    break;
+
                 case CharacterState.Jumping:
                     { }
                     break;
@@ -141,6 +168,10 @@ namespace PrototipoMecanica1
                     break;
 
                 case CharacterState.Moving:
+                    { }
+                    break;
+
+                case CharacterState.Crouching:
                     { }
                     break;
 

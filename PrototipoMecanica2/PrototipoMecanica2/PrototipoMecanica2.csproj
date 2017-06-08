@@ -41,9 +41,23 @@
     <ApplicationManifest>app.manifest</ApplicationManifest>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="Game1.cs" />
+    <Compile Include="Entity\Body\Body.cs" />
+    <Compile Include="Entity\Body\Character\character.cs" />
+    <Compile Include="Entity\Body\Character\Enemy\enemy.cs" />
+    <Compile Include="Entity\Body\Character\Human\human.cs" />
+    <Compile Include="Entity\Body\Projectile\Fire.cs" />
+    <Compile Include="Entity\Body\Projectile\jar.cs" />
+    <Compile Include="Entity\Body\Projectile\lamp.cs" />
+    <Compile Include="Entity\Body\Projectile\sword.cs" />
+    <Compile Include="Entity\Entity.cs" />
+    <Compile Include="Entity\Interface\Button.cs" />
+    <Compile Include="Entity\Interface\Lifebar.cs" />
+    <Compile Include="Game.cs" />
+    <Compile Include="GameStates.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Screens\Menu.cs" />
+    <Compile Include="Screens\Stage.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="MonoGame.Framework">

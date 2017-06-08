@@ -19,8 +19,14 @@ namespace PrototipoMecanica2
 
         public static Texture2D enemy001Texture;
 
-        //Sprites - Projectiles
+        //Sprites - Objects
         public static Texture2D fireTexture;
+        public static Texture2D fireMovingTexture;
+
+        //Sprites - hitboxes
+        public static Texture2D playerHitTexture;
+        public static Texture2D enemyHitTexture;
+        public static Texture2D fireHitTexture;
 
         //Sprites - Stages
         public static Texture2D stageTexture;
@@ -80,6 +86,12 @@ namespace PrototipoMecanica2
 
             //Load sprites - Objects
             fireTexture = Content.Load<Texture2D>("Sprites/Fire");
+            fireMovingTexture = Content.Load<Texture2D>("Sprites/FireMoving");
+
+            //Load sprites - Hitboxes
+            playerHitTexture = Content.Load<Texture2D>("Sprites/playerHit");
+            enemyHitTexture = Content.Load<Texture2D>("Sprites/enemyHit");
+            fireHitTexture = Content.Load<Texture2D>("Sprites/fireHit");
 
             //Load sprites - Stages
             stageTexture = Content.Load<Texture2D>("Sprites/Stage");

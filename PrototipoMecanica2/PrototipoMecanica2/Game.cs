@@ -48,7 +48,7 @@ namespace PrototipoMecanica2
         public static List<Entity> entities = new List<Entity>();
 		
 		//Machine states
-		public enum GameState { Null, Menu, Stage };
+		public enum GameState { Null, Menu, Stage, Pause, Over };
 		
 		//Current State
 		public static GameState currentState = GameState.Null;
@@ -117,6 +117,9 @@ namespace PrototipoMecanica2
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
 
+            if (Keyboard.GetState().IsKeyDown(Keys.Enter))
+                GameStates.EnterGameState(GameState.Pause);
+
             List<Entity> tmp = new List<Entity>(entities);
             foreach (Entity e in tmp)
                 e.Update(gameTime);
@@ -139,6 +142,20 @@ namespace PrototipoMecanica2
 
             //Draw stage
             spriteBatch.Draw(stageTexture, new Vector2(0f, 0f), null, Color.White, 0.0f, Vector2.Zero, Vector2.One, SpriteEffects.None, 0.4f);
+
+            //Draw game paused
+            if (currentState.Equals(GameState.Pause))
+            spriteBatch.DrawString(
+                fontNormal,
+                "PAUSADO",
+                new Vector2(500, 500),
+                Color.White,
+                0.0f,
+                Vector2.Zero,
+                Vector2.One,
+                SpriteEffects.None,
+                0.0f
+                );
 
             //Draw texts
             spriteBatch.DrawString(

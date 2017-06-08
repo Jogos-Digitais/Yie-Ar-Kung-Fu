@@ -8,6 +8,8 @@ namespace PrototipoMecanica2
 {
 	public class GameStates
 	{
+        private static float countdownToMenu = 6;
+
         public static void EnterGameState(World.GameState newState)
         {
             LeaveGameState();
@@ -21,6 +23,14 @@ namespace PrototipoMecanica2
                     break;
 
                 case World.GameState.Stage:
+                    { }
+                    break;
+
+                case World.GameState.Pause:
+                    { }
+                    break;
+
+                case World.GameState.Over:
                     { }
                     break;
             }
@@ -40,6 +50,24 @@ namespace PrototipoMecanica2
                 case World.GameState.Stage:
                     { }
                     break;
+
+                case World.GameState.Pause:
+                    { }
+                    break;
+
+                case World.GameState.Over:
+                    {
+                        if (countdownToMenu > 0)
+                        {
+                            countdownToMenu -= deltaTime;
+                        }
+                        else
+                        {
+                            countdownToMenu = 6;
+                            EnterGameState(World.GameState.Menu);
+                        }
+                    }
+                    break;
             }
         }
 
@@ -57,6 +85,14 @@ namespace PrototipoMecanica2
                 case World.GameState.Stage:
                     { }
                     break;
+
+                case World.GameState.Pause:
+                    { }
+                    break;
+
+                case World.GameState.Over:
+                    { }
+                    break;
             }
         }
 
@@ -69,6 +105,14 @@ namespace PrototipoMecanica2
                     break;
 
                 case World.GameState.Stage:
+                    { }
+                    break;
+
+                case World.GameState.Pause:
+                    { }
+                    break;
+
+                case World.GameState.Over:
                     { }
                     break;
             }

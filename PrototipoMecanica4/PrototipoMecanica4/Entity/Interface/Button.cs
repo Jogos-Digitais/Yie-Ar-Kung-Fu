@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace PrototipoMecanica1
+namespace PrototipoMecanica4
 {
     public class Button : Entity
     {

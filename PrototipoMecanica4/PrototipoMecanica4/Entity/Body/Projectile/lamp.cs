@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -7,15 +7,12 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Audio;
 
-namespace PrototipoMecanica1
+namespace PrototipoMecanica4
 {
-    public class Stage
+    public class Lamp : Body
     {
-        public virtual void Update(GameTime gametime)
-        {
-        }
-
-        public virtual void Draw(GameTime gametime)
+        public Lamp(Vector2 initPos, Vector2 size)
+            : base(initPos, size)
         {
         }
     }

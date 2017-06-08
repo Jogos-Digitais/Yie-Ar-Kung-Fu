@@ -3,7 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System.Collections.Generic;
 
-namespace PrototipoMecanica1
+namespace PrototipoMecanica4
 {
     public class World : Game
     {

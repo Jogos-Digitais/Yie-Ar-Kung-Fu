@@ -9,7 +9,7 @@
     <ProjectGuid>{BD039986-C0E9-4BB3-9F3A-B4F067290D4C}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>PrototipoMecanica1</RootNamespace>
+    <RootNamespace>PrototipoMecanica4</RootNamespace>
     <AssemblyName>PrototipoMecanica1</AssemblyName>
     <FileAlignment>512</FileAlignment>
     <MonoGamePlatform>Windows</MonoGamePlatform>

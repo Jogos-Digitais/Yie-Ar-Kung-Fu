@@ -7,11 +7,11 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Audio;
 
-namespace PrototipoMecanica1
+namespace PrototipoMecanica4
 {
-    public class Jar : Body
+    public class Sword : Body
     {
-        public Jar(Vector2 initPos, Vector2 size)
+        public Sword(Vector2 initPos, Vector2 size)
             : base(initPos, size)
         {
         }

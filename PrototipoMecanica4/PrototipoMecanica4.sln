@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
 VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PrototipoMecanica4", "PrototipoMecanica1\PrototipoMecanica4.csproj", "{BD039986-C0E9-4BB3-9F3A-B4F067290D4C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PrototipoMecanica4", "PrototipoMecanica4\PrototipoMecanica4.csproj", "{BD039986-C0E9-4BB3-9F3A-B4F067290D4C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

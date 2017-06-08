@@ -7,15 +7,12 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Audio;
 
-namespace PrototipoMecanica1
+namespace PrototipoMecanica4
 {
-    public class Menu
+    public class Jar : Body
     {
-        public virtual void Update(GameTime gameTime)
-        {
-        }
-
-        public virtual void Draw(GameTime gameTime)
+        public Jar(Vector2 initPos, Vector2 size)
+            : base(initPos, size)
         {
         }
     }

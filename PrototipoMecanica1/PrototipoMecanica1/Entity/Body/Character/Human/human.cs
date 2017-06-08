@@ -11,6 +11,8 @@ namespace PrototipoMecanica1
 {
     public class Human : Character
     {
+        static public Human instance = null;
+
         float TC = 0f; //Timer Counter
         float JT = 0.500f; //Jump Time
         float JH = 7f; //Jump height
@@ -19,51 +21,65 @@ namespace PrototipoMecanica1
         float t;  //valor de tempo para calcular o seno
         float dy; //efeito de pulo
 
+        float m; //valor de tempo para calcular movimento
+
         //Machine states
-        public enum CharacterState { Null, Standing, Moving, Crouching, Jumping, Attacking, Recoiling, Dead }; //Nenhum estado, parado, movendo-se, saltando, atacando, recuando, morto
+        public enum CharacterState { Null, Standing, Moving, Crouching, Jumping, Attacking, Recoiling, Dead }; //Nenhum estado, parado, movendo-se, abaixando-se, saltando, atacando, recuando, morto
 
         //Current State
         public static CharacterState currentState = CharacterState.Null;
 
         public Human(Vector2 initPos, Vector2 size) : base(initPos, size)
         {
+            instance = this;
+
             //New position
             EnterCharacterState(CharacterState.Standing);
 
             speed *= 2;
         }
 
-        /*
-         JT = 1;      Tempo de Pulo
-         JH = 100f;  100 pixels
-         TC = 
-         y-dy;
-         dy = JH * Math.Sin(t)
-         t = (TC/JT) * phi()
-        */
-
         public override Vector2 GetDir()
         {
             Vector2 dir = Vector2.Zero;
 
-            if ((currentState.ToString() == "Standing" || currentState.ToString() == "Moving") && Keyboard.GetState().IsKeyDown(Keys.Right))
+            if ((currentState.Equals(CharacterState.Standing) || currentState.Equals(CharacterState.Moving)) && Keyboard.GetState().IsKeyDown(Keys.Right))
                 dir.X += 1.0f;
 
-            if ((currentState.ToString() == "Standing" || currentState.ToString() == "Moving") && Keyboard.GetState().IsKeyDown(Keys.Left))
+            if ((currentState.Equals(CharacterState.Standing) || currentState.Equals(CharacterState.Moving)) && Keyboard.GetState().IsKeyDown(Keys.Left))
                 dir.X += -1.0f;
 
             return dir;
-            //return Vector2.Zero;
-            //if (Keyboard.GetState().IsKeyDown(Keys.Up) && pos.Y == size.Y / 2f + (768f - size.Y))
-            //    dir.Y += -1.0f;
-            //
-            //if (Keyboard.GetState().IsKeyDown(Keys.Down))
-            //    dir.Y += 1.0f;
         }
 
         public override Texture2D GetSprite()
         {
-            return World.playerTexture;
+            Texture2D currentTexture = null;
+
+            switch (currentState)
+            {
+                case CharacterState.Standing:
+                    currentTexture = World.playerTexture;
+                    break;
+
+                case CharacterState.Moving:
+                    currentTexture = World.playerMovingTexture;
+                    break;
+
+                case CharacterState.Crouching:
+                    currentTexture = World.playerJumpingTexture;
+                    break;
+
+                case CharacterState.Jumping:
+                    currentTexture = World.playerJumpingTexture;
+                    break;
+
+                default:
+                    currentTexture = World.playerTexture;
+                    break;
+            }
+
+            return currentTexture;
         }
 
         public override void Update(GameTime gameTime)
@@ -71,25 +87,6 @@ namespace PrototipoMecanica1
             float deltaTime = (float)gameTime.ElapsedGameTime.TotalSeconds;
 
             UpdateCharacterState(gameTime);
-            //Keyboard.GetState().IsKeyDown(Keys.Up) && pos.Y == size.Y / 2f + (768f - size.Y)
-            //if (TC >= 0)
-            //{
-                //t = (TC / JT) * (float)Math.PI;
-                //dy = JH * (float)Math.Sin(t);
-                //pos.Y -= dy;
-
-                //TC += deltaTime;
-                //y - dy;
-                //dy = JH * Math.Sin(t);
-                //t = (TC / JT) * phi();
-                //while (pos.Y != (size.Y / 2f) + 452f)
-                //{
-                //    pos.Y -= 1;
-                //}
-            //}
-
-            //if (pos.Y < size.Y / 2f + (768f - size.Y))
-            //    pos.Y += 10;
 
             base.Update(gameTime);
         }
@@ -98,18 +95,34 @@ namespace PrototipoMecanica1
         {
             Texture2D sprite = GetSprite();
 
-            World.spriteBatch.Draw(sprite,
-              pos,
-              null,
-              Color.White,
-              0.0f,
-              new Vector2(sprite.Width,
-                          sprite.Height) / 2f, //pivot
-              new Vector2(size.X / sprite.Width,
-                          size.Y / sprite.Height), //scale
-              SpriteEffects.None,
-              0.1f
-            );
+            if (pos.X < Enemy.instance.pos.X)
+            {
+                World.spriteBatch.Draw(sprite,
+                    pos,
+                    null,
+                    Color.White,
+                    0.0f,
+                    new Vector2(sprite.Width / 2f,
+                                sprite.Height), //pivot
+                    Vector2.One, //scale
+                    SpriteEffects.None,
+                    0.1f
+                );
+            }
+            else
+            {
+                World.spriteBatch.Draw(sprite,
+                    pos,
+                    null,
+                    Color.White,
+                    0.0f,
+                    new Vector2(sprite.Width / 2f,
+                                sprite.Height), //pivot
+                    Vector2.One, //scale
+                    SpriteEffects.FlipHorizontally,
+                    0.1f
+                );
+            }
 
             if (World.debugMode)
             {
@@ -118,8 +131,8 @@ namespace PrototipoMecanica1
                   null,
                   new Color(0.0f, 1.0f, 0.0f, 0.5f),
                   0.0f,
-                  new Vector2(World.debugRectangleTex.Width,
-                              World.debugRectangleTex.Height) / 2f, //pivot
+                  new Vector2(sprite.Width / 2f,
+                              sprite.Height), //pivot
                   Vector2.One, //scale
                   SpriteEffects.None,
                   0.3f
@@ -176,36 +189,13 @@ namespace PrototipoMecanica1
             switch (currentState)
             {
                 case CharacterState.Standing:
-                    {                        
-                        /*
-                         * 
-                         * 
-                         * 
-                         * Vector2 dir = Vector2.Zero;
-
-            
-
-            if (Keyboard.GetState().IsKeyDown(Keys.Up) && pos.Y == size.Y / 2f + (768f - size.Y))
-                dir.Y += -1.0f;
-
-            if (Keyboard.GetState().IsKeyDown(Keys.Down))
-                dir.Y += 1.0f;
-
-            return dir;
-                         * 
-                         * 
-                         * 
-                         * 
-                         * 
-                         * 
-                         * 
-                         * */
+                    {
                         if (Keyboard.GetState().IsKeyDown(Keys.Right) || Keyboard.GetState().IsKeyDown(Keys.Left))
                         {
                             EnterCharacterState(CharacterState.Moving);
                         }
 
-                        if (Keyboard.GetState().IsKeyDown(Keys.Up) && pos.Y == size.Y / 2f + (768f - size.Y))
+                        if (Keyboard.GetState().IsKeyDown(Keys.Up) && pos.Y == size.Y + (768f - size.Y))
                         {
                             EnterCharacterState(CharacterState.Jumping);
                         }
@@ -221,7 +211,12 @@ namespace PrototipoMecanica1
                     {
                         GetDir();
 
-                        EnterCharacterState(CharacterState.Standing);
+                        if(m < 0.250)
+                        {
+                            m += deltaTime;
+                        }
+                        else
+                            EnterCharacterState(CharacterState.Standing);
                     }
                     break;
 
@@ -236,7 +231,7 @@ namespace PrototipoMecanica1
 
                 case CharacterState.Jumping:
                     {
-                        if(TC >= 1f)
+                        if (TC >= 1f)
                         {
                             EnterCharacterState(CharacterState.Standing);
                         }
@@ -274,7 +269,9 @@ namespace PrototipoMecanica1
             switch (currentState)
             {
                 case CharacterState.Standing:
-                    { }
+                    {
+
+                    }
                     break;
 
                 case CharacterState.Moving:
@@ -312,7 +309,9 @@ namespace PrototipoMecanica1
                     break;
 
                 case CharacterState.Moving:
-                    { }
+                    {
+                        m = 0.000f;
+                    }
                     break;
 
                 case CharacterState.Crouching:
@@ -321,7 +320,7 @@ namespace PrototipoMecanica1
 
                 case CharacterState.Jumping:
                     {
-                        TC = 0.00f;
+                        TC = 0.000000f;
                     }
                     break;
 

@@ -101,8 +101,8 @@ namespace PrototipoMecanica1
             if (pos.X >= size.X / 2f + (928f - size.X)) //(char width / 2) + (limit - char width)
                 pos.X = size.X / 2f + (928f - size.X);
 
-            if (pos.Y >= size.Y / 2f + (768f - size.Y)) //(char height / 2) + (limit - char height)
-                pos.Y = size.Y / 2f + (768f - size.Y);
+            if (pos.Y >= size.Y + (768f - size.Y)) //(char height / 2) + (limit - char height)
+                pos.Y = size.Y + (768f - size.Y);
         }
 
         public override void Draw(GameTime gameTime)
@@ -116,10 +116,9 @@ namespace PrototipoMecanica1
               null,
               Color.White,
               0.0f,
-              new Vector2(sprite.Width,
-                          sprite.Height) / 2f, //pivot
-              new Vector2(size.X / sprite.Width,
-                          size.Y / sprite.Height), //scale
+              new Vector2(sprite.Width / 2,
+                          sprite.Height), //pivot
+              new Vector2(1, 1), //scale
               SpriteEffects.None,
               0.2f
             );

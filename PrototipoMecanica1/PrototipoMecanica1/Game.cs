@@ -14,6 +14,9 @@ namespace PrototipoMecanica1
 
         //Sprites - Characters
         public static Texture2D playerTexture;
+        public static Texture2D playerMovingTexture;
+        public static Texture2D playerJumpingTexture;
+
         public static Texture2D enemy001Texture;
 
         //Sprites - Projectiles
@@ -70,6 +73,9 @@ namespace PrototipoMecanica1
 
             //Load sprites - Characters
             playerTexture = Content.Load<Texture2D>("Sprites/Player");
+            playerMovingTexture = Content.Load<Texture2D>("Sprites/PlayerMoving");
+            playerJumpingTexture = Content.Load<Texture2D>("Sprites/PlayerJumping");
+            
             enemy001Texture = Content.Load<Texture2D>("Sprites/Enemy001");
 
             //Load sprites - Objects
@@ -83,8 +89,8 @@ namespace PrototipoMecanica1
             debugRectangleTex = Content.Load<Texture2D>("Sprites/debug_rectangle");
 
             //Adding entities
-            entities.Add(new Human(new Vector2(260, 704), new Vector2(88, 128)));
-            entities.Add(new Enemy(new Vector2(642, 688), new Vector2(108, 160)));
+            entities.Add(new Human(new Vector2(260, 768), new Vector2(88, 128)));
+            entities.Add(new Enemy(new Vector2(642, 768), new Vector2(108, 160)));
 
             //Enter in initial state
             GameStates.EnterGameState(GameState.Stage);

@@ -11,11 +11,15 @@ namespace PrototipoMecanica1
 {
     public class Enemy : Character
     {
+        static public Enemy instance = null;
+
         public float visionRadius;
 
         public Enemy(Vector2 initPos, Vector2 size)
             : base(initPos, size)
         {
+            instance = this;
+
             speed /= 2f;
             visionRadius = size.X * 2;
         }

@@ -47,7 +47,10 @@ namespace PrototipoMecanica2
 
             if (nearestBody != null)
             {
-                return nearestBody.pos - pos;
+                if (pos.X >= Human.instance.pos.X)
+                    return (nearestBody.pos + Vector2.One) - pos;
+                else
+                    return (nearestBody.pos - Vector2.One) - pos;
             }
 
             return Vector2.Zero;
@@ -60,6 +63,37 @@ namespace PrototipoMecanica2
 
         public override void Draw(GameTime gameTime)
         {
+            Texture2D sprite = GetSprite();
+
+            if (pos.X >= Human.instance.pos.X)
+            {
+                World.spriteBatch.Draw(sprite,
+                    pos,
+                    null,
+                    Color.White,
+                    0.0f,
+                    new Vector2(sprite.Width / 2f,
+                                sprite.Height), //pivot
+                    Vector2.One, //scale
+                    SpriteEffects.None,
+                    0.1f
+                );
+            }
+            else
+            {
+                World.spriteBatch.Draw(sprite,
+                    pos,
+                    null,
+                    Color.White,
+                    0.0f,
+                    new Vector2(sprite.Width / 2f,
+                                sprite.Height), //pivot
+                    Vector2.One, //scale
+                    SpriteEffects.FlipHorizontally,
+                    0.1f
+                );
+            }
+
             if (World.debugMode)
             {
                 World.spriteBatch.Draw(World.debugCircleTex,
@@ -74,9 +108,9 @@ namespace PrototipoMecanica2
                   SpriteEffects.None,
                   0.3f
                 );
-            }
 
-            base.Draw(gameTime);
+                World.spriteBatch.DrawString(World.fontNormal, "State: Undefined", new Vector2(this.pos.X, this.pos.Y + 20f), Color.White, 0.0f, Vector2.Zero, 1f, SpriteEffects.None, 0.0f);
+            }
         }
     }
 }

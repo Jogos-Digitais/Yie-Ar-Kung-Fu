@@ -121,7 +121,7 @@ namespace PrototipoMecanica2
         {
             Texture2D sprite = GetSprite();
 
-            if (pos.X < Enemy.instance.pos.X)
+            if (pos.X <= Enemy.instance.pos.X)
             {
                 World.spriteBatch.Draw(sprite,
                     pos,
@@ -164,7 +164,7 @@ namespace PrototipoMecanica2
                   0.3f
                 );
 
-                World.spriteBatch.DrawString(World.fontNormal, "State: " + currentState.ToString() + " TC: " + timerCounter, new Vector2(this.pos.X, this.pos.Y + 50f), Color.White, 0.0f, Vector2.Zero, 1f, SpriteEffects.None, 0.0f);
+                World.spriteBatch.DrawString(World.fontNormal, "State: " + currentState.ToString() + "\nTimer Counter: " + timerCounter, new Vector2(this.pos.X, this.pos.Y + 20f), Color.White, 0.0f, Vector2.Zero, 1f, SpriteEffects.None, 0.0f);
             }
         }
 

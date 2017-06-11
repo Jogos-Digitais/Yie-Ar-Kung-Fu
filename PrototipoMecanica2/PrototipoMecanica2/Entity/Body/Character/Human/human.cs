@@ -21,6 +21,8 @@ namespace PrototipoMecanica2
         float time;  //valor de tempo para calcular o seno
         float jumpEffectY; //efeito de pulo para o alto
         float jumpEffectX; //efeito de pulo para a direção
+        bool jumpKick = false; //Flying kick
+        bool alreadyJumpKicked = false; //Indica se já atacou durante o salto
 
         float movingTime; //valor de tempo para calcular movimento
         int framePersistance; //Conta 3 e muda frame
@@ -85,18 +87,44 @@ namespace PrototipoMecanica2
                     break;
 
                 case CharacterState.Jumping:
-                    currentTexture = World.playerJumpingTexture;
+                    {
+                        if (jumpKick)
+                            currentTexture = World.playerFlyingKickTexture;
+                        else
+                            currentTexture = World.playerJumpingTexture;
+                    }
                     break;
 
                 case CharacterState.Punching:
                     {
-                        currentTexture = World.playerPunchTexture;
+                        if (previousState.Equals(CharacterState.Standing))
+                            currentTexture = World.playerPunchTexture;
+
+                        else if (previousState.Equals(CharacterState.Crouching))
+                            currentTexture = World.playerLowPunchTexture;
+
+                        else if (previousState.Equals(CharacterState.Moving) && movingFrame)
+                            currentTexture = World.playerMovingTexture;
+                        else
+                            currentTexture = World.playerTexture;
                     }
                     break;
 
                 case CharacterState.Kicking:
                     {
-                        currentTexture = World.playerMediumKickTexture;
+                        if (previousState.Equals(CharacterState.Moving) && (Keyboard.GetState().IsKeyDown(Keys.Left) || Keyboard.GetState().IsKeyDown(Keys.Right)))
+                            currentTexture = World.playerHighKickTexture;
+
+                        else if (previousState.Equals(CharacterState.Standing))
+                            currentTexture = World.playerMediumKickTexture;
+
+                        else if (previousState.Equals(CharacterState.Crouching))
+                            currentTexture = World.playerLowKickTexture;
+
+                        else if (previousState.Equals(CharacterState.Moving) && movingFrame)
+                            currentTexture = World.playerMovingTexture;
+                        else
+                            currentTexture = World.playerTexture;
                     }
                     break;
 
@@ -195,21 +223,27 @@ namespace PrototipoMecanica2
 
                 case CharacterState.Punching:
                     {
-                        previousPosition = pos.X;
-                        if (Enemy.instance.pos.X > pos.X)
-                            pos.X += 70;
-                        else
-                            pos.X -= 70;
+                        if (!previousState.Equals(CharacterState.Moving))
+                        {
+                            previousPosition = pos.X;
+                            if (Enemy.instance.pos.X > pos.X)
+                                pos.X += 70;
+                            else
+                                pos.X -= 70;
+                        }
                     }
                     break;
 
                 case CharacterState.Kicking:
                     {
-                        previousPosition = pos.X;
-                        if (Enemy.instance.pos.X > pos.X)
-                            pos.X += 70;
-                        else
-                            pos.X -= 70;
+                        if (!previousState.Equals(CharacterState.Moving) || GetSprite().Equals(World.playerHighKickTexture))
+                        {
+                            previousPosition = pos.X;
+                            if (Enemy.instance.pos.X > pos.X)
+                                pos.X += 70;
+                            else
+                                pos.X -= 70;
+                        }
                     }
                     break;
 
@@ -262,11 +296,13 @@ namespace PrototipoMecanica2
 
                         if (Keyboard.GetState().IsKeyDown(Keys.X))
                         {
+                            previousState = currentState;
                             EnterCharacterState(CharacterState.Punching);
                         }
 
                         if (Keyboard.GetState().IsKeyDown(Keys.Z))
                         {
+                            previousState = currentState;
                             EnterCharacterState(CharacterState.Kicking);
                         }
                     }
@@ -276,7 +312,13 @@ namespace PrototipoMecanica2
                     {
                         GetDir();
 
-                        if(movingTime < 0.100)
+                        if (Keyboard.GetState().IsKeyDown(Keys.Z) && (Keyboard.GetState().IsKeyDown(Keys.Left) || Keyboard.GetState().IsKeyDown(Keys.Right)))
+                        {
+                            previousState = currentState;
+                            EnterCharacterState(CharacterState.Kicking);
+                        }
+
+                        else if(movingTime < 0.100)
                         {
                             if(movingFrame && framePersistance == 3)
                             {
@@ -292,6 +334,7 @@ namespace PrototipoMecanica2
                             framePersistance++;
                             movingTime += deltaTime;
                         }
+
                         else
                             EnterCharacterState(CharacterState.Standing);
                     }
@@ -302,6 +345,18 @@ namespace PrototipoMecanica2
                         if (Keyboard.GetState().IsKeyUp(Keys.Down))
                         {
                             EnterCharacterState(CharacterState.Standing);
+                        }
+
+                        if (currentState.Equals(CharacterState.Crouching) && Keyboard.GetState().IsKeyDown(Keys.X))
+                        {
+                            previousState = currentState;
+                            EnterCharacterState(CharacterState.Punching);
+                        }
+
+                        if (currentState.Equals(CharacterState.Crouching) && Keyboard.GetState().IsKeyDown(Keys.Z))
+                        {
+                            previousState = currentState;
+                            EnterCharacterState(CharacterState.Kicking);
                         }
                     }
                     break;
@@ -316,6 +371,18 @@ namespace PrototipoMecanica2
                         //Salto para cima
                         if (timerCounter >= 0f && jumpDirection == 0)
                         {
+                            if (Keyboard.GetState().IsKeyDown(Keys.Z) && attackingTime > 0f)
+                            {
+                                jumpKick = true;
+                                alreadyJumpKicked = true;
+                                attackingTime -= deltaTime;
+                            }
+                            else
+                            {
+                                jumpKick = false;
+                                attackingTime = 0.25f;
+                            }
+
                             time = (timerCounter / jumpTime) * (float)Math.PI;
                             jumpEffectY = jumpHeight * (float)Math.Sin(time);
                             pos.Y -= jumpEffectY;
@@ -325,6 +392,18 @@ namespace PrototipoMecanica2
                         //Salto para a direita
                         else if(timerCounter >= 0f && jumpDirection == 1)
                         {
+                            if (Keyboard.GetState().IsKeyDown(Keys.Z) && attackingTime > 0f)
+                            {
+                                jumpKick = true;
+                                alreadyJumpKicked = true;
+                                attackingTime -= deltaTime;
+                            }
+                            else
+                            {
+                                jumpKick = false;
+                                attackingTime = 0.25f;
+                            }
+
                             time = (timerCounter / jumpTime) * (float)Math.PI;
                             jumpEffectY = jumpHeight * (float)Math.Sin(time);
                             jumpEffectX = jumpDistance * (float)Math.Sin(time);
@@ -341,6 +420,18 @@ namespace PrototipoMecanica2
                         //Salto para a esquerda
                         else if(timerCounter >= 0f && jumpDirection == -1)
                         {
+                            if (Keyboard.GetState().IsKeyDown(Keys.Z) && attackingTime > 0f)
+                            {
+                                jumpKick = true;
+                                alreadyJumpKicked = true;
+                                attackingTime -= deltaTime;
+                            }
+                            else
+                            {
+                                jumpKick = false;
+                                attackingTime = 0.25f;
+                            }
+
                             time = (timerCounter / jumpTime) * (float)Math.PI;
                             jumpEffectY = jumpHeight * (float)Math.Sin(time);
                             jumpEffectX = jumpDistance * (float)Math.Sin(time);
@@ -359,73 +450,40 @@ namespace PrototipoMecanica2
 
                 case CharacterState.Punching:
                     {
-                        if (attackingTime > 0f)
+                        if (!previousState.Equals(CharacterState.Moving))
                         {
-                            attackingTime -= deltaTime;
+                            if (attackingTime > 0f)
+                            {
+                                attackingTime -= deltaTime;
+                            }
+                            else
+                            {
+                                pos.X = previousPosition;
+                                EnterCharacterState(previousState);
+                            }
                         }
                         else
-                        {
-                            pos.X = previousPosition;
-                            EnterCharacterState(CharacterState.Standing);
-                        }
+                            EnterCharacterState(previousState);
                     }
                     break;
 
                 case CharacterState.Kicking:
                     {
-                        if (attackingTime > 0f)
+                        if (!previousState.Equals(CharacterState.Moving) || GetSprite().Equals(World.playerHighKickTexture))
                         {
-                            attackingTime -= deltaTime;
+                            if (attackingTime > 0f)
+                            {
+                                attackingTime -= deltaTime;
+                            }
+                            else
+                            {
+                                pos.X = previousPosition;
+                                EnterCharacterState(previousState);
+                            }
                         }
                         else
-                        {
-                            pos.X = previousPosition;
-                            EnterCharacterState(CharacterState.Standing);
-                        }
+                            EnterCharacterState(previousState);
                     }
-                    break;
-
-                case CharacterState.Recoiling:
-                    { }
-                    break;
-
-                case CharacterState.Dead:
-                    { };
-                    break;
-            }
-        }
-
-        public void DrawCharacterState(GameTime gameTime)
-        {
-            //Timer
-            float deltaTime = (float)gameTime.ElapsedGameTime.TotalSeconds;
-
-            switch (currentState)
-            {
-                case CharacterState.Standing:
-                    {
-
-                    }
-                    break;
-
-                case CharacterState.Moving:
-                    { }
-                    break;
-
-                case CharacterState.Crouching:
-                    { }
-                    break;
-
-                case CharacterState.Jumping:
-                    { }
-                    break;
-
-                case CharacterState.Punching:
-                    { }
-                    break;
-
-                case CharacterState.Kicking:
-                    { }
                     break;
 
                 case CharacterState.Recoiling:
@@ -459,6 +517,7 @@ namespace PrototipoMecanica2
                 case CharacterState.Jumping:
                     {
                         timerCounter = 0f;
+                        alreadyJumpKicked = false;
                     }
                     break;
 

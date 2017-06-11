@@ -22,7 +22,6 @@ namespace PrototipoMecanica2
         float jumpEffectY; //efeito de pulo para o alto
         float jumpEffectX; //efeito de pulo para a direção
         bool jumpKick = false; //Flying kick
-        bool alreadyJumpKicked = false; //Indica se já atacou durante o salto
 
         float movingTime; //valor de tempo para calcular movimento
         int framePersistance; //Conta 3 e muda frame
@@ -374,7 +373,6 @@ namespace PrototipoMecanica2
                             if (Keyboard.GetState().IsKeyDown(Keys.Z) && attackingTime > 0f)
                             {
                                 jumpKick = true;
-                                alreadyJumpKicked = true;
                                 attackingTime -= deltaTime;
                             }
                             else
@@ -395,7 +393,6 @@ namespace PrototipoMecanica2
                             if (Keyboard.GetState().IsKeyDown(Keys.Z) && attackingTime > 0f)
                             {
                                 jumpKick = true;
-                                alreadyJumpKicked = true;
                                 attackingTime -= deltaTime;
                             }
                             else
@@ -423,7 +420,6 @@ namespace PrototipoMecanica2
                             if (Keyboard.GetState().IsKeyDown(Keys.Z) && attackingTime > 0f)
                             {
                                 jumpKick = true;
-                                alreadyJumpKicked = true;
                                 attackingTime -= deltaTime;
                             }
                             else
@@ -517,7 +513,6 @@ namespace PrototipoMecanica2
                 case CharacterState.Jumping:
                     {
                         timerCounter = 0f;
-                        alreadyJumpKicked = false;
                     }
                     break;
 

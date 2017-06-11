@@ -76,7 +76,7 @@ namespace PrototipoMecanica2
                                 sprite.Height), //pivot
                     Vector2.One, //scale
                     SpriteEffects.None,
-                    0.1f
+                    0.2f
                 );
             }
             else
@@ -90,7 +90,7 @@ namespace PrototipoMecanica2
                                 sprite.Height), //pivot
                     Vector2.One, //scale
                     SpriteEffects.FlipHorizontally,
-                    0.1f
+                    0.2f
                 );
             }
 

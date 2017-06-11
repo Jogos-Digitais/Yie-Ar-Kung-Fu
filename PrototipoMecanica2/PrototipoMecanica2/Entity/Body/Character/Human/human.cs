@@ -22,6 +22,7 @@ namespace PrototipoMecanica2
         float jumpEffectY; //efeito de pulo para o alto
         float jumpEffectX; //efeito de pulo para a direção
         bool jumpKick = false; //Flying kick
+        bool jumpKicked = false; //Saltou e chutou
 
         float movingTime; //valor de tempo para calcular movimento
         int framePersistance; //Conta 3 e muda frame
@@ -370,9 +371,14 @@ namespace PrototipoMecanica2
                         //Salto para cima
                         if (timerCounter >= 0f && jumpDirection == 0)
                         {
-                            if (Keyboard.GetState().IsKeyDown(Keys.Z) && attackingTime > 0f)
+                            if (Keyboard.GetState().IsKeyDown(Keys.Z) && attackingTime > 0f && jumpKicked == false)
                             {
                                 jumpKick = true;
+                                jumpKicked = true;
+                                attackingTime -= deltaTime;
+                            }
+                            else if (attackingTime > 0f && jumpKicked)
+                            {
                                 attackingTime -= deltaTime;
                             }
                             else
@@ -390,9 +396,14 @@ namespace PrototipoMecanica2
                         //Salto para a direita
                         else if(timerCounter >= 0f && jumpDirection == 1)
                         {
-                            if (Keyboard.GetState().IsKeyDown(Keys.Z) && attackingTime > 0f)
+                            if (Keyboard.GetState().IsKeyDown(Keys.Z) && attackingTime > 0f && jumpKicked == false)
                             {
                                 jumpKick = true;
+                                jumpKicked = true;
+                                attackingTime -= deltaTime;
+                            }
+                            else if (attackingTime > 0f && jumpKicked)
+                            {
                                 attackingTime -= deltaTime;
                             }
                             else
@@ -417,9 +428,14 @@ namespace PrototipoMecanica2
                         //Salto para a esquerda
                         else if(timerCounter >= 0f && jumpDirection == -1)
                         {
-                            if (Keyboard.GetState().IsKeyDown(Keys.Z) && attackingTime > 0f)
+                            if (Keyboard.GetState().IsKeyDown(Keys.Z) && attackingTime > 0f && jumpKicked == false)
                             {
                                 jumpKick = true;
+                                jumpKicked = true;
+                                attackingTime -= deltaTime;
+                            }
+                            else if (attackingTime > 0f && jumpKicked)
+                            {
                                 attackingTime -= deltaTime;
                             }
                             else
@@ -513,6 +529,7 @@ namespace PrototipoMecanica2
                 case CharacterState.Jumping:
                     {
                         timerCounter = 0f;
+                        jumpKicked = false;
                     }
                     break;
 

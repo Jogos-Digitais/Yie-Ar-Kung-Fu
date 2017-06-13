@@ -20,7 +20,7 @@ namespace PrototipoMecanica3
         {
             instance = this;
 
-            speed /= 2f;
+            speed *= 2f;
             visionRadius = size.X * 2;
         }
 
@@ -47,10 +47,19 @@ namespace PrototipoMecanica3
 
             if (nearestBody != null)
             {
+                Vector2 positionToReturn;
+
                 if (pos.X >= Human.instance.pos.X)
-                    return (nearestBody.pos + Vector2.One) - pos;
+                    positionToReturn.X = (nearestBody.pos.X + Vector2.One.X) - pos.X;
                 else
-                    return (nearestBody.pos - Vector2.One) - pos;
+                    positionToReturn.X = (nearestBody.pos.X - Vector2.One.X) - pos.X;
+
+                positionToReturn.Y = pos.Y;
+
+                if (pos.X >= Human.instance.pos.X)
+                    return positionToReturn;
+                else
+                    return positionToReturn;
             }
 
             return Vector2.Zero;

@@ -60,10 +60,12 @@ namespace PrototipoMecanica3
                     e.TestCollisionRect(myMin, myMax)) //is colliding against other entity?
                 {
                     Character opponent = (Character)e;
-                    Lifebar.instance.damageEnemyLife(); //TODO: CORRIGIR, "mata instantaneamente"
+                    Lifebar.instance.damageEnemyLife(); //Reduz a vida do adversário
                     break;
                 }
             }
+
+            World.entities.Remove(this); //Se manter a remoção do ataque aqui, a imagem não fica persistente, embora o hit funcione de forma perfeita
         }
 
         public override void Draw(GameTime gameTime)

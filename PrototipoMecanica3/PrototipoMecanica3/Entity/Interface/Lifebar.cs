@@ -31,6 +31,11 @@ namespace PrototipoMecanica3
                 playerLifeColor = new Color(183, 30, 123);
         }
 
+        public int remainingPlayerLife()
+        {
+            return playerLife;
+        }
+
         public void damageEnemyLife()
         {
             enemyLife -= 1;
@@ -39,6 +44,11 @@ namespace PrototipoMecanica3
                 enemyLifeColor = new Color(92, 228, 48);
             else
                 enemyLifeColor = new Color(183, 30, 123);
+        }
+
+        public int remainingEnemyLife()
+        {
+            return enemyLife;
         }
 
         public override void Draw(GameTime gameTime)
@@ -59,6 +69,11 @@ namespace PrototipoMecanica3
 
             for (int i = 0; i < enemyLife; i++)
                 World.spriteBatch.Draw(World.lifeFragment, new Vector2(576 + (32 * i), 849), null, enemyLifeColor, 0.0f, Vector2.Zero, Vector2.One, SpriteEffects.None, 0.0f);
+
+            if (World.debugMode)
+            {
+
+            }
         }
     }
 }

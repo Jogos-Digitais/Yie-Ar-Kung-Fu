@@ -17,7 +17,7 @@ namespace PrototipoMecanica3
 
         public Character myShooter = null;
 
-        public float lifeTime = 5f;
+        public float lifeTime = 0.25f;
 
         public Hit(Character shooter, Vector2 initPos, Vector2 initDir, Vector2 size)
             : base(initPos, size)
@@ -42,8 +42,6 @@ namespace PrototipoMecanica3
         {
             float deltaTime = (float)gameTime.ElapsedGameTime.TotalSeconds;
 
-            //base.Update(gameTime);
-
             lifeTime -= deltaTime;
 
             if (lifeTime <= 0)
@@ -62,6 +60,7 @@ namespace PrototipoMecanica3
                     e.TestCollisionRect(myMin, myMax)) //is colliding against other entity?
                 {
                     Character opponent = (Character)e;
+                    Lifebar.instance.damageEnemyLife(); //TODO: CORRIGIR, "mata instantaneamente"
                     break;
                 }
             }
@@ -84,7 +83,7 @@ namespace PrototipoMecanica3
 
             if (other is Hit) //ignore collision against other hits!
                 return true;
-
+            
             return false;
         }
     }

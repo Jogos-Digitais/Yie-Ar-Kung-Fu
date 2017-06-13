@@ -31,6 +31,8 @@ namespace PrototipoMecanica3
         public static Texture2D fireTexture;
         public static Texture2D fireMovingTexture;
 
+        public static Texture2D lifeBarTexture;
+        public static Texture2D lifeFragment;
         public static Texture2D extraLifeTexture;
 
         //Sprites - hitboxes
@@ -109,6 +111,8 @@ namespace PrototipoMecanica3
             fireTexture = Content.Load<Texture2D>("Sprites/Fire");
             fireMovingTexture = Content.Load<Texture2D>("Sprites/FireMoving");
 
+            lifeBarTexture = Content.Load<Texture2D>("Sprites/LifeBar");
+            lifeFragment = Content.Load<Texture2D>("Sprites/LifeFragment");
             extraLifeTexture = Content.Load<Texture2D>("Sprites/extraLife");
 
             //Load sprites - Hitboxes
@@ -129,6 +133,8 @@ namespace PrototipoMecanica3
             //Adding entities
             entities.Add(new Human(new Vector2(260, 768), new Vector2(88, 128)));
             entities.Add(new Enemy(new Vector2(642, 768), new Vector2(108, 160)));
+
+            entities.Add(new Lifebar());
 
             //Enter in initial state
             GameStates.EnterGameState(GameState.Stage);

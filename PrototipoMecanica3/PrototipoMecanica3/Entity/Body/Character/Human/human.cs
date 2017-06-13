@@ -72,6 +72,8 @@ namespace PrototipoMecanica3
             else if (previousState.Equals(CharacterState.Crouching))
                 hitbox = new Vector2(pos.X + hitX, pos.Y - (World.playerTexture.Height / 3));
 
+            //Lifebar.instance.damagePlayerLife(); LINHA DE TESTE DA BARRA DE LIFE DO JOGADOR
+            //Lifebar.instance.damageEnemyLife(); //LINHA DE TESTE DA BARRA DE LIFE DO INIMIGO
             return hitbox;
         }
 

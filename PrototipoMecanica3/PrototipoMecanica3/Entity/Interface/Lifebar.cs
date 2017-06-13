@@ -65,14 +65,14 @@ namespace PrototipoMecanica3
             );
 
             for (int i = 0; i < playerLife; i++)
-                World.spriteBatch.Draw(World.lifeFragment, new Vector2(416 - (32 * i), 849), null, playerLifeColor, 0.0f, Vector2.Zero, Vector2.One, SpriteEffects.None, 0.0f);
+                World.spriteBatch.Draw(World.lifeFragment, new Vector2(416 - (32 * i), 849), null, playerLifeColor, 0.0f, Vector2.Zero, Vector2.One, SpriteEffects.None, 0.1f);
 
             for (int i = 0; i < enemyLife; i++)
-                World.spriteBatch.Draw(World.lifeFragment, new Vector2(576 + (32 * i), 849), null, enemyLifeColor, 0.0f, Vector2.Zero, Vector2.One, SpriteEffects.None, 0.0f);
+                World.spriteBatch.Draw(World.lifeFragment, new Vector2(576 + (32 * i), 849), null, enemyLifeColor, 0.0f, Vector2.Zero, Vector2.One, SpriteEffects.None, 0.1f);
 
             if (World.debugMode)
             {
-
+                World.spriteBatch.DrawString(World.fontNormal, "Player life: " + playerLife + "\nEnemy life: " + enemyLife, new Vector2(400, 880), Color.White, 0.0f, Vector2.Zero, 1f, SpriteEffects.None, 0.0f);
             }
         }
     }

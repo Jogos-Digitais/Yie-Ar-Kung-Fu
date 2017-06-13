@@ -7,11 +7,11 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Audio;
 
-namespace PrototipoMecanica4
+namespace PrototipoMecanica3
 {
-    public class Hit : Body
+    public class Fire : Body
     {
-        public float damage = 1f;
+        public float damage = 50f;
 
         public Vector2 dir = Vector2.Zero;
 
@@ -19,7 +19,7 @@ namespace PrototipoMecanica4
 
         public float lifeTime = 5f;
 
-        public Hit(Character shooter, Vector2 initPos, Vector2 initDir, Vector2 size)
+        public Fire(Character shooter, Vector2 initPos, Vector2 initDir, Vector2 size)
             : base(initPos, size)
         {
             myShooter = shooter;
@@ -42,32 +42,13 @@ namespace PrototipoMecanica4
         {
             float deltaTime = (float)gameTime.ElapsedGameTime.TotalSeconds;
 
-            //base.Update(gameTime);
+            base.Update(gameTime);
 
             lifeTime -= deltaTime;
 
             if (lifeTime <= 0)
             {
                 World.entities.Remove(this);
-            }
-
-            Vector2 myMin = GetMin();
-            Vector2 myMax = GetMax();
-
-            foreach (Entity e in World.entities)
-            {
-                if ((e != this) && //not myself?
-                    (e != myShooter) && //not my shooter?
-                    (e is Character) && //is character?
-                    e.TestCollisionRect(myMin, myMax)) //is colliding against other entity?
-                {
-                    Character opponent = (Character)e;
-
-
-
-
-                    break;
-                }
             }
         }
 
@@ -81,5 +62,24 @@ namespace PrototipoMecanica4
             base.Draw(gameTime);
         }
 
+        public override void CollisionDetected(Entity other)
+        {
+            if (other is Character)
+            {
+                Character c = (Character)other;
+                c.health -= damage;
+            }
+        }
+
+        public override bool IgnoreCollision(Entity other)
+        {
+            if (other == myShooter) //ignore collision against my shooter!
+                return true;
+
+            if (other is Fire) //ignore collision against other bullets!
+                return true;
+
+            return false;
+        }
     }
 }

@@ -112,7 +112,7 @@ namespace PrototipoMecanica4
             //extraLifeTexture = Content.Load<Texture2D>("Sprites/extraLife");
 
             //Load sprites - Hitboxes
-            //playerHitTexture = Content.Load<Texture2D>("Sprites/playerHit");
+            playerHitTexture = Content.Load<Texture2D>("Sprites/playerHit");
             //enemyHitTexture = Content.Load<Texture2D>("Sprites/enemyHit");
             //fireHitTexture = Content.Load<Texture2D>("Sprites/fireHit");
 

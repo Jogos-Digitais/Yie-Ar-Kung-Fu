@@ -399,7 +399,7 @@ namespace PrototipoMecanica4
                         {
                             timerCounter += deltaTime;
 
-                            //World.entities.Add(new Hit(this, pos, new Vector2(32, 32)));
+                            World.entities.Add(new Hit(this, new Vector2(pos.X + 10, (pos.Y / 2) + pos.Y), GetDir(), new Vector2(32, 32)));
                         }
                     }
 

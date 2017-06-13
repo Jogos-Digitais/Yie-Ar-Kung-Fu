@@ -7,7 +7,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Audio;
 
-namespace PrototipoMecanica2
+namespace PrototipoMecanica3
 {
     public class Human : Character
     {
@@ -30,6 +30,9 @@ namespace PrototipoMecanica2
 
         float attackingTime = 0.25f; //valor de tempo para calcular ataques
 
+        //Posição hitbox
+        Vector2 hitbox = Vector2.One;
+
         //Machine states
         public enum CharacterState { Null, Standing, Moving, Crouching, Jumping, Punching, Kicking, Recoiling, Dead }; //Nenhum estado, parado, movendo-se, abaixando-se, saltando, socando, chutando, recuando, morto
 
@@ -48,6 +51,28 @@ namespace PrototipoMecanica2
             EnterCharacterState(CharacterState.Standing);
 
             speed *= 2;
+
+            //HitBoxes calcs
+
+        }
+
+        public Vector2 GetHitboxPosition(Vector2 hitbox)
+        {
+            float hitX = 0f;
+
+            if (Enemy.instance.pos.X > pos.X)
+                hitX += 55f;
+            else
+                hitX -= 55f;
+
+            if (GetSprite().Equals(World.playerHighKickTexture))
+                hitbox = new Vector2(pos.X + hitX, pos.Y - World.playerTexture.Height);
+            else if (previousState.Equals(CharacterState.Standing))
+                hitbox = new Vector2(pos.X + hitX, pos.Y - (World.playerTexture.Height / 2));
+            else if (previousState.Equals(CharacterState.Crouching))
+                hitbox = new Vector2(pos.X + hitX, pos.Y - (World.playerTexture.Height / 3));
+
+            return hitbox;
         }
 
         public override Vector2 GetDir()
@@ -230,6 +255,8 @@ namespace PrototipoMecanica2
                                 pos.X += 70;
                             else
                                 pos.X -= 70;
+
+                            World.entities.Add(new Hit(this, GetHitboxPosition(hitbox), GetDir(), new Vector2(32, 32)));
                         }
                     }
                     break;
@@ -243,6 +270,8 @@ namespace PrototipoMecanica2
                                 pos.X += 70;
                             else
                                 pos.X -= 70;
+
+                            World.entities.Add(new Hit(this, GetHitboxPosition(hitbox), GetDir(), new Vector2(32, 32)));
                         }
                     }
                     break;
@@ -318,14 +347,14 @@ namespace PrototipoMecanica2
                             EnterCharacterState(CharacterState.Kicking);
                         }
 
-                        else if(movingTime < 0.100)
+                        else if (movingTime < 0.100)
                         {
-                            if(movingFrame && framePersistance == 3)
+                            if (movingFrame && framePersistance == 3)
                             {
                                 movingFrame = false;
                                 framePersistance = 0;
                             }
-                            else if(movingFrame == false && framePersistance == 3)
+                            else if (movingFrame == false && framePersistance == 3)
                             {
                                 movingFrame = true;
                                 framePersistance = 0;
@@ -394,7 +423,7 @@ namespace PrototipoMecanica2
                             timerCounter += deltaTime;
                         }
                         //Salto para a direita
-                        else if(timerCounter >= 0f && jumpDirection == 1)
+                        else if (timerCounter >= 0f && jumpDirection == 1)
                         {
                             if (Keyboard.GetState().IsKeyDown(Keys.Z) && attackingTime > 0f && jumpKicked == false)
                             {
@@ -420,13 +449,13 @@ namespace PrototipoMecanica2
 
                             timerCounter += deltaTime;
 
-                            if(pos.X <= size.X / 2f + 96f || pos.X >= size.X / 2f + (928f - size.X))
+                            if (pos.X <= size.X / 2f + 96f || pos.X >= size.X / 2f + (928f - size.X))
                             {
                                 jumpDirection *= -1;
                             }
                         }
                         //Salto para a esquerda
-                        else if(timerCounter >= 0f && jumpDirection == -1)
+                        else if (timerCounter >= 0f && jumpDirection == -1)
                         {
                             if (Keyboard.GetState().IsKeyDown(Keys.Z) && attackingTime > 0f && jumpKicked == false)
                             {

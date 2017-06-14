@@ -15,10 +15,20 @@ namespace PrototipoMecanica3
 
         public float visionRadius;
 
+        //Machine states
+        public enum CharacterState { Null, Standing, Moving, Attacking, Recoiling, Running, Dead }; //Nenhum estado, parado, movendo-se, atacando, recuando, correndo, morto
+
+        //Current State
+        public static CharacterState previousState = CharacterState.Null;
+        public static CharacterState currentState = CharacterState.Null;
+
         public Enemy(Vector2 initPos, Vector2 size)
             : base(initPos, size)
         {
             instance = this;
+
+            //New position
+            EnterCharacterState(CharacterState.Standing);
 
             speed *= 2f;
             visionRadius = size.X * 2;
@@ -118,7 +128,111 @@ namespace PrototipoMecanica3
                   0.3f
                 );
 
-                World.spriteBatch.DrawString(World.fontNormal, "State: Undefined", new Vector2(this.pos.X, this.pos.Y + 20f), Color.White, 0.0f, Vector2.Zero, 1f, SpriteEffects.None, 0.0f);
+                World.spriteBatch.DrawString(World.fontNormal, "State: " + currentState.ToString(), new Vector2(this.pos.X, this.pos.Y + 20f), Color.White, 0.0f, Vector2.Zero, 1f, SpriteEffects.None, 0.0f);
+            }
+        }
+
+        //States
+        public void EnterCharacterState(CharacterState newState)
+        {
+            LeaveCharacterState();
+
+            currentState = newState;
+
+            switch (currentState)
+            {
+                case CharacterState.Standing:
+                    { }
+                    break;
+
+                case CharacterState.Moving:
+                    { }
+                    break;
+
+                case CharacterState.Attacking:
+                    { }
+                    break;
+
+                case CharacterState.Recoiling:
+                    { }
+                    break;
+
+                case CharacterState.Running:
+                    { }
+                    break;
+
+                case CharacterState.Dead:
+                    { };
+                    break;
+            }
+        }
+
+        public void UpdateCharacterState(GameTime gameTime)
+        {
+            //Timer
+            float deltaTime = (float)gameTime.ElapsedGameTime.TotalSeconds;
+
+            switch (currentState)
+            {
+                case CharacterState.Standing:
+                    {
+                        if (!GetDir().Equals(Vector2.Zero))
+                            EnterCharacterState(CharacterState.Moving);
+                    }
+                    break;
+
+                case CharacterState.Moving:
+                    {
+                        if (GetDir().Equals(Vector2.Zero))
+                            EnterCharacterState(CharacterState.Standing);
+                    }
+                    break;
+
+                case CharacterState.Attacking:
+                    { }
+                    break;
+
+                case CharacterState.Recoiling:
+                    { }
+                    break;
+
+                case CharacterState.Running:
+                    { }
+                    break;
+
+                case CharacterState.Dead:
+                    { };
+                    break;
+            }
+        }
+
+        public void LeaveCharacterState()
+        {
+            switch (currentState)
+            {
+                case CharacterState.Standing:
+                    { }
+                    break;
+
+                case CharacterState.Moving:
+                    { }
+                    break;
+
+                case CharacterState.Attacking:
+                    { }
+                    break;
+
+                case CharacterState.Recoiling:
+                    { }
+                    break;
+
+                case CharacterState.Running:
+                    { }
+                    break;
+
+                case CharacterState.Dead:
+                    { };
+                    break;
             }
         }
     }

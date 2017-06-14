@@ -9,8 +9,8 @@
     <ProjectGuid>{6647071E-4490-48DF-90EC-CFD6D16B1B13}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>PrototipoMecanica2</RootNamespace>
-    <AssemblyName>PrototipoMecanica2</AssemblyName>
+    <RootNamespace>PrototipoMecanica3</RootNamespace>
+    <AssemblyName>PrototipoMecanica3</AssemblyName>
     <FileAlignment>512</FileAlignment>
     <MonoGamePlatform>Windows</MonoGamePlatform>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
@@ -47,6 +47,7 @@
     <Compile Include="Entity\Body\Character\Human\human.cs" />
     <Compile Include="Entity\Body\Projectile\Fire.cs" />
     <Compile Include="Entity\Body\Projectile\Hit.cs" />
+    <Compile Include="Entity\Body\Projectile\HitContact.cs" />
     <Compile Include="Entity\Body\Projectile\jar.cs" />
     <Compile Include="Entity\Body\Projectile\lamp.cs" />
     <Compile Include="Entity\Body\Projectile\sword.cs" />

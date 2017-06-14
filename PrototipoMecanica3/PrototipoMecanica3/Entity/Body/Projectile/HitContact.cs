@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -9,19 +9,15 @@ using Microsoft.Xna.Framework.Audio;
 
 namespace PrototipoMecanica3
 {
-    public class Hit : Body
+    public class HitContact : Body
     {
-        bool contato = false; // Checagem de hit
-
-        public float damage = 1f;
-
         public Vector2 dir = Vector2.Zero;
 
         public Character myShooter = null;
 
         public float lifeTime = 0.25f;
 
-        public Hit(Character shooter, Vector2 initPos, Vector2 initDir, Vector2 size)
+        public HitContact(Character shooter, Vector2 initPos, Vector2 initDir, Vector2 size)
             : base(initPos, size)
         {
             myShooter = shooter;
@@ -37,10 +33,12 @@ namespace PrototipoMecanica3
 
         public override Texture2D GetSprite()
         {
-            if (World.debugMode)
-                return World.debugHitTex;
+            if (myShooter.Equals(Human.instance))
+                return World.playerHitTexture;
+            else if (myShooter.Equals(Enemy.instance))
+                return World.enemyHitTexture;
             else
-                return null;
+                return World.fireHitTexture;
         }
 
         public override void Update(GameTime gameTime)
@@ -53,42 +51,18 @@ namespace PrototipoMecanica3
             {
                 World.entities.Remove(this);
             }
-
-            Vector2 myMin = GetMin();
-            Vector2 myMax = GetMax();
-
-            foreach (Entity e in World.entities)
-            {
-                if ((e != this) && //not myself?
-                    (e != myShooter) && //not my shooter?
-                    (e is Character) && //is character?
-                    e.TestCollisionRect(myMin, myMax)) //is colliding against other entity?
-                {
-                    Character opponent = (Character)e;
-                        if (contato == false)
-                        {
-                            contato = true;
-                            Lifebar.instance.damageEnemyLife();
-                            World.entities.Add(new HitContact(Human.instance, pos, GetDir(), new Vector2(32, 32)));
-                        }
-                    break;
-                }
-            }
-
-            if(contato == true)
-                World.entities.Remove(this);
         }
 
         public override void Draw(GameTime gameTime)
         {
-            if (World.debugMode)
-            {
-                Texture2D sprite = GetSprite();
+            Texture2D sprite = GetSprite();
 
+            if (Human.instance.pos.X <= Enemy.instance.pos.X)
+            {
                 World.spriteBatch.Draw(sprite,
                   pos,
                   null,
-                  new Color(1.0f, 1.0f, 1.0f, 0.5f),
+                  Color.White,
                   0.0f,
                   new Vector2(sprite.Width / 2,
                               sprite.Height), //pivot
@@ -96,7 +70,24 @@ namespace PrototipoMecanica3
                   SpriteEffects.None,
                   0.1f
                 );
+            }
+            else
+            {
+                World.spriteBatch.Draw(sprite,
+                  pos,
+                  null,
+                  Color.White,
+                  0.0f,
+                  new Vector2(sprite.Width / 2,
+                              sprite.Height), //pivot
+                  Vector2.One, //scale
+                  SpriteEffects.FlipHorizontally,
+                  0.1f
+                );
+            }
 
+            if (World.debugMode)
+            {
                 World.spriteBatch.DrawString(World.fontNormal, "Expire time: " + lifeTime, new Vector2(this.pos.X, this.pos.Y + 50f), Color.White, 0.0f, Vector2.Zero, 1f, SpriteEffects.None, 0.0f);
             }
         }
@@ -108,7 +99,7 @@ namespace PrototipoMecanica3
 
             if (other is Hit) //ignore collision against other hits!
                 return true;
-            
+
             return false;
         }
     }

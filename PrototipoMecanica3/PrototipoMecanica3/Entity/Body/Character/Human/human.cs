@@ -65,7 +65,9 @@ namespace PrototipoMecanica3
             else
                 hitX -= 55f;
 
-            if (GetSprite().Equals(World.playerHighKickTexture)) //chute alto
+            if (GetSprite().Equals(World.playerFlyingKickTexture)) //chute no salto
+                hitbox = new Vector2(pos.X + hitX, pos.Y);
+            else if (GetSprite().Equals(World.playerHighKickTexture)) //chute alto
                 hitbox = new Vector2(pos.X + hitX,  (pos.Y - World.playerTexture.Height)+30f);
             else if (GetSprite().Equals(World.playerPunchTexture)) //soco médio
                 hitbox = new Vector2(pos.X + hitX, pos.Y - (World.playerTexture.Height / 2));
@@ -74,6 +76,8 @@ namespace PrototipoMecanica3
             else if (GetSprite().Equals(World.playerLowKickTexture)) //chute baixo
                 hitbox = new Vector2(pos.X + hitX, pos.Y);
             else if (GetSprite().Equals(World.playerMediumKickTexture)) //chute médio
+                hitbox = new Vector2(pos.X + hitX, pos.Y);
+            else if (GetSprite().Equals(World.playerFlyingKickTexture)) //chute no salto
                 hitbox = new Vector2(pos.X + hitX, pos.Y);
 
             //Lifebar.instance.damagePlayerLife(); LINHA DE TESTE DA BARRA DE LIFE DO JOGADOR

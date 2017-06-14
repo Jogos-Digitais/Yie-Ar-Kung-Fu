@@ -65,7 +65,7 @@ namespace PrototipoMecanica3
                 }
             }
 
-            World.entities.Remove(this); //Se manter a remoção do ataque aqui, a imagem não fica persistente, embora o hit funcione de forma perfeita
+            //World.entities.Remove(this); //Se manter a remoção do ataque aqui, a imagem não fica persistente, embora o hit funcione de forma perfeita
         }
 
         public override void Draw(GameTime gameTime)

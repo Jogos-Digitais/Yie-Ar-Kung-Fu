@@ -228,7 +228,10 @@ namespace PrototipoMecanica3
                     break;
 
                 case CharacterState.Dead:
-                    { };
+                    {
+                        if (Lifebar.instance.remainingEnemyLife() > 0)
+                            EnterCharacterState(CharacterState.Standing);
+                    };
                     break;
             }
         }

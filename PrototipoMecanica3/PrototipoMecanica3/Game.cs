@@ -163,6 +163,10 @@ namespace PrototipoMecanica3
             if (Keyboard.GetState().IsKeyDown(Keys.F1) && !prevKeyState.IsKeyDown(Keys.F1))
                 debugMode = !debugMode;
 
+            if (debugMode)
+                if (Keyboard.GetState().IsKeyDown(Keys.F5))
+                    Lifebar.instance.reviveEnemy();
+
             prevKeyState = Keyboard.GetState();
 
             base.Update(gameTime);
@@ -187,8 +191,8 @@ namespace PrototipoMecanica3
             spriteBatch.DrawString(
               fontNormal,
               "F1 - Debug Mode (" + (debugMode ? "DEBUG ON" : "DEBUG OFF") + ")\n" +
-              "Z - Kick | X - Punch",
-              new Vector2(65, 155),  //position
+              "Z - Kick | X - Punch | F5 - In debug mode, revive enemy",
+              new Vector2(65, 151),  //position
               Color.White,          //color
               0.0f,                 //rotation
               Vector2.Zero,         //origin (pivot)

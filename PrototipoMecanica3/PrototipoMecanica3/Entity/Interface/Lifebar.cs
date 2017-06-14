@@ -53,6 +53,12 @@ namespace PrototipoMecanica3
             return enemyLife;
         }
 
+        public void reviveEnemy()
+        {
+            enemyLifeColor = new Color(92, 228, 48);
+            enemyLife = 9;
+        }
+
         public override void Draw(GameTime gameTime)
         {
             World.spriteBatch.Draw(World.lifeBarTexture,

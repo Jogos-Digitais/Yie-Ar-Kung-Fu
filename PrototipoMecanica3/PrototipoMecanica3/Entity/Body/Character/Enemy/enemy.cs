@@ -60,9 +60,9 @@ namespace PrototipoMecanica3
                 Vector2 positionToReturn;
 
                 if (pos.X >= Human.instance.pos.X)
-                    positionToReturn.X = (nearestBody.pos.X + Vector2.One.X) - pos.X;
+                    positionToReturn.X = (nearestBody.pos.X + 90f) - pos.X;
                 else
-                    positionToReturn.X = (nearestBody.pos.X - Vector2.One.X) - pos.X;
+                    positionToReturn.X = (nearestBody.pos.X - 90f) - pos.X;
 
                 positionToReturn.Y = pos.Y;
 
@@ -138,6 +138,18 @@ namespace PrototipoMecanica3
 
             if (World.debugMode)
             {
+                World.spriteBatch.Draw(World.debugBigRectangleTex,
+                  pos,
+                  null,
+                  new Color(0.0f, 0.0f, 1.0f, 0.5f),
+                  0.0f,
+                  new Vector2(sprite.Width / 2f,
+                              sprite.Height), //pivot
+                  Vector2.One, //scale
+                  SpriteEffects.None,
+                  0.3f
+                );
+
                 World.spriteBatch.Draw(World.debugCircleTex,
                   pos,
                   null,

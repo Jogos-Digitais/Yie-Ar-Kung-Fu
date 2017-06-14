@@ -50,6 +50,7 @@ namespace PrototipoMecanica3
         //Sprites - Debugs
         public static Texture2D debugCircleTex;
         public static Texture2D debugRectangleTex;
+        public static Texture2D debugBigRectangleTex;
         public static Texture2D debugHitTex;
 
         //Sprite Batches
@@ -132,6 +133,7 @@ namespace PrototipoMecanica3
             //Load sprites - Debugs
             debugCircleTex = Content.Load<Texture2D>("Sprites/debug_circle");
             debugRectangleTex = Content.Load<Texture2D>("Sprites/debug_rectangle");
+            debugBigRectangleTex = Content.Load<Texture2D>("Sprites/debug_big_rectangle");
             debugHitTex = Content.Load<Texture2D>("Sprites/debug_hitbox");
 
             //Adding entities

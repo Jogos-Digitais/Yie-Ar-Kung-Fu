@@ -80,6 +80,15 @@ namespace PrototipoMecanica3
             return World.enemy001Texture;
         }
 
+        public override void Update(GameTime gameTime)
+        {
+            float deltaTime = (float)gameTime.ElapsedGameTime.TotalSeconds;
+
+            UpdateCharacterState(gameTime);
+
+            base.Update(gameTime);
+        }
+
         public override void Draw(GameTime gameTime)
         {
             Texture2D sprite = GetSprite();

@@ -51,9 +51,6 @@ namespace PrototipoMecanica3
             EnterCharacterState(CharacterState.Standing);
 
             speed *= 2;
-
-            //HitBoxes calcs
-
         }
 
         public Vector2 GetHitboxPosition(Vector2 hitbox)
@@ -65,21 +62,19 @@ namespace PrototipoMecanica3
             else
                 hitX -= 55f;
 
-            if (GetSprite().Equals(World.playerHighKickTexture)) //chute alto
-                hitbox = new Vector2(pos.X + hitX,  (pos.Y - World.playerTexture.Height)+30f);
-            else if (GetSprite().Equals(World.playerPunchTexture)) //soco médio
+            if (GetSprite().Equals(World.playerHighKickTexture)) //Chute alto
+                hitbox = new Vector2(pos.X + hitX,  (pos.Y - World.playerTexture.Height) +30f);
+            else if (GetSprite().Equals(World.playerPunchTexture)) //Soco
                 hitbox = new Vector2(pos.X + hitX, pos.Y - (World.playerTexture.Height / 2));
-            else if (GetSprite().Equals(World.playerLowPunchTexture)) //soco baixo
+            else if (GetSprite().Equals(World.playerLowPunchTexture)) //Soco baixo
                 hitbox = new Vector2(pos.X + hitX, pos.Y - (World.playerTexture.Height / 3));
-            else if (GetSprite().Equals(World.playerLowKickTexture)) //chute baixo
+            else if (GetSprite().Equals(World.playerLowKickTexture)) //Chute baixo
                 hitbox = new Vector2(pos.X + hitX, pos.Y);
-            else if (GetSprite().Equals(World.playerMediumKickTexture)) //chute médio
+            else if (GetSprite().Equals(World.playerMediumKickTexture)) //Chute médio
                 hitbox = new Vector2(pos.X + hitX, pos.Y);
-            else if (GetSprite().Equals(World.playerFlyingKickTexture)) //chute no salto
+            else if (GetSprite().Equals(World.playerFlyingKickTexture)) //Chute no salto
                 hitbox = new Vector2(pos.X + hitX, pos.Y);
 
-            //Lifebar.instance.damagePlayerLife(); LINHA DE TESTE DA BARRA DE LIFE DO JOGADOR
-            //Lifebar.instance.damageEnemyLife(); //LINHA DE TESTE DA BARRA DE LIFE DO INIMIGO
             return hitbox;
         }
 
@@ -601,6 +596,3 @@ namespace PrototipoMecanica3
         }
     }
 }
-
-
-// World.entities.Add(new Hit(this, new Vector2(pos.X + 10, (pos.Y / 2) + pos.Y), GetDir(), new Vector2(32, 32)));

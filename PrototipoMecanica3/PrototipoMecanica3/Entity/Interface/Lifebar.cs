@@ -23,7 +23,8 @@ namespace PrototipoMecanica3
 
         public void damagePlayerLife()
         {
-            playerLife -= 1;
+            if (playerLife >= 1)
+                playerLife -= 1;
 
             if (playerLife > 4)
                 playerLifeColor = new Color(92, 228, 48);
@@ -38,7 +39,8 @@ namespace PrototipoMecanica3
 
         public void damageEnemyLife()
         {
-            enemyLife -= 1;
+            if (enemyLife >= 1)
+                enemyLife -= 1;
 
             if (enemyLife > 4)
                 enemyLifeColor = new Color(92, 228, 48);

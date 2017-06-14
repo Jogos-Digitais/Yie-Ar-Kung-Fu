@@ -55,7 +55,7 @@ namespace PrototipoMecanica3
                 }
             }
 
-            if (nearestBody != null)
+            if (nearestBody != null && !currentState.Equals(CharacterState.Dead))
             {
                 Vector2 positionToReturn;
 
@@ -66,10 +66,7 @@ namespace PrototipoMecanica3
 
                 positionToReturn.Y = pos.Y;
 
-                if (pos.X >= Human.instance.pos.X)
-                    return positionToReturn;
-                else
-                    return positionToReturn;
+                return positionToReturn;
             }
 
             return Vector2.Zero;
@@ -77,7 +74,24 @@ namespace PrototipoMecanica3
 
         public override Texture2D GetSprite()
         {
-            return World.enemy001Texture;
+            Texture2D currentTexture = null;
+
+            switch (currentState)
+            {
+                case CharacterState.Standing:
+                    currentTexture = World.enemy001Texture;
+                    break;
+
+                case CharacterState.Dead:
+                    currentTexture = World.enemy001DeadTexture;
+                    break;
+
+                default:
+                    currentTexture = World.enemy001Texture;
+                    break;
+            }
+
+            return currentTexture;
         }
 
         public override void Update(GameTime gameTime)
@@ -185,15 +199,19 @@ namespace PrototipoMecanica3
             {
                 case CharacterState.Standing:
                     {
-                        if (!GetDir().Equals(Vector2.Zero))
+                        if (!GetDir().Equals(Vector2.Zero) && Lifebar.instance.remainingEnemyLife() >= 1)
                             EnterCharacterState(CharacterState.Moving);
+                        else if (Lifebar.instance.remainingEnemyLife() <= 0)
+                            EnterCharacterState(CharacterState.Dead);
                     }
                     break;
 
                 case CharacterState.Moving:
                     {
-                        if (GetDir().Equals(Vector2.Zero))
+                        if (GetDir().Equals(Vector2.Zero) && Lifebar.instance.remainingEnemyLife() >= 1)
                             EnterCharacterState(CharacterState.Standing);
+                        else if (Lifebar.instance.remainingEnemyLife() <= 0)
+                            EnterCharacterState(CharacterState.Dead);
                     }
                     break;
 

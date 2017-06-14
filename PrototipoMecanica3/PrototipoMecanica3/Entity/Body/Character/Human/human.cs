@@ -589,10 +589,5 @@ namespace PrototipoMecanica3
                     break;
             }
         }
-
-        public override bool WantsToFire()
-        {
-            return Keyboard.GetState().IsKeyDown(Keys.LeftControl);
-        }
     }
 }

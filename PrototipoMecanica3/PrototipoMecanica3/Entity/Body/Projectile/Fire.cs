@@ -11,8 +11,6 @@ namespace PrototipoMecanica3
 {
     public class Fire : Body
     {
-        public float damage = 50f;
-
         public Vector2 dir = Vector2.Zero;
 
         public Character myShooter = null;
@@ -67,7 +65,6 @@ namespace PrototipoMecanica3
             if (other is Character)
             {
                 Character c = (Character)other;
-                c.health -= damage;
             }
         }
 

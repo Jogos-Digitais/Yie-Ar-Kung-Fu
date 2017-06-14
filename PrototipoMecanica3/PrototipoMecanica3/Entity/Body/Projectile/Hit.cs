@@ -13,8 +13,6 @@ namespace PrototipoMecanica3
     {
         bool contato = false; // Checagem de hit
 
-        public float damage = 1f;
-
         public Vector2 dir = Vector2.Zero;
 
         public Character myShooter = null;

@@ -26,6 +26,7 @@ namespace PrototipoMecanica3
         public static Texture2D playerFlyingKickTexture;
 
         public static Texture2D enemy001Texture;
+        public static Texture2D enemy001DeadTexture;
 
         //Sprites - Objects
         public static Texture2D fireTexture;
@@ -107,6 +108,7 @@ namespace PrototipoMecanica3
             playerFlyingKickTexture = Content.Load<Texture2D>("Sprites/PlayerFKick");
             
             enemy001Texture         = Content.Load<Texture2D>("Sprites/Enemy001");
+            enemy001DeadTexture     = Content.Load<Texture2D>("Sprites/Enemy001Dead");
 
             //Load sprites - Objects
             fireTexture = Content.Load<Texture2D>("Sprites/Fire");
@@ -185,8 +187,8 @@ namespace PrototipoMecanica3
             spriteBatch.DrawString(
               fontNormal,
               "F1 - Debug Mode (" + (debugMode ? "DEBUG ON" : "DEBUG OFF") + ")\n" +
-              "Control - Shoot!",
-              new Vector2(10, 10),  //position
+              "Z - Kick | X - Punch",
+              new Vector2(65, 155),  //position
               Color.White,          //color
               0.0f,                 //rotation
               Vector2.Zero,         //origin (pivot)

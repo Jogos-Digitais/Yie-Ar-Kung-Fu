@@ -17,7 +17,7 @@ namespace PrototipoMecanica3
 
         public Character myShooter = null;
 
-        public float lifeTime = 0.25f;
+        public float lifeTime = 5.25f;
 
         public Hit(Character shooter, Vector2 initPos, Vector2 initDir, Vector2 size)
             : base(initPos, size)

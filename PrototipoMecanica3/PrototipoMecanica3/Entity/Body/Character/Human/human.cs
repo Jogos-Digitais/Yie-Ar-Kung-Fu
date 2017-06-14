@@ -65,9 +65,7 @@ namespace PrototipoMecanica3
             else
                 hitX -= 55f;
 
-            if (GetSprite().Equals(World.playerFlyingKickTexture)) //chute no salto
-                hitbox = new Vector2(pos.X + hitX, pos.Y);
-            else if (GetSprite().Equals(World.playerHighKickTexture)) //chute alto
+            if (GetSprite().Equals(World.playerHighKickTexture)) //chute alto
                 hitbox = new Vector2(pos.X + hitX,  (pos.Y - World.playerTexture.Height)+30f);
             else if (GetSprite().Equals(World.playerPunchTexture)) //soco médio
                 hitbox = new Vector2(pos.X + hitX, pos.Y - (World.playerTexture.Height / 2));
@@ -415,6 +413,7 @@ namespace PrototipoMecanica3
                                 jumpKick = true;
                                 jumpKicked = true;
                                 attackingTime -= deltaTime;
+                                World.entities.Add(new Hit(this, GetHitboxPosition(hitbox), GetDir(), new Vector2(32, 32)));
                             }
                             else if (attackingTime > 0f && jumpKicked)
                             {
@@ -440,6 +439,7 @@ namespace PrototipoMecanica3
                                 jumpKick = true;
                                 jumpKicked = true;
                                 attackingTime -= deltaTime;
+                                World.entities.Add(new Hit(this, GetHitboxPosition(hitbox), GetDir(), new Vector2(32, 32)));
                             }
                             else if (attackingTime > 0f && jumpKicked)
                             {
@@ -472,6 +472,7 @@ namespace PrototipoMecanica3
                                 jumpKick = true;
                                 jumpKicked = true;
                                 attackingTime -= deltaTime;
+                                World.entities.Add(new Hit(this, GetHitboxPosition(hitbox), GetDir(), new Vector2(32, 32)));
                             }
                             else if (attackingTime > 0f && jumpKicked)
                             {

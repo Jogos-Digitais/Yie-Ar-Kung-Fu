@@ -11,6 +11,8 @@ namespace PrototipoMecanica3
 {
     public class Hit : Body
     {
+        bool contato = false; // Checagem de hit
+
         public float damage = 1f;
 
         public Vector2 dir = Vector2.Zero;
@@ -52,6 +54,8 @@ namespace PrototipoMecanica3
             Vector2 myMin = GetMin();
             Vector2 myMax = GetMax();
 
+            
+
             foreach (Entity e in World.entities)
             {
                 if ((e != this) && //not myself?
@@ -60,7 +64,11 @@ namespace PrototipoMecanica3
                     e.TestCollisionRect(myMin, myMax)) //is colliding against other entity?
                 {
                     Character opponent = (Character)e;
-                    Lifebar.instance.damageEnemyLife(); //Reduz a vida do adversário
+                        if (contato == false)
+                        {
+                            contato = true;
+                            Lifebar.instance.damageEnemyLife(); //Reduz a vida do adversário
+                        }                    
                     break;
                 }
             }

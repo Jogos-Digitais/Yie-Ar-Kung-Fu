@@ -63,7 +63,7 @@ namespace PrototipoMecanica3
                 hitX -= 55f;
 
             if (GetSprite().Equals(World.playerHighKickTexture)) //Chute alto
-                hitbox = new Vector2(pos.X + hitX,  (pos.Y - World.playerTexture.Height) +30f);
+                hitbox = new Vector2(pos.X + hitX,  (pos.Y - World.playerTexture.Height) +40f);
             else if (GetSprite().Equals(World.playerPunchTexture)) //Soco
                 hitbox = new Vector2(pos.X + hitX, pos.Y - (World.playerTexture.Height / 2));
             else if (GetSprite().Equals(World.playerLowPunchTexture)) //Soco baixo

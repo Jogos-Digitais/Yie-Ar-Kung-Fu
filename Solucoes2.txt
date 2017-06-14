@@ -1,0 +1,73 @@
+
+DarkSehna - Hoje às 00:25
+Vector2 myMin = GetMin();
+            Vector2 myMax = GetMax();
+
+
+
+            foreach (Entity e in World.entities)
+            {
+                if ((e != this) && //not myself?
+                    (e != myShooter) && //not my shooter?
+                    (e is Character) && //is character?
+                    e.TestCollisionRect(myMin, myMax)) //is colliding against other entity?
+                {
+                    Character opponent = (Character)e;
+                        if (contato == false)
+                        {
+                            contato = true;
+                            Lifebar.instance.damageEnemyLife(); //Reduz a vida do adversário
+                        }
+                    break;
+                }
+isso é a condição de colisão nao?
+GabrielMR - Hoje às 00:26
+sim
+colidiu e houve contato pela primeira vez
+reduz vida
+DarkSehna - Hoje às 00:26
+copia ela e coloca em uma função no inimigo, muda as condições para
+e is Proctile
+e em vez de mudar vida
+entra no estado
+entrando no estado verifica o lifebar
+e gg
+moreu
+coloca um botao para aparecer feel like a ninja
+e gg prototipos
+GabrielMR - Hoje às 00:27
+:stuck_out_tongue:
+Eu entendi 25% do que você falou agora
+DarkSehna - Hoje às 00:28
+metade do q eu falei nao é importante
+acrdito q
+GabrielMR - Hoje às 00:28
+Bem
+Então meu aproveitamento foi de 75%
+DarkSehna - Hoje às 00:28
+se subistituir o        (e is Character) && //is character?
+por
+e is a Proctile
+troca a condição de Character para projectile, q seria o hit
+algo assim
+ai em vez de diminuir o lifebar
+entra no estado
+GabrielMR - Hoje às 00:29
+recoiling
+DarkSehna - Hoje às 00:29
+recoiling
+GabrielMR - Hoje às 00:29
+checa a vida
+DarkSehna - Hoje às 00:29
+isso
+isso
+GabrielMR - Hoje às 00:29
+Entendi
+DarkSehna - Hoje às 00:29
+e acabou
+o resto foi só bobegem
+q essa ideia me veio assim do nada
+e acabei escrevendo besteira
+NOVAS MENSAGENS
+DarkSehna - Hoje às 00:30
+girias dos games

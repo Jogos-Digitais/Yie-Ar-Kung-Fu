@@ -1,0 +1,12 @@
+
+	Gabriel Sehna
+	Gabriel Rebello
+	Vander Costa
+
+Primeiro protótipo:
+
+	Movimentação, limite da tela, saltar
+
+Segundo protótipo:
+
+	Golpes, 

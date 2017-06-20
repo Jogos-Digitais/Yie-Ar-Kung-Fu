@@ -44,6 +44,7 @@ namespace PrototipoMecanica4
         public static Texture2D fireHitTexture;
 
         //Sprites - Stages
+        public static Texture2D menuTexture;
         public static Texture2D stageTexture;
 
         //Sprites messages
@@ -133,6 +134,7 @@ namespace PrototipoMecanica4
             fireHitTexture = Content.Load<Texture2D>("Sprites/fireHit");
 
             //Load sprites - Stages
+            menuTexture = Content.Load<Texture2D>("Sprites/Menu");
             stageTexture = Content.Load<Texture2D>("Sprites/Stage");
 
             //Sprites messages
@@ -278,7 +280,9 @@ namespace PrototipoMecanica4
             switch (currentState)
             {
                 case GameState.Menu:
-                    { }
+                    {
+                        drawMenu(gameTime);
+                    }
                     break;
 
                 case GameState.Stage:
@@ -358,7 +362,8 @@ namespace PrototipoMecanica4
 
         private void drawMenu(GameTime gameTime)
         {
-
+            //Draw menu
+            spriteBatch.Draw(menuTexture, new Vector2(0f, 0f), null, Color.White, 0.0f, Vector2.Zero, Vector2.One, SpriteEffects.None, 0.4f);
         }
 
         private void drawStage(GameTime gameTime)

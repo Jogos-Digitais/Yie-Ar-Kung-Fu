@@ -55,7 +55,6 @@
     <Compile Include="Entity\Interface\Button.cs" />
     <Compile Include="Entity\Interface\Lifebar.cs" />
     <Compile Include="Game.cs" />
-    <Compile Include="GameStates.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Screens\Menu.cs" />

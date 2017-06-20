@@ -8,7 +8,7 @@ namespace PrototipoMecanica4
     public class World : Game
     {
         GraphicsDeviceManager graphics;
-        
+
         #region VARIABLES
 
         //Sprites - Fonts
@@ -98,24 +98,26 @@ namespace PrototipoMecanica4
             //Create new sprite batch
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
+            #region TEXTURE AND TEXT LOADS
+
             //Load fonts
             fontNormal = Content.Load<SpriteFont>("Fonts/Normal");
 
             //Load sprites - Characters
-            playerTexture           = Content.Load<Texture2D>("Sprites/Player");
-            playerMovingTexture     = Content.Load<Texture2D>("Sprites/PlayerMoving");
-            playerJumpingTexture    = Content.Load<Texture2D>("Sprites/PlayerJumping");
+            playerTexture = Content.Load<Texture2D>("Sprites/Player");
+            playerMovingTexture = Content.Load<Texture2D>("Sprites/PlayerMoving");
+            playerJumpingTexture = Content.Load<Texture2D>("Sprites/PlayerJumping");
 
-            playerLowPunchTexture   = Content.Load<Texture2D>("Sprites/PlayerLPunch");
-            playerPunchTexture      = Content.Load<Texture2D>("Sprites/PlayerPunch");
+            playerLowPunchTexture = Content.Load<Texture2D>("Sprites/PlayerLPunch");
+            playerPunchTexture = Content.Load<Texture2D>("Sprites/PlayerPunch");
 
-            playerLowKickTexture    = Content.Load<Texture2D>("Sprites/PlayerLKick");
+            playerLowKickTexture = Content.Load<Texture2D>("Sprites/PlayerLKick");
             playerMediumKickTexture = Content.Load<Texture2D>("Sprites/PlayerMKick");
-            playerHighKickTexture   = Content.Load<Texture2D>("Sprites/PlayerHKick");
+            playerHighKickTexture = Content.Load<Texture2D>("Sprites/PlayerHKick");
             playerFlyingKickTexture = Content.Load<Texture2D>("Sprites/PlayerFKick");
-            
-            enemy001Texture         = Content.Load<Texture2D>("Sprites/Enemy001");
-            enemy001DeadTexture     = Content.Load<Texture2D>("Sprites/Enemy001Dead");
+
+            enemy001Texture = Content.Load<Texture2D>("Sprites/Enemy001");
+            enemy001DeadTexture = Content.Load<Texture2D>("Sprites/Enemy001Dead");
 
             //Load sprites - Objects
             fireTexture = Content.Load<Texture2D>("Sprites/Fire");
@@ -142,6 +144,8 @@ namespace PrototipoMecanica4
             debugBigRectangleTex = Content.Load<Texture2D>("Sprites/debug_big_rectangle");
             debugHitTex = Content.Load<Texture2D>("Sprites/debug_hitbox");
 
+            #endregion
+
             //Adding entities
             entities.Add(new Human(new Vector2(260, 768), new Vector2(88, 128)));
             entities.Add(new Enemy(new Vector2(642, 768), new Vector2(108, 160)));
@@ -161,26 +165,8 @@ namespace PrototipoMecanica4
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
 
-            if (currentState.Equals(GameState.Menu))
-            {
-                if (Keyboard.GetState().IsKeyDown(Keys.Enter))
-                    EnterGameState(GameState.Stage);
-            }
-
-            else if (currentState.Equals(GameState.Stage))
-            {
-                UpdateGameState(gameTime);
-            }
-
-            else if (currentState.Equals(GameState.Pause))
-            {
-
-            }
-
-            else if (currentState.Equals(GameState.Over))
-            {
-
-            }
+            //Game logic
+            UpdateGameState(gameTime);
 
             prevKeyState = Keyboard.GetState();
 
@@ -195,25 +181,8 @@ namespace PrototipoMecanica4
             //Begin draws
             spriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.NonPremultiplied);
 
-            if (currentState.Equals(GameState.Menu))
-            {
-
-            }
-
-            else if (currentState.Equals(GameState.Stage))
-            {
-                drawStage(gameTime);
-            }
-
-            else if (currentState.Equals(GameState.Pause))
-            {
-
-            }
-
-            else if (currentState.Equals(GameState.Over))
-            {
-
-            }
+            //Draw game
+            DrawGameState(gameTime);
 
             //End draws
             spriteBatch.End();
@@ -231,23 +200,23 @@ namespace PrototipoMecanica4
         {
             LeaveGameState();
 
-            World.currentState = newState;
+            currentState = newState;
 
-            switch (World.currentState)
+            switch (currentState)
             {
-                case World.GameState.Menu:
+                case GameState.Menu:
                     { }
                     break;
 
-                case World.GameState.Stage:
+                case GameState.Stage:
                     { }
                     break;
 
-                case World.GameState.Pause:
+                case GameState.Pause:
                     { }
                     break;
 
-                case World.GameState.Over:
+                case GameState.Over:
                     { }
                     break;
             }
@@ -261,26 +230,28 @@ namespace PrototipoMecanica4
             switch (currentState)
             {
                 case GameState.Menu:
-                    { }
+                    {
+                        if (Keyboard.GetState().IsKeyDown(Keys.Enter) && prevKeyState.IsKeyUp(Keys.Enter))
+                            EnterGameState(GameState.Stage);
+                    }
                     break;
 
                 case GameState.Stage:
                     {
-                        List<Entity> tmp = new List<Entity>(entities);
-                        foreach (Entity e in tmp)
-                            e.Update(gameTime);
+                        if (Keyboard.GetState().IsKeyDown(Keys.Enter) && prevKeyState.IsKeyUp(Keys.Enter))
+                            EnterGameState(GameState.Pause);
 
-                        if (Keyboard.GetState().IsKeyDown(Keys.F1) && !prevKeyState.IsKeyDown(Keys.F1))
-                            debugMode = !debugMode;
-
-                        if (debugMode)
-                            if (Keyboard.GetState().IsKeyDown(Keys.F5))
-                                Lifebar.instance.reviveEnemy();
+                        logicStage(gameTime);
                     }
                     break;
 
                 case GameState.Pause:
-                    { }
+                    {
+                        if (Keyboard.GetState().IsKeyDown(Keys.Enter) && prevKeyState.IsKeyUp(Keys.Enter))
+                            EnterGameState(GameState.Stage);
+
+                        logicPause(gameTime);
+                    }
                     break;
 
                 case GameState.Over:
@@ -311,6 +282,32 @@ namespace PrototipoMecanica4
                     break;
 
                 case GameState.Stage:
+                    {
+                        drawStage(gameTime);
+                    }
+                    break;
+
+                case GameState.Pause:
+                    {
+                        drawPause(gameTime);
+                    }
+                    break;
+
+                case GameState.Over:
+                    { }
+                    break;
+            }
+        }
+
+        public void LeaveGameState()
+        {
+            switch (currentState)
+            {
+                case GameState.Menu:
+                    { }
+                    break;
+
+                case GameState.Stage:
                     { }
                     break;
 
@@ -324,26 +321,35 @@ namespace PrototipoMecanica4
             }
         }
 
-        public void LeaveGameState()
+        #endregion
+
+        #region LOGIC STATES
+
+        private void logicMenu(GameTime gameTime)
         {
-            switch (World.currentState)
-            {
-                case World.GameState.Menu:
-                    { }
-                    break;
+        }
 
-                case World.GameState.Stage:
-                    { }
-                    break;
+        private void logicStage(GameTime gameTime)
+        {
+            List<Entity> tmp = new List<Entity>(entities);
+            foreach (Entity e in tmp)
+                e.Update(gameTime);
 
-                case World.GameState.Pause:
-                    { }
-                    break;
+            if (Keyboard.GetState().IsKeyDown(Keys.F1) && !prevKeyState.IsKeyDown(Keys.F1))
+                debugMode = !debugMode;
 
-                case World.GameState.Over:
-                    { }
-                    break;
-            }
+            if (debugMode)
+                if (Keyboard.GetState().IsKeyDown(Keys.F5))
+                    Lifebar.instance.reviveEnemy();
+        }
+
+        private void logicPause(GameTime gameTime)
+        {
+
+        }
+
+        private void logicOver(GameTime gameTime)
+        {
         }
 
         #endregion
@@ -381,9 +387,7 @@ namespace PrototipoMecanica4
 
         private void drawPause(GameTime gameTime)
         {
-            //Draw game paused
-            if (currentState.Equals(GameState.Pause))
-                spriteBatch.Draw(pauseTexture, new Vector2((graphics.PreferredBackBufferWidth - pauseTexture.Width) / 2, (graphics.PreferredBackBufferHeight - pauseTexture.Height) / 2), null, Color.White, 0.0f, Vector2.Zero, Vector2.One, SpriteEffects.None, 0.3f);
+            spriteBatch.Draw(pauseTexture, new Vector2((graphics.PreferredBackBufferWidth - pauseTexture.Width) / 2, (graphics.PreferredBackBufferHeight - pauseTexture.Height) / 2), null, Color.White, 0.0f, Vector2.Zero, Vector2.One, SpriteEffects.None, 0.3f);
 
             drawStage(gameTime);
         }

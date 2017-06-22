@@ -26,9 +26,25 @@ namespace PrototipoMecanica4
             return Math.Max(size.X, size.Y) / 2f;
         }
 
-        public Vector2 GetMin() { return pos - size / 2; }
+        public Vector2 GetMin()
+        {
+            Vector2 calc;
 
-        public Vector2 GetMax() { return pos + size / 2; }
+            calc.X = pos.X - size.X / 2f;
+            calc.Y = pos.Y - size.Y;
+
+            return calc;
+        }
+
+        public Vector2 GetMax()
+        {
+            Vector2 calc;
+
+            calc.X = pos.X + size.X / 2f;
+            calc.Y = pos.Y;
+
+            return calc;
+        }
 
         public virtual Vector2 GetDir()
         {
@@ -42,10 +58,10 @@ namespace PrototipoMecanica4
 
         public bool TestPoint(Vector2 testPos)
         {
-            return (testPos.X > (pos.X - size.X / 2f)) &&
-                   (testPos.Y > (pos.Y - size.Y / 2f)) &&
-                   (testPos.X < (pos.X + size.X / 2f)) &&
-                   (testPos.Y < (pos.Y + size.Y / 2f));
+            return (testPos.X > GetMin().X) &&
+                   (testPos.Y > GetMin().Y) &&
+                   (testPos.X < GetMax().X) &&
+                   (testPos.Y < GetMax().Y);
         }
 
         public override void Update(GameTime gameTime)

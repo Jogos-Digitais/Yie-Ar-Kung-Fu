@@ -45,9 +45,9 @@ namespace PrototipoMecanica4
                 {
                     Body testBody = (Body)e;
 
-                    float testDist = Vector2.Distance(this.pos, testBody.pos) - testBody.GetRadius();
+                    float testDist = Vector2.Distance(this.pos, testBody.pos);
 
-                    if ((testDist <= visionRadius) && (testDist < nearestDist))
+                    if (testDist < nearestDist)
                     {
                         nearestDist = testDist;
                         nearestBody = testBody;

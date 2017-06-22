@@ -66,23 +66,24 @@ namespace PrototipoMecanica4
 
         public override void Update(GameTime gameTime)
         {
-            float dt = (float)gameTime.ElapsedGameTime.TotalSeconds;
+            float deltaTime = (float)gameTime.ElapsedGameTime.TotalSeconds;
 
             Vector2 dir = GetDir();
 
             float s = dir.Length();
+            
             if (s > 0)
                 dir = dir / s;
 
             //simulate physics independently in two axis
             for (int axis = 0; axis < 2; axis++)
             {
-                Vector2 bkpPos = pos; //save current position
+                Vector2 backupPos = pos; //save current position
 
                 if (axis == 0)
-                    pos += new Vector2(dir.X, 0f) * dt * speed; //only X
+                    pos += new Vector2(dir.X, 0f) * deltaTime * speed; //only X
                 else
-                    pos += new Vector2(0f, dir.Y) * dt * speed; //only Y
+                    pos += new Vector2(0f, dir.Y) * deltaTime * speed; //only Y
 
                 Entity collider = null;
 
@@ -104,15 +105,12 @@ namespace PrototipoMecanica4
                 }
 
                 if (collider != null) //undo movement!
-                    pos = bkpPos;
+                    pos = backupPos;
             }
 
             //Arena limits
             if (pos.X <= size.X / 2f + 96f) //(char width / 2) + limit
                 pos.X = size.X / 2f + 96f;
-
-            //if (pos.Y <= size.Y / 2f + 519f) //(char height / 2) + limit
-            //    pos.Y = size.Y / 2f + 519f;
 
             if (pos.X >= size.X / 2f + (928f - size.X)) //(char width / 2) + (limit - char width)
                 pos.X = size.X / 2f + (928f - size.X);

@@ -36,33 +36,18 @@ namespace PrototipoMecanica4
 
         public override Vector2 GetDir()
         {
-            Body nearestBody = null;
-            float nearestDist = 9999.9f;
+            Body testBody = Human.instance;
 
-            foreach (Entity e in World.entities)
-            {
-                if (e is Human)
-                {
-                    Body testBody = (Body)e;
+            //float testDist = Vector2.Distance(this.pos, testBody.pos);
 
-                    float testDist = Vector2.Distance(this.pos, testBody.pos);
-
-                    if (testDist < nearestDist)
-                    {
-                        nearestDist = testDist;
-                        nearestBody = testBody;
-                    }
-                }
-            }
-
-            if (nearestBody != null && !currentState.Equals(CharacterState.Dead))
+            if (!currentState.Equals(CharacterState.Dead))
             {
                 Vector2 positionToReturn;
 
                 if (pos.X >= Human.instance.pos.X)
-                    positionToReturn.X = (nearestBody.pos.X + 90f) - pos.X;
+                    positionToReturn.X = testBody.pos.X - pos.X + 100f;
                 else
-                    positionToReturn.X = (nearestBody.pos.X - 90f) - pos.X;
+                    positionToReturn.X = testBody.pos.X - pos.X - 100f;
 
                 positionToReturn.Y = pos.Y;
 
@@ -150,18 +135,18 @@ namespace PrototipoMecanica4
                   0.3f
                 );
 
-                World.spriteBatch.Draw(World.debugCircleTex,
-                  pos,
-                  null,
-                  new Color(1.0f, 0.0f, 0.0f, 0.5f),
-                  0.0f,
-                  new Vector2(World.debugCircleTex.Width,
-                              World.debugCircleTex.Height) / 2f, //pivot
-                  new Vector2(2f * visionRadius / (float)World.debugCircleTex.Width,
-                              2f * visionRadius / (float)World.debugCircleTex.Height), //scale
-                  SpriteEffects.None,
-                  0.3f
-                );
+                //World.spriteBatch.Draw(World.debugCircleTex,
+                //  pos,
+                //  null,
+                //  new Color(1.0f, 0.0f, 0.0f, 0.5f),
+                //  0.0f,
+                //  new Vector2(World.debugCircleTex.Width,
+                //              World.debugCircleTex.Height) / 2f, //pivot
+                //  new Vector2(2f * visionRadius / (float)World.debugCircleTex.Width,
+                //              2f * visionRadius / (float)World.debugCircleTex.Height), //scale
+                //  SpriteEffects.None,
+                //  0.3f
+                //);
 
                 World.spriteBatch.DrawString(World.fontNormal, "State: " + currentState.ToString(), new Vector2(this.pos.X, this.pos.Y + 20f), Color.White, 0.0f, Vector2.Zero, 1f, SpriteEffects.None, 0.0f);
             }

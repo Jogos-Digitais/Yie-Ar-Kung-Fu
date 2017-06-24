@@ -62,7 +62,7 @@ namespace PrototipoMecanica4
         public override void Draw(GameTime gameTime)
         {
             World.spriteBatch.Draw(World.lifeBarTexture,
-              new Vector2(152, 841),
+              new Vector2(152, 832),
               null,
               Color.White,
               0.0f,
@@ -73,10 +73,10 @@ namespace PrototipoMecanica4
             );
 
             for (int i = 0; i < playerLife; i++)
-                World.spriteBatch.Draw(World.lifeFragment, new Vector2(416 - (32 * i), 849), null, playerLifeColor, 0.0f, Vector2.Zero, Vector2.One, SpriteEffects.None, 0.1f);
+                World.spriteBatch.Draw(World.lifeFragment, new Vector2(416 - (32 * i), 840), null, playerLifeColor, 0.0f, Vector2.Zero, Vector2.One, SpriteEffects.None, 0.1f);
 
             for (int i = 0; i < enemyLife; i++)
-                World.spriteBatch.Draw(World.lifeFragment, new Vector2(576 + (32 * i), 849), null, enemyLifeColor, 0.0f, Vector2.Zero, Vector2.One, SpriteEffects.None, 0.1f);
+                World.spriteBatch.Draw(World.lifeFragment, new Vector2(576 + (32 * i), 840), null, enemyLifeColor, 0.0f, Vector2.Zero, Vector2.One, SpriteEffects.None, 0.1f);
 
             if (World.debugMode)
             {

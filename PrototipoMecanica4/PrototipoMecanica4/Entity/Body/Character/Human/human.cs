@@ -17,7 +17,7 @@ namespace PrototipoMecanica4
         float jumpTime = 0.5f; //tempo do salto
         float jumpHeight = 9f; //altura do salto
         float jumpDirection = 0f; //direção do salto
-        float jumpDistance = 9f; //distância do salto
+        float jumpDistance = 6.43f; //distância do salto
         float time;  //valor de tempo para calcular o seno
         float jumpEffectY; //efeito de pulo para o alto
         float jumpEffectX; //efeito de pulo para a direção

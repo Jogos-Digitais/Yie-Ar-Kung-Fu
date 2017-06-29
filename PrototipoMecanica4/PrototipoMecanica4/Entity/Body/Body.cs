@@ -84,7 +84,8 @@ namespace PrototipoMecanica4
                 {
                     pos += new Vector2(dir.X, 0f) * deltaTime * speed; //only X
                 }
-                else { 
+                else
+                { 
                     pos += new Vector2(0f, dir.Y) * deltaTime * speed; //only Y
                 }
 

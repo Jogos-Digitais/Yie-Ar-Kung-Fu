@@ -28,6 +28,14 @@ namespace PrototipoMecanica4
         public static Texture2D playerFlyingKickTexture;
 
         public static Texture2D enemy001Texture;
+
+        public static Texture2D enemy001MovingTexture;
+        public static Texture2D enemy001PrepareAttackTexture;
+
+        public static Texture2D enemy001KickTexture;
+        public static Texture2D enemy001LowStaffAttackTexture;
+        public static Texture2D enemy001StaffAttackTexture;
+
         public static Texture2D enemy001DeadTexture;
 
         //Sprites - Objects
@@ -118,6 +126,14 @@ namespace PrototipoMecanica4
             playerFlyingKickTexture = Content.Load<Texture2D>("Sprites/PlayerFKick");
 
             enemy001Texture = Content.Load<Texture2D>("Sprites/Enemy001");
+
+            enemy001MovingTexture = Content.Load<Texture2D>("Sprites/Enemy001Moving");
+            enemy001PrepareAttackTexture = Content.Load<Texture2D>("Sprites/Enemy001PrepareAttack");
+
+            enemy001KickTexture = Content.Load<Texture2D>("Sprites/Enemy001Kick");
+            enemy001LowStaffAttackTexture = Content.Load<Texture2D>("Sprites/Enemy001LStaffAttack");
+            enemy001StaffAttackTexture = Content.Load<Texture2D>("Sprites/Enemy001StaffAttack");
+
             enemy001DeadTexture = Content.Load<Texture2D>("Sprites/Enemy001Dead");
 
             //Load sprites - Objects

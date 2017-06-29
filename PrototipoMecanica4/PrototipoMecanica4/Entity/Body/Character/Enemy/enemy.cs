@@ -15,6 +15,10 @@ namespace PrototipoMecanica4
 
         public float visionRadius;
 
+        private float safeDistance = 124f; //Distância segura do player, para aproximação
+        private float dangerDistance = 0f; //Distância perigosa do player, para afastar-se
+        private float runDistance = 0f; //Distância de corrida, multiplicar por pontos de vida perdidos
+
         //Machine states
         public enum CharacterState { Null, Standing, Moving, Attacking, Recoiling, Running, Dead }; //Nenhum estado, parado, movendo-se, atacando, recuando, correndo, morto
 
@@ -32,22 +36,23 @@ namespace PrototipoMecanica4
 
             speed *= 2f;
             visionRadius = size.X * 2;
+
+            //Definir distâncias
+            safeDistance = 104 + (Human.instance.size.X / 2) + (Enemy.instance.size.X / 2);
         }
 
         public override Vector2 GetDir()
         {
             Body testBody = Human.instance;
 
-            //float testDist = Vector2.Distance(this.pos, testBody.pos);
-
             if (!currentState.Equals(CharacterState.Dead))
             {
                 Vector2 positionToReturn;
 
                 if (pos.X >= Human.instance.pos.X)
-                    positionToReturn.X = testBody.pos.X - pos.X + 100f;
+                    positionToReturn.X = testBody.pos.X - pos.X + safeDistance;
                 else
-                    positionToReturn.X = testBody.pos.X - pos.X - 100f;
+                    positionToReturn.X = testBody.pos.X - pos.X - safeDistance;
 
                 positionToReturn.Y = pos.Y;
 
@@ -196,7 +201,7 @@ namespace PrototipoMecanica4
             {
                 case CharacterState.Standing:
                     {
-                        if (!GetDir().Equals(Vector2.Zero) && Lifebar.instance.remainingEnemyLife() >= 1)
+                        if (!((int)GetDir().X).Equals((int)Vector2.Zero.X) && Lifebar.instance.remainingEnemyLife() >= 1)
                             EnterCharacterState(CharacterState.Moving);
                         else if (Lifebar.instance.remainingEnemyLife() <= 0)
                             EnterCharacterState(CharacterState.Dead);
@@ -205,7 +210,22 @@ namespace PrototipoMecanica4
 
                 case CharacterState.Moving:
                     {
-                        if (GetDir().Equals(Vector2.Zero) && Lifebar.instance.remainingEnemyLife() >= 1)
+                        //if (Math.Abs(GetDir().X) < dangerDistance)
+                        //{
+                        //    EnterCharacterState(CharacterState.Running);
+                        //}
+                        //
+                        //else if (Math.Abs(GetDir().X) > dangerDistance && Math.Abs(GetDir().X) <= safeDistance)
+                        //{
+                        //    EnterCharacterState(CharacterState.Attacking);
+                        //}
+                        //
+                        //else
+                        //{
+                        //
+                        //}
+
+                        if (((int)GetDir().X).Equals((int)Vector2.Zero.X) && Lifebar.instance.remainingEnemyLife() >= 1)
                             EnterCharacterState(CharacterState.Standing);
                         else if (Lifebar.instance.remainingEnemyLife() <= 0)
                             EnterCharacterState(CharacterState.Dead);

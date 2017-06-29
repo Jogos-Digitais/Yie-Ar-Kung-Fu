@@ -1,0 +1,7 @@
+1 - O inimigo tem uma distancia mínima de 104 pxs antes de entrar no ataque combo
+2 - quando o inimigo chega na distância mínima ele entra no combo de ataque, que consiste  em uma sequência de 4 chutes
+3 - o inimigo desfere 4 chutes em combo e então avança, repeteindo  o mesmo processo até que seja atingido
+4 - quando o inimigo é atacado, ele recua uma certa distância dependendo do nível de vida dele
+5 - no primeiro hit recebido, o inimigo recua para a distancia segura ( 104 pxs) do player
+6 - os hit consecutivos, serão a soma do recuo anterior com a metade do mesmo
+7 - quando o player pousa na posição mais próxima do inimigo ( próximo de 0), o inimigo recua

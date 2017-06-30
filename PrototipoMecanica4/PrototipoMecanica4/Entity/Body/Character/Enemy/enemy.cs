@@ -13,8 +13,8 @@ namespace PrototipoMecanica4
     {
         static public Enemy instance = null;
 
-        private float safeDistance = 0f; //Distância segura do player, para aproximação
-        private float dangerDistance = 0f; //Distância perigosa do player, para afastar-se
+        private float safeZone = 0f; //Distância segura do player, para aproximação
+        private float dangerZone = 0f; //Distância perigosa do player, para afastar-se
         private float runDistance = 0f; //Distância de corrida, multiplicar por pontos de vida perdidos
 
         float movingTime; //valor de tempo para calcular movimento
@@ -24,7 +24,7 @@ namespace PrototipoMecanica4
         float attackingTime = 0.25f; //valor de tempo para calcular ataques
 
         //Machine states
-        public enum CharacterState { Null, Standing, Moving, Attacking, Recoiling, Running, Dead }; //Nenhum estado, parado, movendo-se, atacando, recuando, correndo, morto
+        public enum CharacterState { Null, Standing, Moving, Advancing, Retreating, Attacking, Recoiling, Running, Dead }; //Nenhum estado, parado, movendo-se, avançando, recuando, atacando, absorvendo, correndo, morto
 
         //Current State
         public static CharacterState previousState = CharacterState.Null;
@@ -40,8 +40,8 @@ namespace PrototipoMecanica4
             speed /= 8f;
 
             //Definir distâncias
-            safeDistance = 104 + (Human.instance.size.X / 2) + (size.X / 2);
-            dangerDistance = -4 + (Human.instance.size.X / 2) + (size.X / 2); //Nunca verificar com igual, sempre menor
+            safeZone = 104 + (Human.instance.size.X / 2) + (size.X / 2);
+            dangerZone = -4 + (Human.instance.size.X / 2) + (size.X / 2); //Nunca verificar com igual, sempre menor
         }
 
         public override Vector2 GetDir()
@@ -50,12 +50,34 @@ namespace PrototipoMecanica4
 
             if (!currentState.Equals(CharacterState.Dead))
             {
-                Vector2 positionToReturn;
+                Vector2 positionToReturn = Vector2.Zero;
 
-                if (pos.X >= Human.instance.pos.X)
-                    positionToReturn.X = testBody.pos.X - pos.X + safeDistance; //+safedistance
-                else
-                    positionToReturn.X = testBody.pos.X - pos.X - safeDistance; //-safedistance
+                switch (currentState)
+                {
+                    case CharacterState.Moving:
+                        {
+                            if (pos.X >= Human.instance.pos.X)
+                                positionToReturn.X = testBody.pos.X - pos.X + safeZone; //+safedistance
+                            else
+                                positionToReturn.X = testBody.pos.X - pos.X - safeZone; //-safedistance
+                        }
+                        break;
+
+                    case CharacterState.Advancing:
+                        {
+                            if (pos.X >= Human.instance.pos.X)
+                                positionToReturn.X = testBody.pos.X - pos.X + dangerZone; //+safedistance
+                            else
+                                positionToReturn.X = testBody.pos.X - pos.X - dangerZone; //-safedistance
+                        }
+                        break;
+
+                    case CharacterState.Retreating:
+                        {
+
+                        }
+                        break;
+                }
 
                 positionToReturn.Y = pos.Y;
 
@@ -84,6 +106,12 @@ namespace PrototipoMecanica4
                     }
                     break;
 
+                case CharacterState.Attacking:
+                    {
+                        currentTexture = World.enemy001PrepareAttackTexture;
+                    }
+                    break;
+
                 case CharacterState.Dead:
                     currentTexture = World.enemy001DeadTexture;
                     break;
@@ -96,10 +124,8 @@ namespace PrototipoMecanica4
             return currentTexture;
         }
 
-        public override void Update(GameTime gameTime)
+        public void move(float deltaTime)
         {
-            float deltaTime = (float)gameTime.ElapsedGameTime.TotalSeconds;
-
             Vector2 dir = GetDir();
 
             float s = dir.Length();
@@ -147,12 +173,20 @@ namespace PrototipoMecanica4
             //Arena limits
             if (pos.X <= size.X / 2f + 96f) //(char width / 2) + limit
                 pos.X = size.X / 2f + 96f;
-            
+
             if (pos.X >= size.X / 2f + (928f - size.X)) //(char width / 2) + (limit - char width)
                 pos.X = size.X / 2f + (928f - size.X);
-            
+
             if (pos.Y >= size.Y + (768f - size.Y)) //(char height / 2) + (limit - char height)
                 pos.Y = size.Y + (768f - size.Y);
+        }
+
+        public override void Update(GameTime gameTime)
+        {
+            float deltaTime = (float)gameTime.ElapsedGameTime.TotalSeconds;
+
+            //if (currentState.Equals(CharacterState.Moving))
+            //    move(deltaTime);
 
             UpdateCharacterState(gameTime);
         }
@@ -225,6 +259,14 @@ namespace PrototipoMecanica4
                     { }
                     break;
 
+                case CharacterState.Advancing:
+                    { }
+                    break;
+
+                case CharacterState.Retreating:
+                    { }
+                    break;
+
                 case CharacterState.Attacking:
                     { }
                     break;
@@ -256,13 +298,19 @@ namespace PrototipoMecanica4
                     {
                         if (!((int)distance == 0) && Lifebar.instance.remainingEnemyLife() >= 1)
                             EnterCharacterState(CharacterState.Moving);
+
                         else if (Lifebar.instance.remainingEnemyLife() <= 0)
                             EnterCharacterState(CharacterState.Dead);
+
+                        else if ((int)distance == 0)
+                            EnterCharacterState(CharacterState.Attacking);
                     }
                     break;
 
                 case CharacterState.Moving:
                     {
+                        move(deltaTime);
+
                         if ((int)distance == 0 && Lifebar.instance.remainingEnemyLife() >= 1)
                             EnterCharacterState(CharacterState.Standing);
 
@@ -291,6 +339,14 @@ namespace PrototipoMecanica4
                             framePersistance = 0;
                         }
                     }
+                    break;
+
+                case CharacterState.Advancing:
+                    { }
+                    break;
+
+                case CharacterState.Retreating:
+                    { }
                     break;
 
                 case CharacterState.Attacking:
@@ -326,6 +382,14 @@ namespace PrototipoMecanica4
                     { 
 						movingTime = 0f;
 					}
+                    break;
+
+                case CharacterState.Advancing:
+                    { }
+                    break;
+
+                case CharacterState.Retreating:
+                    { }
                     break;
 
                 case CharacterState.Attacking:

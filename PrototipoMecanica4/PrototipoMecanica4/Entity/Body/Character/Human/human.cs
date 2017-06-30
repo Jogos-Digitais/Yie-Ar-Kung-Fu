@@ -34,7 +34,7 @@ namespace PrototipoMecanica4
         Vector2 hitbox = Vector2.One;
 
         //Machine states
-        public enum CharacterState { Null, Standing, Moving, Crouching, Jumping, Punching, Kicking, Recoiling, Dead }; //Nenhum estado, parado, movendo-se, abaixando-se, saltando, socando, chutando, recuando, morto
+        public enum CharacterState { Null, Standing, Moving, Crouching, Jumping, Punching, Kicking, Recoiling, Dead }; //Nenhum estado, parado, movendo-se, abaixando-se, saltando, socando, chutando, absorvendo, morto
 
         //Current State
         public static CharacterState previousState = CharacterState.Null;
@@ -254,6 +254,7 @@ namespace PrototipoMecanica4
                         if (!previousState.Equals(CharacterState.Moving))
                         {
                             previousPosition = pos.X;
+
                             if (Enemy.instance.pos.X > pos.X)
                                 pos.X += 70;
                             else
@@ -269,6 +270,7 @@ namespace PrototipoMecanica4
                         if (!previousState.Equals(CharacterState.Moving) || GetSprite().Equals(World.playerHighKickTexture))
                         {
                             previousPosition = pos.X;
+
                             if (Enemy.instance.pos.X > pos.X)
                                 pos.X += 70;
                             else

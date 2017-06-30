@@ -21,6 +21,8 @@ namespace PrototipoMecanica4
         int framePersistance; //Conta 3 e muda frame
         bool movingFrame = false; //Moving frame
 
+        float attackingTime = 0.25f; //valor de tempo para calcular ataques
+
         //Machine states
         public enum CharacterState { Null, Standing, Moving, Attacking, Recoiling, Running, Dead }; //Nenhum estado, parado, movendo-se, atacando, recuando, correndo, morto
 
@@ -35,7 +37,7 @@ namespace PrototipoMecanica4
             //New position
             EnterCharacterState(CharacterState.Standing);
 
-            speed /= 4f;
+            speed /= 8f;
 
             //Definir distâncias
             safeDistance = 104 + (Human.instance.size.X / 2) + (size.X / 2);
@@ -51,9 +53,9 @@ namespace PrototipoMecanica4
                 Vector2 positionToReturn;
 
                 if (pos.X >= Human.instance.pos.X)
-                    positionToReturn.X = testBody.pos.X - pos.X + safeDistance;
+                    positionToReturn.X = testBody.pos.X - pos.X + safeDistance; //+safedistance
                 else
-                    positionToReturn.X = testBody.pos.X - pos.X - safeDistance;
+                    positionToReturn.X = testBody.pos.X - pos.X - safeDistance; //-safedistance
 
                 positionToReturn.Y = pos.Y;
 
@@ -74,7 +76,12 @@ namespace PrototipoMecanica4
                     break;
 
                 case CharacterState.Moving:
-                    currentTexture = World.enemy001MovingTexture;
+                    {
+                        if (movingFrame)
+                            currentTexture = World.enemy001MovingTexture;
+                        else
+                            currentTexture = World.enemy001Texture;
+                    }
                     break;
 
                 case CharacterState.Dead:
@@ -241,11 +248,13 @@ namespace PrototipoMecanica4
             //Timer
             float deltaTime = (float)gameTime.ElapsedGameTime.TotalSeconds;
 
+            float distance = Math.Abs(GetDir().X);
+
             switch (currentState)
             {
                 case CharacterState.Standing:
                     {
-                        if (!GetDir().X.Equals(0.00f) && Lifebar.instance.remainingEnemyLife() >= 1)
+                        if (!((int)distance == 0) && Lifebar.instance.remainingEnemyLife() >= 1)
                             EnterCharacterState(CharacterState.Moving);
                         else if (Lifebar.instance.remainingEnemyLife() <= 0)
                             EnterCharacterState(CharacterState.Dead);
@@ -254,10 +263,33 @@ namespace PrototipoMecanica4
 
                 case CharacterState.Moving:
                     {
-                        if (GetDir().X.Equals(0.00f) && Lifebar.instance.remainingEnemyLife() >= 1)
+                        if ((int)distance == 0 && Lifebar.instance.remainingEnemyLife() >= 1)
                             EnterCharacterState(CharacterState.Standing);
+
                         else if (Lifebar.instance.remainingEnemyLife() <= 0)
                             EnterCharacterState(CharacterState.Dead);
+
+                        else if (movingTime < 0.200)
+                        {
+                            if (movingFrame && framePersistance == 10)
+                            {
+                                movingFrame = false;
+                            }
+
+                            else if (movingFrame == false && framePersistance == 10)
+                            {
+                                movingFrame = true;
+                            }
+
+                            framePersistance++;
+                            movingTime += deltaTime;
+                        }
+
+                        else if(movingTime > 0.200)
+                        {
+                            movingTime = 0;
+                            framePersistance = 0;
+                        }
                     }
                     break;
 
@@ -291,11 +323,15 @@ namespace PrototipoMecanica4
                     break;
 
                 case CharacterState.Moving:
-                    { }
+                    { 
+						movingTime = 0f;
+					}
                     break;
 
                 case CharacterState.Attacking:
-                    { }
+                    {
+						attackingTime = 0.25f;
+					}
                     break;
 
                 case CharacterState.Recoiling:

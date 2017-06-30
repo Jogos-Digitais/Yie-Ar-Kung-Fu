@@ -6,3 +6,5 @@
 6 - os hit consecutivos, serão a soma do recuo anterior com a metade do mesmo
 7 - quando o player pousa na posição mais próxima do inimigo ( próximo de 0), o inimigo recua bastante
 8 - distância de perigo -4 pxs
+
+9 - Ao soco normal o inimigo ataca com o bastão, ao chute médio ele ataca com o bastão abaixado.

@@ -2,6 +2,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System.Collections.Generic;
+using Microsoft.Xna.Framework.Audio;
 
 namespace PrototipoMecanica4
 {
@@ -81,6 +82,38 @@ namespace PrototipoMecanica4
 
         //Current State
         public static GameState currentState = GameState.Null;
+
+        //Sound Library
+        SoundEffect sound001;
+        SoundEffect sound002;
+        SoundEffect sound003;
+        SoundEffect sound004;
+        SoundEffect sound005;
+        SoundEffect sound006;
+        SoundEffect sound007;
+        SoundEffect sound008;
+        SoundEffect sound009;
+        SoundEffect sound010;
+        SoundEffect sound011;
+        SoundEffect sound012;
+        SoundEffect sound013;
+        SoundEffect sound014;
+        SoundEffect sound015;
+        SoundEffect sound016;
+        SoundEffect sound017;
+        SoundEffect sound018;
+        SoundEffect sound019;
+        SoundEffect sound020;
+        SoundEffect sound021;
+        SoundEffect sound022;
+        SoundEffect sound023;
+        SoundEffect sound024;
+        SoundEffect sound025;
+        SoundEffect sound026;
+        SoundEffect sound027;
+        SoundEffect sound028;
+        SoundEffect sound029;
+        SoundEffect sound030;
 
         #endregion
 
@@ -164,6 +197,12 @@ namespace PrototipoMecanica4
 
             #endregion
 
+            #region LOAD SOUNDS
+
+            LoadSounds();
+
+            #endregion
+
             //Adding entities
             entities.Add(new Human(new Vector2(260, 768), new Vector2(88, 128)));
             entities.Add(new Enemy(new Vector2(642, 768), new Vector2(108, 160)));
@@ -172,6 +211,40 @@ namespace PrototipoMecanica4
 
             //Enter in initial state
             EnterGameState(GameState.Menu);
+        }
+
+        private void LoadSounds()
+        {
+            //sound001 = Content.Load<SoundEffect>("Sounds/");
+            //sound002 = Content.Load<SoundEffect>("Sounds/");
+            //sound003 = Content.Load<SoundEffect>("Sounds/");
+            //sound004 = Content.Load<SoundEffect>("Sounds/");
+            //sound005 = Content.Load<SoundEffect>("Sounds/");
+            //sound006 = Content.Load<SoundEffect>("Sounds/");
+            //sound007 = Content.Load<SoundEffect>("Sounds/");
+            //sound008 = Content.Load<SoundEffect>("Sounds/");
+            //sound009 = Content.Load<SoundEffect>("Sounds/");
+            //sound010 = Content.Load<SoundEffect>("Sounds/");
+            //sound011 = Content.Load<SoundEffect>("Sounds/");
+            //sound012 = Content.Load<SoundEffect>("Sounds/");
+            //sound013 = Content.Load<SoundEffect>("Sounds/");
+            //sound014 = Content.Load<SoundEffect>("Sounds/");
+            //sound015 = Content.Load<SoundEffect>("Sounds/");
+            //sound016 = Content.Load<SoundEffect>("Sounds/");
+            //sound017 = Content.Load<SoundEffect>("Sounds/");
+            //sound018 = Content.Load<SoundEffect>("Sounds/");
+            //sound019 = Content.Load<SoundEffect>("Sounds/");
+            //sound020 = Content.Load<SoundEffect>("Sounds/");
+            //sound021 = Content.Load<SoundEffect>("Sounds/");
+            //sound022 = Content.Load<SoundEffect>("Sounds/");
+            //sound023 = Content.Load<SoundEffect>("Sounds/");
+            //sound024 = Content.Load<SoundEffect>("Sounds/");
+            //sound025 = Content.Load<SoundEffect>("Sounds/");
+            //sound026 = Content.Load<SoundEffect>("Sounds/");
+            //sound027 = Content.Load<SoundEffect>("Sounds/");
+            //sound028 = Content.Load<SoundEffect>("Sounds/");
+            //sound029 = Content.Load<SoundEffect>("Sounds/");
+            //sound030 = Content.Load<SoundEffect>("Sounds/");
         }
 
         protected override void UnloadContent()

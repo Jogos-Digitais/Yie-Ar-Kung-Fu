@@ -54,6 +54,15 @@ namespace PrototipoMecanica4
 
                 switch (currentState)
                 {
+                    case CharacterState.Standing:
+                        {
+                            if (pos.X >= Human.instance.pos.X)
+                                positionToReturn.X = testBody.pos.X - pos.X + safeZone; //+safedistance
+                            else
+                                positionToReturn.X = testBody.pos.X - pos.X - safeZone; //-safedistance
+                        }
+                        break;
+
                     case CharacterState.Moving:
                         {
                             if (pos.X >= Human.instance.pos.X)

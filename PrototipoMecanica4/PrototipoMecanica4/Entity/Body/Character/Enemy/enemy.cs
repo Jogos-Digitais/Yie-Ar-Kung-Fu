@@ -37,7 +37,7 @@ namespace PrototipoMecanica4
             //New position
             EnterCharacterState(CharacterState.Standing);
 
-            speed /= 8f;
+            speed *= 2f;
 
             //Definir distâncias
             safeZone = 104 + (Human.instance.size.X / 2) + (size.X / 2);
@@ -79,7 +79,7 @@ namespace PrototipoMecanica4
                         break;
                 }
 
-                positionToReturn.Y = pos.Y;
+                //positionToReturn.Y = pos.Y;
 
                 return positionToReturn;
             }
@@ -140,7 +140,7 @@ namespace PrototipoMecanica4
 
                 if (axis == 0)
                 {
-                    pos += new Vector2(dir.X, 0f) * speed; //only X * deltaTime
+                    pos += new Vector2(dir.X, 0f) * deltaTime * speed; //only X * deltaTime
                 }
                 else
                 {
@@ -296,13 +296,13 @@ namespace PrototipoMecanica4
             {
                 case CharacterState.Standing:
                     {
-                        if (!((int)distance == 0) && Lifebar.instance.remainingEnemyLife() >= 1)
+                        if ((distance < -4 || distance > 4) && Lifebar.instance.remainingEnemyLife() >= 1)
                             EnterCharacterState(CharacterState.Moving);
 
                         else if (Lifebar.instance.remainingEnemyLife() <= 0)
                             EnterCharacterState(CharacterState.Dead);
 
-                        else if ((int)distance == 0)
+                        else if (distance >= -1 && distance <= 1)
                             EnterCharacterState(CharacterState.Attacking);
                     }
                     break;
@@ -311,7 +311,7 @@ namespace PrototipoMecanica4
                     {
                         move(deltaTime);
 
-                        if ((int)distance == 0 && Lifebar.instance.remainingEnemyLife() >= 1)
+                        if (distance >= -4 && distance <= 4 && Lifebar.instance.remainingEnemyLife() >= 1)
                             EnterCharacterState(CharacterState.Standing);
 
                         else if (Lifebar.instance.remainingEnemyLife() <= 0)

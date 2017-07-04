@@ -64,6 +64,7 @@ namespace PrototipoMecanica4
         public static Texture2D debugRectangleTex;
         public static Texture2D debugBigRectangleTex;
         public static Texture2D debugHitTex;
+        public static Texture2D debugZones;
 
         //Sprite Batches
         public static SpriteBatch spriteBatch;
@@ -194,6 +195,7 @@ namespace PrototipoMecanica4
             debugRectangleTex = Content.Load<Texture2D>("Sprites/debug_rectangle");
             debugBigRectangleTex = Content.Load<Texture2D>("Sprites/debug_big_rectangle");
             debugHitTex = Content.Load<Texture2D>("Sprites/debug_hitbox");
+            debugZones = Content.Load<Texture2D>("Sprites/debug_zones");
 
             #endregion
 

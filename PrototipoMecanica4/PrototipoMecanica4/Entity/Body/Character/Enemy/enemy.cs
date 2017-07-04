@@ -54,18 +54,18 @@ namespace PrototipoMecanica4
         public Vector2 GetHitboxPosition(Vector2 hitbox)
         {
             float hitX = 0f;
-        
-            if (Enemy.instance.pos.X > pos.X)
-                hitX += 55f;
+
+            if (Human.instance.pos.X > pos.X)
+                hitX += 85f;
             else
-                hitX -= 55f;
-        
+                hitX -= 85f;
+
             if (GetSprite().Equals(World.enemy001KickTexture)) //Chute
-                hitbox = new Vector2(pos.X + hitX, (pos.Y - World.enemy001Texture.Height) /2);
+                hitbox = new Vector2(pos.X + hitX, pos.Y - 55f);
             else if (GetSprite().Equals(World.enemy001StaffAttackTexture)) //Bastão
-                hitbox = new Vector2(pos.X + hitX, pos.Y - (World.enemy001Texture.Height / 2));
+                hitbox = new Vector2(pos.X + hitX, pos.Y - 55f);
             else if (GetSprite().Equals(World.enemy001LowStaffAttackTexture)) //Bastão baixo
-                hitbox = new Vector2(pos.X + hitX, pos.Y - (World.enemy001Texture.Height / 3));
+                hitbox = new Vector2(pos.X + hitX, pos.Y - 55f);
         
             return hitbox;
         }
@@ -267,6 +267,30 @@ namespace PrototipoMecanica4
                   0.3f
                 );
 
+                //Safe zone
+                World.spriteBatch.Draw(World.debugZones,
+                  new Vector2((pos.X >= Human.instance.pos.X ? (Human.instance.pos.X - pos.X + safeZone) + (pos.X - size.X / 2) : (Human.instance.pos.X - pos.X - safeZone) + (pos.X + size.X / 2)), 518f),
+                  null,
+                  new Color(0.0f, 1.0f, 0.0f, 0.5f),
+                  0.0f,
+                  Vector2.Zero, //pivot
+                  Vector2.One, //scale
+                  SpriteEffects.None,
+                  0.3f
+                );
+
+                //Danger zone
+                World.spriteBatch.Draw(World.debugZones,
+                    new Vector2((pos.X >= Human.instance.pos.X ? (Human.instance.pos.X - pos.X + dangerZone) + (pos.X - size.X / 2) : (Human.instance.pos.X - pos.X - dangerZone) + (pos.X + size.X / 2)), 518f),
+                  null,
+                  new Color(1.0f, 0.0f, 0.0f, 0.5f),
+                  0.0f,
+                  Vector2.Zero, //pivot
+                  Vector2.One, //scale
+                  SpriteEffects.None,
+                  0.3f
+                );
+
                 World.spriteBatch.DrawString(World.fontNormal, "State: " + currentState.ToString() + Environment.NewLine + "Combo: " + attackingCombo, new Vector2(this.pos.X, this.pos.Y + 20f), Color.White, 0.0f, Vector2.Zero, 1f, SpriteEffects.None, 0.0f);
             }
         }
@@ -387,11 +411,13 @@ namespace PrototipoMecanica4
                                 if (attackingFrame && attackingFramePersistance == 10)
                                 {
                                     attackingFrame = false;
-                                    attackingCombo++;
                                 }
                                 else if (attackingFrame == false && attackingFramePersistance == 10)
                                 {
                                     attackingFrame = true;
+                                    attackingCombo++;
+                                    
+                                    World.entities.Add(new Hit(this, GetHitboxPosition(hitbox), GetDir(), new Vector2(32, 32)));
                                 }
 
                                 attackingFramePersistance++;
@@ -408,8 +434,6 @@ namespace PrototipoMecanica4
                             //{
                             //    EnterCharacterState(CharacterState.Advancing);
                             //}
-
-                            World.entities.Add(new Hit(this, GetHitboxPosition(hitbox), GetDir(), new Vector2(32, 32)));
                         }
 
                         else

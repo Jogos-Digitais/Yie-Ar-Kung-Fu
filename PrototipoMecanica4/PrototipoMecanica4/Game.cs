@@ -205,12 +205,6 @@ namespace PrototipoMecanica4
 
             #endregion
 
-            //Adding entities
-            entities.Add(new Human(new Vector2(260, 768), new Vector2(88, 128)));
-            entities.Add(new Enemy(new Vector2(642, 768), new Vector2(108, 160)));
-
-            entities.Add(new Lifebar());
-
             //Enter in initial state
             EnterGameState(GameState.Menu);
         }
@@ -255,9 +249,6 @@ namespace PrototipoMecanica4
 
         protected override void Update(GameTime gameTime)
         {
-            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
-                Exit();
-
             //Game logic
             UpdateGameState(gameTime);
 
@@ -298,7 +289,9 @@ namespace PrototipoMecanica4
             switch (currentState)
             {
                 case GameState.Menu:
-                    { }
+                    {
+                        entities.Clear();
+                    }
                     break;
 
                 case GameState.Stage:
@@ -324,6 +317,9 @@ namespace PrototipoMecanica4
             {
                 case GameState.Menu:
                     {
+                        if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape) && prevKeyState.IsKeyUp(Keys.Escape))
+                            Exit();
+
                         if (Keyboard.GetState().IsKeyDown(Keys.Enter) && prevKeyState.IsKeyUp(Keys.Enter))
                             EnterGameState(GameState.Stage);
                     }
@@ -331,6 +327,9 @@ namespace PrototipoMecanica4
 
                 case GameState.Stage:
                     {
+                        if (Keyboard.GetState().IsKeyDown(Keys.Escape) && prevKeyState.IsKeyUp(Keys.Escape))
+                            EnterGameState(GameState.Menu);
+
                         if (Keyboard.GetState().IsKeyDown(Keys.Enter) && prevKeyState.IsKeyUp(Keys.Enter))
                             EnterGameState(GameState.Pause);
 
@@ -399,7 +398,13 @@ namespace PrototipoMecanica4
             switch (currentState)
             {
                 case GameState.Menu:
-                    { }
+                    {
+                        //Adding entities
+                        entities.Add(new Human(new Vector2(260, 768), new Vector2(88, 128)));
+                        entities.Add(new Enemy(new Vector2(642, 768), new Vector2(108, 160)));
+
+                        entities.Add(new Lifebar());
+                    }
                     break;
 
                 case GameState.Stage:

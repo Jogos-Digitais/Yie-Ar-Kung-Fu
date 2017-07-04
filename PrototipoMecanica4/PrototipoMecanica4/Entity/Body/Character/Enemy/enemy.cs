@@ -66,7 +66,7 @@ namespace PrototipoMecanica4
                 hitbox = new Vector2(pos.X + hitX, pos.Y - 55f);
             else if (GetSprite().Equals(World.enemy001LowStaffAttackTexture)) //Bastão baixo
                 hitbox = new Vector2(pos.X + hitX, pos.Y - 55f);
-        
+
             return hitbox;
         }
 
@@ -80,7 +80,8 @@ namespace PrototipoMecanica4
 
                 switch (currentState)
                 {
-                    case CharacterState.Standing: case CharacterState.Moving:
+                    case CharacterState.Standing:
+                    case CharacterState.Moving:
                         {
                             if (pos.X >= Human.instance.pos.X)
                                 positionToReturn.X = testBody.pos.X - pos.X + safeZone; //+safedistance
@@ -169,7 +170,7 @@ namespace PrototipoMecanica4
 
                 if (axis == 0)
                 {
-                    pos += new Vector2(dir.X, 0f) * deltaTime * speed; //only X * deltaTime
+                    pos += new Vector2(dir.X, 0f) * deltaTime * speed; //only X
                 }
                 else
                 {
@@ -220,38 +221,45 @@ namespace PrototipoMecanica4
             UpdateCharacterState(gameTime);
         }
 
+        private SpriteEffects VirarImagem()
+        {
+            SpriteEffects efeito = SpriteEffects.None;
+
+            if (pos.X >= Human.instance.pos.X && Human.instance.positionAtJump.Equals(Vector2.Zero))
+            {
+                efeito = SpriteEffects.None;
+            }
+            else if (pos.X < Human.instance.pos.X && Human.instance.positionAtJump.Equals(Vector2.Zero))
+            {
+                efeito = SpriteEffects.FlipHorizontally;
+            }
+            else if (pos.X >= Human.instance.positionAtJump.X)
+            {
+                efeito = SpriteEffects.None;
+            }
+            else if (pos.X < Human.instance.positionAtJump.X)
+            {
+                efeito = SpriteEffects.FlipHorizontally;
+            }
+
+            return efeito;
+        }
+
         public override void Draw(GameTime gameTime)
         {
             Texture2D sprite = GetSprite();
 
-            if (pos.X >= Human.instance.pos.X)
-            {
-                World.spriteBatch.Draw(sprite,
-                    pos,
-                    null,
-                    Color.White,
-                    0.0f,
-                    new Vector2(sprite.Width / 2f,
-                                sprite.Height), //pivot
-                    Vector2.One, //scale
-                    SpriteEffects.None,
-                    0.2f
-                );
-            }
-            else
-            {
-                World.spriteBatch.Draw(sprite,
-                    pos,
-                    null,
-                    Color.White,
-                    0.0f,
-                    new Vector2(sprite.Width / 2f,
-                                sprite.Height), //pivot
-                    Vector2.One, //scale
-                    SpriteEffects.FlipHorizontally,
-                    0.2f
-                );
-            }
+            World.spriteBatch.Draw(sprite,
+                pos,
+                null,
+                Color.White,
+                0.0f,
+                new Vector2(sprite.Width / 2f,
+                            sprite.Height), //pivot
+                Vector2.One, //scale
+                VirarImagem(),
+                0.2f
+            );
 
             if (World.debugMode)
             {
@@ -386,7 +394,7 @@ namespace PrototipoMecanica4
                             movingTime += deltaTime;
                         }
 
-                        else if(movingTime > 0.200)
+                        else if (movingTime > 0.200)
                         {
                             movingTime = 0;
                             framePersistance = 0;
@@ -416,7 +424,7 @@ namespace PrototipoMecanica4
                                 {
                                     attackingFrame = true;
                                     attackingCombo++;
-                                    
+
                                     World.entities.Add(new Hit(this, GetHitboxPosition(hitbox), GetDir(), new Vector2(32, 32)));
                                 }
 
@@ -439,7 +447,7 @@ namespace PrototipoMecanica4
                         else
                         {
                             EnterCharacterState(CharacterState.Dead);
-                        }                       
+                        }
                     }
                     break;
 
@@ -469,9 +477,9 @@ namespace PrototipoMecanica4
                     break;
 
                 case CharacterState.Moving:
-                    { 
-						movingTime = 0f;
-					}
+                    {
+                        movingTime = 0f;
+                    }
                     break;
 
                 case CharacterState.Advancing:
@@ -484,9 +492,9 @@ namespace PrototipoMecanica4
 
                 case CharacterState.Attacking:
                     {
-						attackingTime = 0.25f;
+                        attackingTime = 0.25f;
                         attackingCombo = 0;
-					}
+                    }
                     break;
 
                 case CharacterState.Recoiling:

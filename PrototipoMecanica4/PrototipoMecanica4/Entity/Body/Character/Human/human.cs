@@ -23,6 +23,7 @@ namespace PrototipoMecanica4
         float jumpEffectX; //efeito de pulo para a direção
         bool jumpKick = false; //Flying kick
         bool jumpKicked = false; //Saltou e chutou
+        public Vector2 positionAtJump = Vector2.Zero; //Posição antes de saltar
 
         float movingTime; //valor de tempo para calcular movimento
         int framePersistance; //Conta 3 e muda frame
@@ -173,12 +174,36 @@ namespace PrototipoMecanica4
             base.Update(gameTime);
         }
 
+        private SpriteEffects VirarImagem()
+        {
+            SpriteEffects efeito = SpriteEffects.None;
+
+            if (pos.X <= Enemy.instance.pos.X && positionAtJump.Equals(Vector2.Zero))
+            {
+                efeito = SpriteEffects.None;
+            }
+            else if (pos.X > Enemy.instance.pos.X && positionAtJump.Equals(Vector2.Zero))
+            {
+                efeito = SpriteEffects.FlipHorizontally;
+            }
+            else if (positionAtJump.X <= Enemy.instance.pos.X)
+            {
+                efeito = SpriteEffects.None;
+            }
+            else if (positionAtJump.X > Enemy.instance.pos.X)
+            {
+                efeito = SpriteEffects.FlipHorizontally;
+            }
+
+            return efeito;
+        }
+
         public override void Draw(GameTime gameTime)
         {
             Texture2D sprite = GetSprite();
 
-            if (pos.X <= Enemy.instance.pos.X)
-            {
+            //if (pos.X <= Enemy.instance.pos.X)
+            //{
                 World.spriteBatch.Draw(sprite,
                     pos,
                     null,
@@ -187,24 +212,24 @@ namespace PrototipoMecanica4
                     new Vector2(sprite.Width / 2f,
                                 sprite.Height), //pivot
                     Vector2.One, //scale
-                    SpriteEffects.None,
+                    VirarImagem(),
                     0.1f
                 );
-            }
-            else
-            {
-                World.spriteBatch.Draw(sprite,
-                    pos,
-                    null,
-                    Color.White,
-                    0.0f,
-                    new Vector2(sprite.Width / 2f,
-                                sprite.Height), //pivot
-                    Vector2.One, //scale
-                    SpriteEffects.FlipHorizontally,
-                    0.1f
-                );
-            }
+            //}
+            //else
+            //{
+            //    World.spriteBatch.Draw(sprite,
+            //        pos,
+            //        null,
+            //        Color.White,
+            //        0.0f,
+            //        new Vector2(sprite.Width / 2f,
+            //                    sprite.Height), //pivot
+            //        Vector2.One, //scale
+            //        SpriteEffects.FlipHorizontally,
+            //        0.1f
+            //    );
+            //}
 
             if (World.debugMode)
             {
@@ -246,7 +271,9 @@ namespace PrototipoMecanica4
                     break;
 
                 case CharacterState.Jumping:
-                    { }
+                    {
+                        positionAtJump = pos;
+                    }
                     break;
 
                 case CharacterState.Punching:
@@ -567,6 +594,7 @@ namespace PrototipoMecanica4
                     {
                         timerCounter = 0f;
                         jumpKicked = false;
+                        positionAtJump = Vector2.Zero;
                     }
                     break;
 

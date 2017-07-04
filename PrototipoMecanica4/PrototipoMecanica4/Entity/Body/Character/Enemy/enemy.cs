@@ -22,6 +22,12 @@ namespace PrototipoMecanica4
         bool movingFrame = false; //Moving frame
 
         float attackingTime = 0.25f; //valor de tempo para calcular ataques
+        int attackingFramePersistance; //Conta 3 e muda frame
+        bool attackingFrame = false; //Attacking frame
+        int attackingCombo = 0; //Attacking combo
+
+        //Posição hitbox
+        Vector2 hitbox = Vector2.One;
 
         //Machine states
         public enum CharacterState { Null, Standing, Moving, Advancing, Retreating, Attacking, Recoiling, Running, Dead }; //Nenhum estado, parado, movendo-se, avançando, recuando, atacando, absorvendo, correndo, morto
@@ -42,6 +48,26 @@ namespace PrototipoMecanica4
             //Definir distâncias
             safeZone = 104 + (Human.instance.size.X / 2) + (size.X / 2);
             dangerZone = -4 + (Human.instance.size.X / 2) + (size.X / 2); //Nunca verificar com igual, sempre menor
+        }
+
+        //TODO
+        public Vector2 GetHitboxPosition(Vector2 hitbox)
+        {
+            float hitX = 0f;
+        
+            if (Enemy.instance.pos.X > pos.X)
+                hitX += 55f;
+            else
+                hitX -= 55f;
+        
+            if (GetSprite().Equals(World.enemy001KickTexture)) //Chute
+                hitbox = new Vector2(pos.X + hitX, (pos.Y - World.enemy001Texture.Height) /2);
+            else if (GetSprite().Equals(World.enemy001StaffAttackTexture)) //Bastão
+                hitbox = new Vector2(pos.X + hitX, pos.Y - (World.enemy001Texture.Height / 2));
+            else if (GetSprite().Equals(World.enemy001LowStaffAttackTexture)) //Bastão baixo
+                hitbox = new Vector2(pos.X + hitX, pos.Y - (World.enemy001Texture.Height / 3));
+        
+            return hitbox;
         }
 
         public override Vector2 GetDir()
@@ -108,7 +134,10 @@ namespace PrototipoMecanica4
 
                 case CharacterState.Attacking:
                     {
-                        currentTexture = World.enemy001PrepareAttackTexture;
+                        if (attackingFrame)
+                            currentTexture = World.enemy001KickTexture;
+                        else
+                            currentTexture = World.enemy001PrepareAttackTexture;
                     }
                     break;
 
@@ -238,7 +267,7 @@ namespace PrototipoMecanica4
                   0.3f
                 );
 
-                World.spriteBatch.DrawString(World.fontNormal, "State: " + currentState.ToString(), new Vector2(this.pos.X, this.pos.Y + 20f), Color.White, 0.0f, Vector2.Zero, 1f, SpriteEffects.None, 0.0f);
+                World.spriteBatch.DrawString(World.fontNormal, "State: " + currentState.ToString() + Environment.NewLine + "Combo: " + attackingCombo, new Vector2(this.pos.X, this.pos.Y + 20f), Color.White, 0.0f, Vector2.Zero, 1f, SpriteEffects.None, 0.0f);
             }
         }
 
@@ -350,7 +379,44 @@ namespace PrototipoMecanica4
                     break;
 
                 case CharacterState.Attacking:
-                    { }
+                    {
+                        if (Lifebar.instance.remainingEnemyLife() >= 1)
+                        {
+                            if (attackingTime > 0 && attackingCombo < 4)
+                            {
+                                if (attackingFrame && attackingFramePersistance == 10)
+                                {
+                                    attackingFrame = false;
+                                    attackingCombo++;
+                                }
+                                else if (attackingFrame == false && attackingFramePersistance == 10)
+                                {
+                                    attackingFrame = true;
+                                }
+
+                                attackingFramePersistance++;
+                                attackingTime -= deltaTime;
+                            }
+
+                            else if (attackingTime <= 0 && attackingCombo < 4)
+                            {
+                                attackingTime = 0.25f;
+                                attackingFramePersistance = 0;
+                            }
+
+                            //else if(attackingCombo == 4)
+                            //{
+                            //    EnterCharacterState(CharacterState.Advancing);
+                            //}
+
+                            World.entities.Add(new Hit(this, GetHitboxPosition(hitbox), GetDir(), new Vector2(32, 32)));
+                        }
+
+                        else
+                        {
+                            EnterCharacterState(CharacterState.Dead);
+                        }                       
+                    }
                     break;
 
                 case CharacterState.Recoiling:
@@ -395,6 +461,7 @@ namespace PrototipoMecanica4
                 case CharacterState.Attacking:
                     {
 						attackingTime = 0.25f;
+                        attackingCombo = 0;
 					}
                     break;
 

@@ -1,0 +1,13 @@
+
+	X 368 pixels
+	Y 689 pixels
+	
+	---
+	
+	x 60 width
+	
+	y 28 height
+	
+	---
+	
+	

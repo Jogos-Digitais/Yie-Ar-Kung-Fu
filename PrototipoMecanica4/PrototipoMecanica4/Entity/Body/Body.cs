@@ -81,9 +81,13 @@ namespace PrototipoMecanica4
                 Vector2 backupPos = pos; //save current position
 
                 if (axis == 0)
+                {
                     pos += new Vector2(dir.X, 0f) * deltaTime * speed; //only X
+                }
                 else
+                { 
                     pos += new Vector2(0f, dir.Y) * deltaTime * speed; //only Y
+                }
 
                 Entity collider = null;
 

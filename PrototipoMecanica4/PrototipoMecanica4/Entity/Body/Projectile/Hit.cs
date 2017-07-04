@@ -59,7 +59,7 @@ namespace PrototipoMecanica4
             {
                 if ((e != this) && //not myself?
                     (e != myShooter) && //not my shooter?
-                    (e is Character) && //is character?
+                    (e is Enemy) && //is enemy?
                     e.TestCollisionRect(myMin, myMax)) //is colliding against other entity?
                 {
                     Character opponent = (Character)e;
@@ -69,6 +69,21 @@ namespace PrototipoMecanica4
                             Lifebar.instance.damageEnemyLife();
                             World.entities.Add(new HitContact(Human.instance, pos, GetDir(), new Vector2(32, 32)));
                         }
+                    break;
+                }
+
+                else if ((e != this) && //not myself?
+                    (e != myShooter) && //not my shooter?
+                    (e is Human) && //is human?
+                    e.TestCollisionRect(myMin, myMax)) //is colliding against other entity?
+                {
+                    Character opponent = (Character)e;
+                    if (contato == false)
+                    {
+                        contato = true;
+                        Lifebar.instance.damagePlayerLife();
+                        World.entities.Add(new HitContact(Enemy.instance, pos, GetDir(), new Vector2(32, 32)));
+                    }
                     break;
                 }
             }

@@ -2,6 +2,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System.Collections.Generic;
+using Microsoft.Xna.Framework.Audio;
 
 namespace PrototipoMecanica4
 {
@@ -28,6 +29,14 @@ namespace PrototipoMecanica4
         public static Texture2D playerFlyingKickTexture;
 
         public static Texture2D enemy001Texture;
+
+        public static Texture2D enemy001MovingTexture;
+        public static Texture2D enemy001PrepareAttackTexture;
+
+        public static Texture2D enemy001KickTexture;
+        public static Texture2D enemy001LowStaffAttackTexture;
+        public static Texture2D enemy001StaffAttackTexture;
+
         public static Texture2D enemy001DeadTexture;
 
         //Sprites - Objects
@@ -55,6 +64,7 @@ namespace PrototipoMecanica4
         public static Texture2D debugRectangleTex;
         public static Texture2D debugBigRectangleTex;
         public static Texture2D debugHitTex;
+        public static Texture2D debugZones;
 
         //Sprite Batches
         public static SpriteBatch spriteBatch;
@@ -73,6 +83,38 @@ namespace PrototipoMecanica4
 
         //Current State
         public static GameState currentState = GameState.Null;
+
+        //Sound Library
+        SoundEffect sound001;
+        SoundEffect sound002;
+        SoundEffect sound003;
+        SoundEffect sound004;
+        SoundEffect sound005;
+        SoundEffect sound006;
+        SoundEffect sound007;
+        SoundEffect sound008;
+        SoundEffect sound009;
+        SoundEffect sound010;
+        SoundEffect sound011;
+        SoundEffect sound012;
+        SoundEffect sound013;
+        SoundEffect sound014;
+        SoundEffect sound015;
+        SoundEffect sound016;
+        SoundEffect sound017;
+        SoundEffect sound018;
+        SoundEffect sound019;
+        SoundEffect sound020;
+        SoundEffect sound021;
+        SoundEffect sound022;
+        SoundEffect sound023;
+        SoundEffect sound024;
+        SoundEffect sound025;
+        SoundEffect sound026;
+        SoundEffect sound027;
+        SoundEffect sound028;
+        SoundEffect sound029;
+        SoundEffect sound030;
 
         #endregion
 
@@ -118,6 +160,14 @@ namespace PrototipoMecanica4
             playerFlyingKickTexture = Content.Load<Texture2D>("Sprites/PlayerFKick");
 
             enemy001Texture = Content.Load<Texture2D>("Sprites/Enemy001");
+
+            enemy001MovingTexture = Content.Load<Texture2D>("Sprites/Enemy001Moving");
+            enemy001PrepareAttackTexture = Content.Load<Texture2D>("Sprites/Enemy001PrepareAttack");
+
+            enemy001KickTexture = Content.Load<Texture2D>("Sprites/Enemy001Kick");
+            enemy001LowStaffAttackTexture = Content.Load<Texture2D>("Sprites/Enemy001LStaffAttack");
+            enemy001StaffAttackTexture = Content.Load<Texture2D>("Sprites/Enemy001StaffAttack");
+
             enemy001DeadTexture = Content.Load<Texture2D>("Sprites/Enemy001Dead");
 
             //Load sprites - Objects
@@ -145,17 +195,52 @@ namespace PrototipoMecanica4
             debugRectangleTex = Content.Load<Texture2D>("Sprites/debug_rectangle");
             debugBigRectangleTex = Content.Load<Texture2D>("Sprites/debug_big_rectangle");
             debugHitTex = Content.Load<Texture2D>("Sprites/debug_hitbox");
+            debugZones = Content.Load<Texture2D>("Sprites/debug_zones");
 
             #endregion
 
-            //Adding entities
-            entities.Add(new Human(new Vector2(260, 768), new Vector2(88, 128)));
-            entities.Add(new Enemy(new Vector2(642, 768), new Vector2(108, 160)));
+            #region LOAD SOUNDS
 
-            entities.Add(new Lifebar());
+            LoadSounds();
+
+            #endregion
 
             //Enter in initial state
             EnterGameState(GameState.Menu);
+        }
+
+        private void LoadSounds()
+        {
+            //sound001 = Content.Load<SoundEffect>("Sounds/");
+            //sound002 = Content.Load<SoundEffect>("Sounds/");
+            //sound003 = Content.Load<SoundEffect>("Sounds/");
+            //sound004 = Content.Load<SoundEffect>("Sounds/");
+            //sound005 = Content.Load<SoundEffect>("Sounds/");
+            //sound006 = Content.Load<SoundEffect>("Sounds/");
+            //sound007 = Content.Load<SoundEffect>("Sounds/");
+            //sound008 = Content.Load<SoundEffect>("Sounds/");
+            //sound009 = Content.Load<SoundEffect>("Sounds/");
+            //sound010 = Content.Load<SoundEffect>("Sounds/");
+            //sound011 = Content.Load<SoundEffect>("Sounds/");
+            //sound012 = Content.Load<SoundEffect>("Sounds/");
+            //sound013 = Content.Load<SoundEffect>("Sounds/");
+            //sound014 = Content.Load<SoundEffect>("Sounds/");
+            //sound015 = Content.Load<SoundEffect>("Sounds/");
+            //sound016 = Content.Load<SoundEffect>("Sounds/");
+            //sound017 = Content.Load<SoundEffect>("Sounds/");
+            //sound018 = Content.Load<SoundEffect>("Sounds/");
+            //sound019 = Content.Load<SoundEffect>("Sounds/");
+            //sound020 = Content.Load<SoundEffect>("Sounds/");
+            //sound021 = Content.Load<SoundEffect>("Sounds/");
+            //sound022 = Content.Load<SoundEffect>("Sounds/");
+            //sound023 = Content.Load<SoundEffect>("Sounds/");
+            //sound024 = Content.Load<SoundEffect>("Sounds/");
+            //sound025 = Content.Load<SoundEffect>("Sounds/");
+            //sound026 = Content.Load<SoundEffect>("Sounds/");
+            //sound027 = Content.Load<SoundEffect>("Sounds/");
+            //sound028 = Content.Load<SoundEffect>("Sounds/");
+            //sound029 = Content.Load<SoundEffect>("Sounds/");
+            //sound030 = Content.Load<SoundEffect>("Sounds/");
         }
 
         protected override void UnloadContent()
@@ -164,9 +249,6 @@ namespace PrototipoMecanica4
 
         protected override void Update(GameTime gameTime)
         {
-            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
-                Exit();
-
             //Game logic
             UpdateGameState(gameTime);
 
@@ -207,7 +289,9 @@ namespace PrototipoMecanica4
             switch (currentState)
             {
                 case GameState.Menu:
-                    { }
+                    {
+                        entities.Clear();
+                    }
                     break;
 
                 case GameState.Stage:
@@ -233,6 +317,9 @@ namespace PrototipoMecanica4
             {
                 case GameState.Menu:
                     {
+                        if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape) && prevKeyState.IsKeyUp(Keys.Escape))
+                            Exit();
+
                         if (Keyboard.GetState().IsKeyDown(Keys.Enter) && prevKeyState.IsKeyUp(Keys.Enter))
                             EnterGameState(GameState.Stage);
                     }
@@ -240,6 +327,9 @@ namespace PrototipoMecanica4
 
                 case GameState.Stage:
                     {
+                        if (Keyboard.GetState().IsKeyDown(Keys.Escape) && prevKeyState.IsKeyUp(Keys.Escape))
+                            EnterGameState(GameState.Menu);
+
                         if (Keyboard.GetState().IsKeyDown(Keys.Enter) && prevKeyState.IsKeyUp(Keys.Enter))
                             EnterGameState(GameState.Pause);
 
@@ -308,7 +398,13 @@ namespace PrototipoMecanica4
             switch (currentState)
             {
                 case GameState.Menu:
-                    { }
+                    {
+                        //Adding entities
+                        entities.Add(new Human(new Vector2(260, 768), new Vector2(88, 128)));
+                        entities.Add(new Enemy(new Vector2(642, 768), new Vector2(108, 160)));
+
+                        entities.Add(new Lifebar());
+                    }
                     break;
 
                 case GameState.Stage:

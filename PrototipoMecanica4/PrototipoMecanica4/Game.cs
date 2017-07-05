@@ -12,8 +12,11 @@ namespace PrototipoMecanica4
 
         #region VARIABLES
 
-        //Sprites - Fonts
+        #region Sprites - Fonts
+
         public static SpriteFont fontNormal;
+
+        #endregion
 
         #region Sprites - Characters
 
@@ -46,6 +49,8 @@ namespace PrototipoMecanica4
         #endregion
 
         #region Sprites - Objects
+
+        public static Texture2D selectedOptionTexture;
 
         public static Texture2D fireTexture;
         public static Texture2D fireMovingTexture;
@@ -87,24 +92,6 @@ namespace PrototipoMecanica4
 
         #endregion
 
-        //Sprite Batches
-        public static SpriteBatch spriteBatch;
-
-        //Keyboard state
-        public static KeyboardState prevKeyState = Keyboard.GetState();
-
-        //Debug mode
-        public static bool debugMode = false;
-
-        //World entities
-        public static List<Entity> entities = new List<Entity>();
-
-        //Machine states
-        public enum GameState { Null, Menu, Stage, Pause, Over };
-
-        //Current State
-        public static GameState currentState = GameState.Null;
-
         #region Sound Library
 
         SoundEffect sound001;
@@ -139,6 +126,25 @@ namespace PrototipoMecanica4
         SoundEffect sound030;
 
         #endregion
+
+        //Sprite Batches
+        public static SpriteBatch spriteBatch;
+
+        //Keyboard state
+        public static KeyboardState prevKeyState = Keyboard.GetState();
+
+        //Debug mode
+        public static bool debugMode = false;
+
+        //World entities
+        public static List<Entity> menuEntities = new List<Entity>();
+        public static List<Entity> entities = new List<Entity>();
+
+        //Machine states
+        public enum GameState { Null, Menu, Stage, Pause, Over };
+
+        //Current State
+        public static GameState currentState = GameState.Null;
 
         #endregion
 
@@ -190,7 +196,8 @@ namespace PrototipoMecanica4
 
         private void LoadSprites()
         {
-            //Load sprites - Characters
+            #region Load sprites - Characters
+            
             playerTexture = Content.Load<Texture2D>("Sprites/Player");
             playerMovingTexture = Content.Load<Texture2D>("Sprites/PlayerMoving");
             playerJumpingTexture = Content.Load<Texture2D>("Sprites/PlayerJumping");
@@ -217,7 +224,10 @@ namespace PrototipoMecanica4
 
             enemy001DeadTexture = Content.Load<Texture2D>("Sprites/Enemy001Dead");
 
-            //Load sprites - Objects
+            #endregion
+
+            #region Load sprites - Objects
+
             fireTexture = Content.Load<Texture2D>("Sprites/Fire");
             fireMovingTexture = Content.Load<Texture2D>("Sprites/FireMoving");
 
@@ -225,24 +235,40 @@ namespace PrototipoMecanica4
             lifeFragment = Content.Load<Texture2D>("Sprites/LifeFragment");
             extraLifeTexture = Content.Load<Texture2D>("Sprites/extraLife");
 
-            //Load sprites - Hitboxes
+            #endregion
+
+            #region Load sprites - Hitboxes
+
+            selectedOptionTexture = Content.Load<Texture2D>("Sprites/SelectedOption");
+
             playerHitTexture = Content.Load<Texture2D>("Sprites/playerHit");
             enemyHitTexture = Content.Load<Texture2D>("Sprites/enemyHit");
             fireHitTexture = Content.Load<Texture2D>("Sprites/fireHit");
 
-            //Load sprites - Stages
+            #endregion
+
+            #region Load sprites - Stages
+            
             menuTexture = Content.Load<Texture2D>("Sprites/Menu");
             stageTexture = Content.Load<Texture2D>("Sprites/Stage");
 
-            //Sprites messages
+            #endregion
+
+            #region Load sprites - Messages
+
             pauseTexture = Content.Load<Texture2D>("Sprites/Pause");
 
-            //Load sprites - Debugs
+            #endregion
+
+            #region Load sprites - Debugs
+            
             debugCircleTex = Content.Load<Texture2D>("Sprites/debug_circle");
             debugRectangleTex = Content.Load<Texture2D>("Sprites/debug_rectangle");
             debugBigRectangleTex = Content.Load<Texture2D>("Sprites/debug_big_rectangle");
             debugHitTex = Content.Load<Texture2D>("Sprites/debug_hitbox");
             debugZones = Content.Load<Texture2D>("Sprites/debug_zones");
+
+            #endregion
         }
 
         private void LoadSounds()
@@ -327,6 +353,9 @@ namespace PrototipoMecanica4
                 case GameState.Menu:
                     {
                         entities.Clear();
+
+                        if (SelectedOption.instance == null)
+                            menuEntities.Add(new SelectedOption());
                     }
                     break;
 
@@ -356,7 +385,12 @@ namespace PrototipoMecanica4
                         if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape) && prevKeyState.IsKeyUp(Keys.Escape))
                             Exit();
 
-                        if (Keyboard.GetState().IsKeyDown(Keys.Enter) && prevKeyState.IsKeyUp(Keys.Enter))
+                        if (Keyboard.GetState().IsKeyDown(Keys.Space) && prevKeyState.IsKeyUp(Keys.Space) ||
+                            Keyboard.GetState().IsKeyDown(Keys.Q) && prevKeyState.IsKeyUp(Keys.Q))
+                            SelectedOption.instance.ChangeSelectedOption();
+
+                        if (Keyboard.GetState().IsKeyDown(Keys.Enter) && prevKeyState.IsKeyUp(Keys.Enter) ||
+                            Keyboard.GetState().IsKeyDown(Keys.W) && prevKeyState.IsKeyUp(Keys.W))
                             EnterGameState(GameState.Stage);
                     }
                     break;
@@ -366,7 +400,8 @@ namespace PrototipoMecanica4
                         if (Keyboard.GetState().IsKeyDown(Keys.Escape) && prevKeyState.IsKeyUp(Keys.Escape))
                             EnterGameState(GameState.Menu);
 
-                        if (Keyboard.GetState().IsKeyDown(Keys.Enter) && prevKeyState.IsKeyUp(Keys.Enter))
+                        if (Keyboard.GetState().IsKeyDown(Keys.Enter) && prevKeyState.IsKeyUp(Keys.Enter) ||
+                            Keyboard.GetState().IsKeyDown(Keys.W) && prevKeyState.IsKeyUp(Keys.W))
                             EnterGameState(GameState.Pause);
 
                         logicStage(gameTime);
@@ -375,7 +410,8 @@ namespace PrototipoMecanica4
 
                 case GameState.Pause:
                     {
-                        if (Keyboard.GetState().IsKeyDown(Keys.Enter) && prevKeyState.IsKeyUp(Keys.Enter))
+                        if (Keyboard.GetState().IsKeyDown(Keys.Enter) && prevKeyState.IsKeyUp(Keys.Enter) ||
+                            Keyboard.GetState().IsKeyDown(Keys.W) && prevKeyState.IsKeyUp(Keys.W))
                             EnterGameState(GameState.Stage);
 
                         logicPause(gameTime);
@@ -500,6 +536,10 @@ namespace PrototipoMecanica4
         {
             //Draw menu
             spriteBatch.Draw(menuTexture, new Vector2(0f, 0f), null, Color.White, 0.0f, Vector2.Zero, Vector2.One, SpriteEffects.None, 0.4f);
+
+            //Draw each menu entity
+            foreach (Entity e in menuEntities)
+                e.Draw(gameTime);
         }
 
         private void drawStage(GameTime gameTime)

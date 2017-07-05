@@ -511,7 +511,9 @@ namespace PrototipoMecanica4
                     break;
 
                 case CharacterState.Advancing:
-                    { }
+                    {
+                        movingTime = 0f;
+                    }
                     break;
 
                 case CharacterState.Retreating:

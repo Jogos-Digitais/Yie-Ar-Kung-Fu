@@ -8,3 +8,5 @@
 8 - distância de perigo -4 pxs
 
 9 - Ao soco normal o inimigo ataca com o bastão, ao chute médio ele ataca com o bastão abaixado.
+
+Personagem ao morrer 'treme as pernas' 6x (DeadAnimation)

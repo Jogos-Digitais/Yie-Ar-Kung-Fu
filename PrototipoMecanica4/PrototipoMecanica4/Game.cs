@@ -15,7 +15,8 @@ namespace PrototipoMecanica4
         //Sprites - Fonts
         public static SpriteFont fontNormal;
 
-        //Sprites - Characters
+        #region Sprites - Characters
+
         public static Texture2D playerTexture;
         public static Texture2D playerMovingTexture;
         public static Texture2D playerJumpingTexture;
@@ -28,6 +29,9 @@ namespace PrototipoMecanica4
         public static Texture2D playerHighKickTexture;
         public static Texture2D playerFlyingKickTexture;
 
+        public static Texture2D playerDeadTexture;
+        public static Texture2D playerDeadAnimationTexture;
+
         public static Texture2D enemy001Texture;
 
         public static Texture2D enemy001MovingTexture;
@@ -39,7 +43,10 @@ namespace PrototipoMecanica4
 
         public static Texture2D enemy001DeadTexture;
 
-        //Sprites - Objects
+        #endregion
+
+        #region Sprites - Objects
+
         public static Texture2D fireTexture;
         public static Texture2D fireMovingTexture;
 
@@ -47,24 +54,38 @@ namespace PrototipoMecanica4
         public static Texture2D lifeFragment;
         public static Texture2D extraLifeTexture;
 
-        //Sprites - hitboxes
+        #endregion
+
+        #region Sprites - Hitboxes
+
         public static Texture2D playerHitTexture;
         public static Texture2D enemyHitTexture;
         public static Texture2D fireHitTexture;
 
-        //Sprites - Stages
+        #endregion
+
+        #region Sprites - Stages
+
         public static Texture2D menuTexture;
         public static Texture2D stageTexture;
 
-        //Sprites messages
+        #endregion
+
+        #region Sprites - Messages
+
         public static Texture2D pauseTexture;
 
-        //Sprites - Debugs
+        #endregion
+
+        #region Sprites - Debugs
+
         public static Texture2D debugCircleTex;
         public static Texture2D debugRectangleTex;
         public static Texture2D debugBigRectangleTex;
         public static Texture2D debugHitTex;
         public static Texture2D debugZones;
+
+        #endregion
 
         //Sprite Batches
         public static SpriteBatch spriteBatch;
@@ -84,7 +105,8 @@ namespace PrototipoMecanica4
         //Current State
         public static GameState currentState = GameState.Null;
 
-        //Sound Library
+        #region Sound Library
+
         SoundEffect sound001;
         SoundEffect sound002;
         SoundEffect sound003;
@@ -118,6 +140,8 @@ namespace PrototipoMecanica4
 
         #endregion
 
+        #endregion
+
         #region METHODS
 
         public World()
@@ -141,11 +165,31 @@ namespace PrototipoMecanica4
             //Create new sprite batch
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
-            #region TEXTURE AND TEXT LOADS
+            #region TEXT LOAD
 
             //Load fonts
             fontNormal = Content.Load<SpriteFont>("Fonts/Normal");
 
+            #endregion
+
+            #region LOAD SPRITES
+
+            LoadSprites();
+
+            #endregion
+
+            #region LOAD SOUNDS
+
+            LoadSounds();
+
+            #endregion
+
+            //Enter in initial state
+            EnterGameState(GameState.Menu);
+        }
+
+        private void LoadSprites()
+        {
             //Load sprites - Characters
             playerTexture = Content.Load<Texture2D>("Sprites/Player");
             playerMovingTexture = Content.Load<Texture2D>("Sprites/PlayerMoving");
@@ -158,6 +202,9 @@ namespace PrototipoMecanica4
             playerMediumKickTexture = Content.Load<Texture2D>("Sprites/PlayerMKick");
             playerHighKickTexture = Content.Load<Texture2D>("Sprites/PlayerHKick");
             playerFlyingKickTexture = Content.Load<Texture2D>("Sprites/PlayerFKick");
+
+            playerDeadTexture = Content.Load<Texture2D>("Sprites/PlayerDead");
+            playerDeadAnimationTexture = Content.Load<Texture2D>("Sprites/PlayerDeadAnimation");
 
             enemy001Texture = Content.Load<Texture2D>("Sprites/Enemy001");
 
@@ -196,17 +243,6 @@ namespace PrototipoMecanica4
             debugBigRectangleTex = Content.Load<Texture2D>("Sprites/debug_big_rectangle");
             debugHitTex = Content.Load<Texture2D>("Sprites/debug_hitbox");
             debugZones = Content.Load<Texture2D>("Sprites/debug_zones");
-
-            #endregion
-
-            #region LOAD SOUNDS
-
-            LoadSounds();
-
-            #endregion
-
-            //Enter in initial state
-            EnterGameState(GameState.Menu);
         }
 
         private void LoadSounds()
@@ -441,6 +477,10 @@ namespace PrototipoMecanica4
             if (debugMode)
                 if (Keyboard.GetState().IsKeyDown(Keys.F5))
                     Lifebar.instance.reviveEnemy();
+
+            if (debugMode)
+                if (Keyboard.GetState().IsKeyDown(Keys.F6))
+                    Lifebar.instance.revivePlayer();
         }
 
         private void logicPause(GameTime gameTime)
@@ -467,19 +507,19 @@ namespace PrototipoMecanica4
             //Draw stage
             spriteBatch.Draw(stageTexture, new Vector2(0f, 0f), null, Color.White, 0.0f, Vector2.Zero, Vector2.One, SpriteEffects.None, 0.4f);
 
-            //Draw texts
-            spriteBatch.DrawString(
-              fontNormal,
-              "F1 - Debug Mode (" + (debugMode ? "DEBUG ON" : "DEBUG OFF") + ")\n" +
-              "Z - Kick | X - Punch | F5 - In debug mode, revive enemy",
-              new Vector2(65, 151),  //position
-              Color.White,          //color
-              0.0f,                 //rotation
-              Vector2.Zero,         //origin (pivot)
-              Vector2.One,          //scale
-              SpriteEffects.None,
-              0.0f
-            );
+            ////Draw texts
+            //spriteBatch.DrawString(
+            //  fontNormal,
+            //  "F1 - Debug Mode (" + (debugMode ? "DEBUG ON" : "DEBUG OFF") + ")\n" +
+            //  "Z - Kick | X - Punch | F5 - In debug mode, revive enemy",
+            //  new Vector2(65, 151),  //position
+            //  Color.White,          //color
+            //  0.0f,                 //rotation
+            //  Vector2.Zero,         //origin (pivot)
+            //  Vector2.One,          //scale
+            //  SpriteEffects.None,
+            //  0.0f
+            //);
 
             //Draw each entity
             foreach (Entity e in entities)

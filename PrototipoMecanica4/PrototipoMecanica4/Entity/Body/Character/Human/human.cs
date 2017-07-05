@@ -158,6 +158,12 @@ namespace PrototipoMecanica4
                     }
                     break;
 
+                case CharacterState.Dead:
+                    {
+                        currentTexture = World.playerDeadTexture;
+                    }
+                    break;
+
                 default:
                     currentTexture = World.playerTexture;
                     break;
@@ -583,7 +589,7 @@ namespace PrototipoMecanica4
 
                 case CharacterState.Dead:
                     {
-                        if (Lifebar.instance.remainingEnemyLife() > 0)
+                        if (Lifebar.instance.remainingPlayerLife() > 0)
                             EnterCharacterState(CharacterState.Standing);
                     };
                     break;

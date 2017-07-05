@@ -59,6 +59,12 @@ namespace PrototipoMecanica4
             enemyLife = 9;
         }
 
+        public void revivePlayer()
+        {
+            playerLifeColor = new Color(92, 228, 48);
+            playerLife = 9;
+        }
+
         public override void Draw(GameTime gameTime)
         {
             World.spriteBatch.Draw(World.lifeBarTexture,

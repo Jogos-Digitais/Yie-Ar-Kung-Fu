@@ -106,8 +106,6 @@ namespace PrototipoMecanica4
                         break;
                 }
 
-                //positionToReturn.Y = pos.Y;
-
                 return positionToReturn;
             }
 
@@ -403,7 +401,37 @@ namespace PrototipoMecanica4
                     break;
 
                 case CharacterState.Advancing:
-                    { }
+                    {
+                        move(deltaTime);
+
+                        if (distance >= -4 && distance <= 4 && Lifebar.instance.remainingEnemyLife() >= 1)
+                            EnterCharacterState(CharacterState.Standing);
+
+                        else if (Lifebar.instance.remainingEnemyLife() <= 0)
+                            EnterCharacterState(CharacterState.Dead);
+
+                        else if (movingTime < 0.200)
+                        {
+                            if (movingFrame && framePersistance == 10)
+                            {
+                                movingFrame = false;
+                            }
+
+                            else if (movingFrame == false && framePersistance == 10)
+                            {
+                                movingFrame = true;
+                            }
+
+                            framePersistance++;
+                            movingTime += deltaTime;
+                        }
+
+                        else if (movingTime > 0.200)
+                        {
+                            movingTime = 0;
+                            framePersistance = 0;
+                        }
+                    }
                     break;
 
                 case CharacterState.Retreating:
@@ -438,10 +466,10 @@ namespace PrototipoMecanica4
                                 attackingFramePersistance = 0;
                             }
 
-                            //else if(attackingCombo == 4)
-                            //{
-                            //    EnterCharacterState(CharacterState.Advancing);
-                            //}
+                            else if(attackingCombo == 4)
+                            {
+                                EnterCharacterState(CharacterState.Advancing);
+                            }
                         }
 
                         else

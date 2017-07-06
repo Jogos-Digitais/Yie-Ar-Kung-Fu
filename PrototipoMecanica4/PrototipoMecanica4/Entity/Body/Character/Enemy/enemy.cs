@@ -49,7 +49,7 @@ namespace PrototipoMecanica4
             //Definir distâncias
             safeZone = 104 + (Human.instance.size.X / 2) + (size.X / 2);
             dangerZone = -4 + (Human.instance.size.X / 2) + (size.X / 2); //Nunca verificar com igual, sempre menor
-            advanceZone = safeZone - (size.X / 2);
+            advanceZone = safeZone; //Distância inicial igual a safeZone
         }
 
         //TODO
@@ -86,24 +86,27 @@ namespace PrototipoMecanica4
                     case CharacterState.Moving:
                         {
                             if (pos.X >= Human.instance.pos.X)
-                                positionToReturn.X = testBody.pos.X - pos.X + safeZone; //+safedistance
+                                positionToReturn.X = testBody.pos.X - pos.X + safeZone; //+safeZone
                             else
-                                positionToReturn.X = testBody.pos.X - pos.X - safeZone; //-safedistance
+                                positionToReturn.X = testBody.pos.X - pos.X - safeZone; //-safeZone
                         }
                         break;
 
                     case CharacterState.Advancing:
                         {
                             if (pos.X >= Human.instance.pos.X)
-                                positionToReturn.X = testBody.pos.X - pos.X + dangerZone; //+safedistance
+                                positionToReturn.X = testBody.pos.X - pos.X + advanceZone; //+advanceZone
                             else
-                                positionToReturn.X = testBody.pos.X - pos.X - dangerZone; //-safedistance
+                                positionToReturn.X = testBody.pos.X - pos.X - advanceZone; //-advanceZone
                         }
                         break;
 
                     case CharacterState.Retreating:
                         {
-
+                            if (pos.X >= Human.instance.pos.X)
+                                positionToReturn.X = testBody.pos.X - pos.X + dangerZone; //+dangerZone
+                            else
+                                positionToReturn.X = testBody.pos.X - pos.X - dangerZone; //-dangerZone
                         }
                         break;
                 }
@@ -329,7 +332,9 @@ namespace PrototipoMecanica4
                     break;
 
                 case CharacterState.Moving:
-                    { }
+                    {
+                        advanceZone = safeZone;
+                    }
                     break;
 
                 case CharacterState.Advancing:
@@ -419,7 +424,7 @@ namespace PrototipoMecanica4
                         move(deltaTime);
 
                         if (distance >= -4 && distance <= 4 && Lifebar.instance.remainingEnemyLife() >= 1)
-                            EnterCharacterState(CharacterState.Standing);
+                            EnterCharacterState(CharacterState.Attacking);
 
                         else if (Lifebar.instance.remainingEnemyLife() <= 0)
                             EnterCharacterState(CharacterState.Dead);
@@ -468,6 +473,11 @@ namespace PrototipoMecanica4
                                     attackingCombo++;
 
                                     World.entities.Add(new Hit(this, GetHitboxPosition(hitbox), GetDir(), new Vector2(32, 32)));
+
+                                    //float safeDistance = Vector2.Distance(Human.instance.pos / 2, pos / 2);
+                                    //
+                                    //if (safeDistance > safeZone + 4)
+                                    //    EnterCharacterState(CharacterState.Moving);
                                 }
 
                                 attackingFramePersistance++;
@@ -521,6 +531,9 @@ namespace PrototipoMecanica4
                 case CharacterState.Moving:
                     {
                         movingTime = 0f;
+
+                        if (advanceZone > Math.Min(safeZone, dangerZone))
+                            advanceZone -= size.X / 2;
                     }
                     break;
 
@@ -536,6 +549,8 @@ namespace PrototipoMecanica4
 
                 case CharacterState.Attacking:
                     {
+                        attackingFrame = false;
+
                         attackingTime = 0.25f;
                         attackingCombo = 0;
                     }

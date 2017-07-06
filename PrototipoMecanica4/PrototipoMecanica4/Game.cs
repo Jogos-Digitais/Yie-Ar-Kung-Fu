@@ -367,7 +367,6 @@ namespace PrototipoMecanica4
                 case GameState.Pause:
                     {
                         pauseSound.Play();
-
                     }
                     break;
 

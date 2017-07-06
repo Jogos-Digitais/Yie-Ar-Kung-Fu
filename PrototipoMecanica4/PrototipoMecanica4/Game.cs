@@ -488,6 +488,8 @@ namespace PrototipoMecanica4
                         entities.Add(new Enemy(new Vector2(642, 768), new Vector2(108, 160)));
 
                         entities.Add(new Lifebar());
+
+                        entities.Add(new PlayerExtraLives());
                     }
                     break;
 

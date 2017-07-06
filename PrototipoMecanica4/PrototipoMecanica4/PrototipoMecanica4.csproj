@@ -54,6 +54,7 @@
     <Compile Include="Entity\Entity.cs" />
     <Compile Include="Entity\Interface\Button.cs" />
     <Compile Include="Entity\Interface\Lifebar.cs" />
+    <Compile Include="Entity\Interface\PlayerExtraLives.cs" />
     <Compile Include="Entity\Interface\SelectedOption.cs" />
     <Compile Include="Game.cs" />
     <Compile Include="Program.cs" />

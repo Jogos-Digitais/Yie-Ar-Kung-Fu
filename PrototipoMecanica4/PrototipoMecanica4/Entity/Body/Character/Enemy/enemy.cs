@@ -15,6 +15,7 @@ namespace PrototipoMecanica4
 
         private float safeZone = 0f; //Distância segura do player, para aproximação
         private float dangerZone = 0f; //Distância perigosa do player, para afastar-se
+        private float advanceZone = 0f; //Distância de avanço da IA, vai alternando
         private float runDistance = 0f; //Distância de corrida, multiplicar por pontos de vida perdidos
 
         float movingTime; //valor de tempo para calcular movimento
@@ -48,6 +49,7 @@ namespace PrototipoMecanica4
             //Definir distâncias
             safeZone = 104 + (Human.instance.size.X / 2) + (size.X / 2);
             dangerZone = -4 + (Human.instance.size.X / 2) + (size.X / 2); //Nunca verificar com igual, sempre menor
+            advanceZone = safeZone - (size.X / 2);
         }
 
         //TODO
@@ -278,6 +280,18 @@ namespace PrototipoMecanica4
                   new Vector2((pos.X >= Human.instance.pos.X ? (Human.instance.pos.X - pos.X + safeZone) + (pos.X - size.X / 2) : (Human.instance.pos.X - pos.X - safeZone) + (pos.X + size.X / 2)), 518f),
                   null,
                   new Color(0.0f, 1.0f, 0.0f, 0.5f),
+                  0.0f,
+                  Vector2.Zero, //pivot
+                  Vector2.One, //scale
+                  SpriteEffects.None,
+                  0.3f
+                );
+
+                //Advance zone
+                World.spriteBatch.Draw(World.debugZones,
+                  new Vector2((pos.X >= Human.instance.pos.X ? (Human.instance.pos.X - pos.X + advanceZone) + (pos.X - size.X / 2) : (Human.instance.pos.X - pos.X - advanceZone) + (pos.X + size.X / 2)), 518f),
+                  null,
+                  new Color(0.0f, 0.0f, 1.0f, 0.5f),
                   0.0f,
                   Vector2.Zero, //pivot
                   Vector2.One, //scale

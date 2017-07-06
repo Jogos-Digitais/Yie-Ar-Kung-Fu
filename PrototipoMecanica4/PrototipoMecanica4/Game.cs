@@ -94,7 +94,7 @@ namespace PrototipoMecanica4
 
         #region Sound Library
 
-        SoundEffect sound001;
+        SoundEffect pauseSound;
         SoundEffect sound002;
         SoundEffect sound003;
         SoundEffect sound004;
@@ -273,6 +273,7 @@ namespace PrototipoMecanica4
 
         private void LoadSounds()
         {
+            pauseSound = Content.Load<SoundEffect>("Sounds/pauseSound");
             //sound001 = Content.Load<SoundEffect>("Sounds/");
             //sound002 = Content.Load<SoundEffect>("Sounds/");
             //sound003 = Content.Load<SoundEffect>("Sounds/");
@@ -364,7 +365,9 @@ namespace PrototipoMecanica4
                     break;
 
                 case GameState.Pause:
-                    { }
+                    {
+                        pauseSound.Play();
+                    }
                     break;
 
                 case GameState.Over:
@@ -402,7 +405,11 @@ namespace PrototipoMecanica4
 
                         if (Keyboard.GetState().IsKeyDown(Keys.Enter) && prevKeyState.IsKeyUp(Keys.Enter) ||
                             Keyboard.GetState().IsKeyDown(Keys.W) && prevKeyState.IsKeyUp(Keys.W))
+                        {
+                            
                             EnterGameState(GameState.Pause);
+                        }
+                            
 
                         logicStage(gameTime);
                     }
@@ -412,7 +419,12 @@ namespace PrototipoMecanica4
                     {
                         if (Keyboard.GetState().IsKeyDown(Keys.Enter) && prevKeyState.IsKeyUp(Keys.Enter) ||
                             Keyboard.GetState().IsKeyDown(Keys.W) && prevKeyState.IsKeyUp(Keys.W))
+                        {
+                            
                             EnterGameState(GameState.Stage);
+                            
+                        }
+                        
 
                         logicPause(gameTime);
                     }

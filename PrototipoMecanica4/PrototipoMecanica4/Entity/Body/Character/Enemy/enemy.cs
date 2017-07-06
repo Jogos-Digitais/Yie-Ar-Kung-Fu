@@ -37,7 +37,8 @@ namespace PrototipoMecanica4
         public static CharacterState previousState = CharacterState.Null;
         public static CharacterState currentState = CharacterState.Null;
 
-        public Enemy(Vector2 initPos, Vector2 size) : base(initPos, size)
+        public Enemy(Vector2 initPos, Vector2 size)
+            : base(initPos, size)
         {
             instance = this;
 
@@ -338,7 +339,10 @@ namespace PrototipoMecanica4
                     break;
 
                 case CharacterState.Advancing:
-                    { }
+                    {
+                        if (advanceZone > dangerZone)
+                            advanceZone -= size.X / 2;
+                    }
                     break;
 
                 case CharacterState.Retreating:
@@ -426,7 +430,7 @@ namespace PrototipoMecanica4
                         if (distance >= -4 && distance <= 4 && Lifebar.instance.remainingEnemyLife() >= 1)
                             EnterCharacterState(CharacterState.Attacking);
 
-                        else if (Lifebar.instance.remainingEnemyLife() <= 0)
+                        if (Lifebar.instance.remainingEnemyLife() <= 0)
                             EnterCharacterState(CharacterState.Dead);
 
                         else if (movingTime < 0.200)
@@ -490,7 +494,7 @@ namespace PrototipoMecanica4
                                 attackingFramePersistance = 0;
                             }
 
-                            else if(attackingCombo == 4)
+                            else if (attackingCombo == 4)
                             {
                                 EnterCharacterState(CharacterState.Advancing);
                             }
@@ -531,9 +535,6 @@ namespace PrototipoMecanica4
                 case CharacterState.Moving:
                     {
                         movingTime = 0f;
-
-                        if (advanceZone > Math.Min(safeZone, dangerZone))
-                            advanceZone -= size.X / 2;
                     }
                     break;
 

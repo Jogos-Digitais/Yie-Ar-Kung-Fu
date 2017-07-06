@@ -43,7 +43,7 @@
   <ItemGroup>
     <Compile Include="Entity\Body\Body.cs" />
     <Compile Include="Entity\Body\Character\character.cs" />
-    <Compile Include="Entity\Body\Character\Enemy\enemy01.cs" />
+    <Compile Include="Entity\Body\Character\Enemy\enemy.cs" />
     <Compile Include="Entity\Body\Character\Human\human.cs" />
     <Compile Include="Entity\Body\Projectile\Fire.cs" />
     <Compile Include="Entity\Body\Projectile\Hit.cs" />

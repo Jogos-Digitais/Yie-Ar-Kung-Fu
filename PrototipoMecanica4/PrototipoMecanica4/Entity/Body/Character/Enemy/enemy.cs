@@ -349,7 +349,7 @@ namespace PrototipoMecanica4
             //Timer
             float deltaTime = (float)gameTime.ElapsedGameTime.TotalSeconds;
 
-            float distance = Math.Abs(GetDir().X);
+            float distance = GetDir().X;
 
             switch (currentState)
             {
@@ -361,7 +361,7 @@ namespace PrototipoMecanica4
                         else if (Lifebar.instance.remainingEnemyLife() <= 0)
                             EnterCharacterState(CharacterState.Dead);
 
-                        else if (distance >= -1 && distance <= 1)
+                        else if (distance >= -3 && distance <= 3)
                             EnterCharacterState(CharacterState.Attacking);
                     }
                     break;

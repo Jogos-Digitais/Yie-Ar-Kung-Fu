@@ -53,38 +53,37 @@ namespace PrototipoMecanica4
             }
         }
 
+        private SpriteEffects VirarImagem()
+        {
+            SpriteEffects efeito = SpriteEffects.None;
+
+            if (Human.instance.pos.X <= Enemy.instance.pos.X)
+            {
+                efeito = SpriteEffects.None;
+            }
+            else
+            {
+                efeito = SpriteEffects.FlipHorizontally;
+            }
+
+            return efeito;
+        }
+
         public override void Draw(GameTime gameTime)
         {
             Texture2D sprite = GetSprite();
 
-            if (Human.instance.pos.X <= Enemy.instance.pos.X)
-            {
-                World.spriteBatch.Draw(sprite,
-                  pos,
-                  null,
-                  Color.White,
-                  0.0f,
-                  new Vector2(sprite.Width / 2,
-                              sprite.Height), //pivot
-                  Vector2.One, //scale
-                  SpriteEffects.None,
-                  0.1f
-                );
-            }
-            else
-            {
-                World.spriteBatch.Draw(sprite,
-                  pos,
-                  null,
-                  Color.White,
-                  0.0f,
-                  new Vector2(sprite.Width / 2,
-                              sprite.Height), //pivot
-                  Vector2.One, //scale
-                  SpriteEffects.FlipHorizontally,
-                  0.1f
-                );
-            }
+            World.spriteBatch.Draw(sprite,
+              pos,
+              null,
+              Color.White,
+              0.0f,
+              new Vector2(sprite.Width / 2,
+                          sprite.Height), //pivot
+              Vector2.One, //scale
+              VirarImagem(),
+              0.0f
+            );
 
             if (World.debugMode)
             {

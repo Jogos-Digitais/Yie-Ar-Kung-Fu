@@ -31,6 +31,8 @@ namespace PrototipoMecanica4
 
         float attackingTime = 0.25f; //valor de tempo para calcular ataques
 
+        public bool attacked = false; //Foi atacado?
+
         //Posição hitbox
         Vector2 hitbox = Vector2.One;
 

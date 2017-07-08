@@ -72,6 +72,7 @@ namespace PrototipoMecanica4
         #region Sprites - Stages
 
         public static Texture2D menuTexture;
+        public static Texture2D stageLoadTexture;
         public static Texture2D stageTexture;
 
         #endregion
@@ -79,6 +80,7 @@ namespace PrototipoMecanica4
         #region Sprites - Messages
 
         public static Texture2D pauseTexture;
+        public static Texture2D overTexture;
 
         #endregion
 
@@ -95,35 +97,37 @@ namespace PrototipoMecanica4
         #region Sound Library
 
         SoundEffect pauseSound;
-        SoundEffect sound002;
-        SoundEffect sound003;
-        SoundEffect sound004;
-        SoundEffect sound005;
-        SoundEffect sound006;
-        SoundEffect sound007;
-        SoundEffect sound008;
-        SoundEffect sound009;
-        SoundEffect sound010;
-        SoundEffect sound011;
-        SoundEffect sound012;
-        SoundEffect sound013;
-        SoundEffect sound014;
-        SoundEffect sound015;
-        SoundEffect sound016;
-        SoundEffect sound017;
-        SoundEffect sound018;
-        SoundEffect sound019;
-        SoundEffect sound020;
-        SoundEffect sound021;
-        SoundEffect sound022;
-        SoundEffect sound023;
-        SoundEffect sound024;
-        SoundEffect sound025;
-        SoundEffect sound026;
-        SoundEffect sound027;
-        SoundEffect sound028;
-        SoundEffect sound029;
-        SoundEffect sound030;
+        SoundEffect gameMusic;
+        SoundEffect overSound;
+        SoundEffect victorySound;
+        //SoundEffect sound005;
+        //SoundEffect sound006;
+        //SoundEffect sound007;
+        //SoundEffect sound008;
+        //SoundEffect sound009;
+        //SoundEffect sound010;
+        //SoundEffect sound011;
+        //SoundEffect sound012;
+        //SoundEffect sound013;
+        //SoundEffect sound014;
+        //SoundEffect sound015;
+        //SoundEffect sound016;
+        //SoundEffect sound017;
+        //SoundEffect sound018;
+        //SoundEffect sound019;
+        //SoundEffect sound020;
+        //SoundEffect sound021;
+        //SoundEffect sound022;
+        //SoundEffect sound023;
+        //SoundEffect sound024;
+        //SoundEffect sound025;
+        //SoundEffect sound026;
+        //SoundEffect sound027;
+        //SoundEffect sound028;
+        //SoundEffect sound029;
+        //SoundEffect sound030;
+
+        SoundEffectInstance music;
 
         #endregion
 
@@ -141,7 +145,7 @@ namespace PrototipoMecanica4
         public static List<Entity> entities = new List<Entity>();
 
         //Machine states
-        public enum GameState { Null, Menu, Stage, Pause, Over };
+        public enum GameState { Null, Menu, StageLoad, Stage, Pause, Over };
 
         //Current State
         public static GameState currentState = GameState.Null;
@@ -190,6 +194,13 @@ namespace PrototipoMecanica4
 
             #endregion
 
+            //Create music instance
+            music = gameMusic.CreateInstance();
+
+            //Music properties
+            music.IsLooped = true;
+            music.Volume = 1.0f;
+
             //Enter in initial state
             EnterGameState(GameState.Menu);
         }
@@ -197,7 +208,7 @@ namespace PrototipoMecanica4
         private void LoadSprites()
         {
             #region Load sprites - Characters
-            
+
             playerTexture = Content.Load<Texture2D>("Sprites/Player");
             playerMovingTexture = Content.Load<Texture2D>("Sprites/PlayerMoving");
             playerJumpingTexture = Content.Load<Texture2D>("Sprites/PlayerJumping");
@@ -248,8 +259,9 @@ namespace PrototipoMecanica4
             #endregion
 
             #region Load sprites - Stages
-            
+
             menuTexture = Content.Load<Texture2D>("Sprites/Menu");
+            stageLoadTexture = Content.Load<Texture2D>("Sprites/StageLoad");
             stageTexture = Content.Load<Texture2D>("Sprites/Stage");
 
             #endregion
@@ -257,11 +269,12 @@ namespace PrototipoMecanica4
             #region Load sprites - Messages
 
             pauseTexture = Content.Load<Texture2D>("Sprites/Pause");
+            overTexture = Content.Load<Texture2D>("Sprites/Over");
 
             #endregion
 
             #region Load sprites - Debugs
-            
+
             debugCircleTex = Content.Load<Texture2D>("Sprites/debug_circle");
             debugRectangleTex = Content.Load<Texture2D>("Sprites/debug_rectangle");
             debugBigRectangleTex = Content.Load<Texture2D>("Sprites/debug_big_rectangle");
@@ -274,9 +287,9 @@ namespace PrototipoMecanica4
         private void LoadSounds()
         {
             pauseSound = Content.Load<SoundEffect>("Sounds/pauseSound");
-            //sound001 = Content.Load<SoundEffect>("Sounds/");
-            //sound002 = Content.Load<SoundEffect>("Sounds/");
-            //sound003 = Content.Load<SoundEffect>("Sounds/");
+            gameMusic = Content.Load<SoundEffect>("Sounds/gameMusic");
+            overSound = Content.Load<SoundEffect>("Sounds/overSound");
+            victorySound = Content.Load<SoundEffect>("Sounds/victorySound");
             //sound004 = Content.Load<SoundEffect>("Sounds/");
             //sound005 = Content.Load<SoundEffect>("Sounds/");
             //sound006 = Content.Load<SoundEffect>("Sounds/");
@@ -341,6 +354,8 @@ namespace PrototipoMecanica4
 
         #region FSM
 
+        float startTime = 2;
+        float loadStageTime = 2;
         float countdownToMenu = 6;
 
         public void EnterGameState(GameState newState)
@@ -353,11 +368,17 @@ namespace PrototipoMecanica4
             {
                 case GameState.Menu:
                     {
+                        music.Stop();
+
                         entities.Clear();
 
                         if (SelectedOption.instance == null)
                             menuEntities.Add(new SelectedOption());
                     }
+                    break;
+
+                case GameState.StageLoad:
+                    { }
                     break;
 
                 case GameState.Stage:
@@ -366,6 +387,8 @@ namespace PrototipoMecanica4
 
                 case GameState.Pause:
                     {
+                        music.Pause();
+
                         pauseSound.Play();
                     }
                     break;
@@ -378,69 +401,35 @@ namespace PrototipoMecanica4
 
         public void UpdateGameState(GameTime gameTime)
         {
-            //Timer
-            float deltaTime = (float)gameTime.ElapsedGameTime.TotalSeconds;
-
             switch (currentState)
             {
                 case GameState.Menu:
                     {
-                        if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape) && prevKeyState.IsKeyUp(Keys.Escape))
-                            Exit();
+                        logicMenu(gameTime);
+                    }
+                    break;
 
-                        if (Keyboard.GetState().IsKeyDown(Keys.Space) && prevKeyState.IsKeyUp(Keys.Space) ||
-                            Keyboard.GetState().IsKeyDown(Keys.Q) && prevKeyState.IsKeyUp(Keys.Q))
-                            SelectedOption.instance.ChangeSelectedOption();
-
-                        if (Keyboard.GetState().IsKeyDown(Keys.Enter) && prevKeyState.IsKeyUp(Keys.Enter) ||
-                            Keyboard.GetState().IsKeyDown(Keys.W) && prevKeyState.IsKeyUp(Keys.W))
-                            EnterGameState(GameState.Stage);
+                case GameState.StageLoad:
+                    {
+                        logicStageLoad(gameTime);
                     }
                     break;
 
                 case GameState.Stage:
                     {
-                        if (Keyboard.GetState().IsKeyDown(Keys.Escape) && prevKeyState.IsKeyUp(Keys.Escape))
-                            EnterGameState(GameState.Menu);
-
-                        if (Keyboard.GetState().IsKeyDown(Keys.Enter) && prevKeyState.IsKeyUp(Keys.Enter) ||
-                            Keyboard.GetState().IsKeyDown(Keys.W) && prevKeyState.IsKeyUp(Keys.W))
-                        {
-                            
-                            EnterGameState(GameState.Pause);
-                        }
-                            
-
                         logicStage(gameTime);
                     }
                     break;
 
                 case GameState.Pause:
                     {
-                        if (Keyboard.GetState().IsKeyDown(Keys.Enter) && prevKeyState.IsKeyUp(Keys.Enter) ||
-                            Keyboard.GetState().IsKeyDown(Keys.W) && prevKeyState.IsKeyUp(Keys.W))
-                        {
-                            
-                            EnterGameState(GameState.Stage);
-                            
-                        }
-                        
-
                         logicPause(gameTime);
                     }
                     break;
 
                 case GameState.Over:
                     {
-                        if (countdownToMenu > 0)
-                        {
-                            countdownToMenu -= deltaTime;
-                        }
-                        else
-                        {
-                            countdownToMenu = 6;
-                            EnterGameState(GameState.Menu);
-                        }
+                        logicOver(gameTime);
                     }
                     break;
             }
@@ -456,6 +445,12 @@ namespace PrototipoMecanica4
                 case GameState.Menu:
                     {
                         drawMenu(gameTime);
+                    }
+                    break;
+
+                case GameState.StageLoad:
+                    {
+                        drawStageLoad(gameTime);
                     }
                     break;
 
@@ -490,6 +485,14 @@ namespace PrototipoMecanica4
                         entities.Add(new Lifebar());
 
                         entities.Add(new PlayerExtraLives());
+
+                        music.Play();
+                    }
+                    break;
+
+                case GameState.StageLoad:
+                    {
+                        loadStageTime = 2f;
                     }
                     break;
 
@@ -498,7 +501,9 @@ namespace PrototipoMecanica4
                     break;
 
                 case GameState.Pause:
-                    { }
+                    {
+                        music.Resume();
+                    }
                     break;
 
                 case GameState.Over:
@@ -513,10 +518,38 @@ namespace PrototipoMecanica4
 
         private void logicMenu(GameTime gameTime)
         {
+            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape) && prevKeyState.IsKeyUp(Keys.Escape))
+                Exit();
+
+            if (Keyboard.GetState().IsKeyDown(Keys.Space) && prevKeyState.IsKeyUp(Keys.Space) ||
+                Keyboard.GetState().IsKeyDown(Keys.Q) && prevKeyState.IsKeyUp(Keys.Q))
+                SelectedOption.instance.ChangeSelectedOption();
+
+            if (Keyboard.GetState().IsKeyDown(Keys.Enter) && prevKeyState.IsKeyUp(Keys.Enter) ||
+                Keyboard.GetState().IsKeyDown(Keys.W) && prevKeyState.IsKeyUp(Keys.W))
+                EnterGameState(GameState.StageLoad);
+        }
+
+        private void logicStageLoad(GameTime gameTime)
+        {
+            //Timer
+            float deltaTime = (float)gameTime.ElapsedGameTime.TotalSeconds;
+
+            if (loadStageTime > 0)
+                loadStageTime -= deltaTime;
+            else
+                EnterGameState(GameState.Stage);
         }
 
         private void logicStage(GameTime gameTime)
         {
+            if (Keyboard.GetState().IsKeyDown(Keys.Escape) && prevKeyState.IsKeyUp(Keys.Escape))
+                EnterGameState(GameState.Menu);
+
+            if (Keyboard.GetState().IsKeyDown(Keys.Enter) && prevKeyState.IsKeyUp(Keys.Enter) ||
+                Keyboard.GetState().IsKeyDown(Keys.W) && prevKeyState.IsKeyUp(Keys.W))
+                EnterGameState(GameState.Pause);
+
             List<Entity> tmp = new List<Entity>(entities);
             foreach (Entity e in tmp)
                 e.Update(gameTime);
@@ -535,11 +568,23 @@ namespace PrototipoMecanica4
 
         private void logicPause(GameTime gameTime)
         {
-
+            if (Keyboard.GetState().IsKeyDown(Keys.Enter) && prevKeyState.IsKeyUp(Keys.Enter) ||
+                Keyboard.GetState().IsKeyDown(Keys.W) && prevKeyState.IsKeyUp(Keys.W))
+                EnterGameState(GameState.Stage);
         }
 
         private void logicOver(GameTime gameTime)
         {
+            //Timer
+            float deltaTime = (float)gameTime.ElapsedGameTime.TotalSeconds;
+
+            if (countdownToMenu > 0)
+                countdownToMenu -= deltaTime;
+            else
+            {
+                countdownToMenu = 6;
+                EnterGameState(GameState.Menu);
+            }
         }
 
         #endregion
@@ -556,24 +601,16 @@ namespace PrototipoMecanica4
                 e.Draw(gameTime);
         }
 
+        private void drawStageLoad(GameTime gameTime)
+        {
+            //Draw stage load
+            spriteBatch.Draw(stageLoadTexture, new Vector2(0f, 0f), null, Color.White, 0.0f, Vector2.Zero, Vector2.One, SpriteEffects.None, 0.4f);
+        }
+
         private void drawStage(GameTime gameTime)
         {
             //Draw stage
             spriteBatch.Draw(stageTexture, new Vector2(0f, 0f), null, Color.White, 0.0f, Vector2.Zero, Vector2.One, SpriteEffects.None, 0.4f);
-
-            ////Draw texts
-            //spriteBatch.DrawString(
-            //  fontNormal,
-            //  "F1 - Debug Mode (" + (debugMode ? "DEBUG ON" : "DEBUG OFF") + ")\n" +
-            //  "Z - Kick | X - Punch | F5 - In debug mode, revive enemy",
-            //  new Vector2(65, 151),  //position
-            //  Color.White,          //color
-            //  0.0f,                 //rotation
-            //  Vector2.Zero,         //origin (pivot)
-            //  Vector2.One,          //scale
-            //  SpriteEffects.None,
-            //  0.0f
-            //);
 
             //Draw each entity
             foreach (Entity e in entities)
@@ -589,7 +626,9 @@ namespace PrototipoMecanica4
 
         private void drawOver(GameTime gameTime)
         {
+            spriteBatch.Draw(overTexture, new Vector2((graphics.PreferredBackBufferWidth - pauseTexture.Width) / 2, (graphics.PreferredBackBufferHeight - pauseTexture.Height) / 2), null, Color.White, 0.0f, Vector2.Zero, Vector2.One, SpriteEffects.None, 0.3f);
 
+            drawStage(gameTime);
         }
 
         #endregion

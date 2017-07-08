@@ -18,20 +18,22 @@ namespace PrototipoMecanica4
         private float advanceZone = 0f; //Distância de avanço da IA, vai alternando
         private float runDistance = 0f; //Distância de corrida, multiplicar por pontos de vida perdidos
 
-        float standingTime; //Valor de tempo para calcular tempo parado
+        private float standingTime; //Valor de tempo para calcular tempo parado
 
-        float movingTime; //valor de tempo para calcular movimento
-        int framePersistance; //Conta 10 e muda frame
-        bool movingFrame = false; //Moving frame
+        private float movingTime; //valor de tempo para calcular movimento
+        private int framePersistance; //Conta 10 e muda frame
+        private bool movingFrame = false; //Moving frame
 
-        float attackingTime = 0.25f; //valor de tempo para calcular ataques
-        int attackingCombo = 0; //Attacking combo
+        private float attackingTime = 0.25f; //valor de tempo para calcular ataques
+        private int attackingCombo = 0; //Attacking combo
+
+        public bool attacked = false; //Foi atacado?
 
         //Posição hitbox
         Vector2 hitbox = Vector2.One;
 
         //Machine states
-        public enum CharacterState { Null, Standing, Moving, Advancing, Retreating, PreparingAttack, Attacking, Recoiling, Running, Dead }; //Nenhum estado, parado, movendo-se, avançando, recuando, preparando ataque, atacando, absorvendo, correndo, morto
+        public enum CharacterState { Null, Standing, Moving, Advancing, PreparingAttack, Attacking, Recoiling, Running, Dead }; //Nenhum estado, parado, movendo-se, avançando, preparando ataque, atacando, absorvendo, correndo, morto
 
         //Current State
         public static CharacterState previousState = CharacterState.Null;
@@ -101,15 +103,6 @@ namespace PrototipoMecanica4
                                 positionToReturn.X = testBody.pos.X - pos.X - advanceZone; //-advanceZone
                         }
                         break;
-
-                    case CharacterState.Retreating:
-                        {
-                            if (pos.X >= Human.instance.pos.X)
-                                positionToReturn.X = testBody.pos.X - pos.X + dangerZone; //+dangerZone
-                            else
-                                positionToReturn.X = testBody.pos.X - pos.X - dangerZone; //-dangerZone
-                        }
-                        break;
                 }
 
                 return positionToReturn;
@@ -130,7 +123,6 @@ namespace PrototipoMecanica4
 
                 case CharacterState.Moving:
                 case CharacterState.Advancing:
-                case CharacterState.Retreating:
                     {
                         if (movingFrame)
                             currentTexture = World.enemy001MovingTexture;
@@ -140,7 +132,12 @@ namespace PrototipoMecanica4
                     break;
 
                 case CharacterState.PreparingAttack:
-                    currentTexture = World.enemy001PrepareAttackTexture;
+                    {
+                        if (standingTime > 0)
+                            currentTexture = World.enemy001Texture;
+                        else
+                            currentTexture = World.enemy001PrepareAttackTexture;
+                    }
                     break;
 
                 case CharacterState.Attacking:
@@ -328,12 +325,13 @@ namespace PrototipoMecanica4
             {
                 case CharacterState.Standing:
                     {
-                        standingTime = 0f;
+                        standingTime = 0.2f;
                     }
                     break;
 
                 case CharacterState.Moving:
                     {
+                        attackingCombo = 0;
                         advanceZone = safeZone;
                     }
                     break;
@@ -343,10 +341,6 @@ namespace PrototipoMecanica4
                         if (advanceZone > dangerZone)
                             advanceZone -= size.X / 2;
                     }
-                    break;
-
-                case CharacterState.Retreating:
-                    { }
                     break;
 
                 case CharacterState.PreparingAttack:
@@ -388,9 +382,9 @@ namespace PrototipoMecanica4
                     {
                         if (Lifebar.instance.remainingEnemyLife() > 0)
                         {
-                            standingTime += deltaTime;
+                            standingTime -= deltaTime;
 
-                            if (standingTime >= 0.2f)
+                            if (standingTime <= 0f)
                             {
                                 if (distance < -4 || distance > 4)
                                     EnterCharacterState(CharacterState.Moving);
@@ -480,28 +474,57 @@ namespace PrototipoMecanica4
                     }
                     break;
 
-                case CharacterState.Retreating:
-                    { }
-                    break;
-
                 case CharacterState.PreparingAttack:
                     {
                         if (Lifebar.instance.remainingEnemyLife() > 0)
                         {
-                            if (attackingTime > 0 && attackingCombo < 4)
+                            float safeDistance = Vector2.Distance(Human.instance.pos, pos);
+
+                            if (standingTime > 0)
                             {
-                                attackingTime -= deltaTime;
+                                standingTime -= deltaTime;
+                            }
+                            else
+                            {
+                                if (safeDistance > safeZone + 4)
+                                    EnterCharacterState(CharacterState.Moving);
+                                else if (attackingCombo < 4)
+                                    EnterCharacterState(CharacterState.Attacking);
+                                else if (attackingCombo == 4)
+                                    EnterCharacterState(CharacterState.Advancing);
                             }
 
-                            else if (attackingTime <= 0 && attackingCombo < 4)
-                            {
-                                EnterCharacterState(CharacterState.Attacking);
-                            }
+                            //else if (selfHitCheck)
+                            //{
+                            //  EnterCharacterState(CharacterState.Recoiling);
+                            //}
 
-                            else if (attackingCombo == 4)
-                            {
-                                EnterCharacterState(CharacterState.Advancing);
-                            }
+                            //????????????????????
+                            //else if (advanceZone < dangerZone)
+                            //{
+                            //
+                            //}
+
+                            //Ataque de bastão?
+                            //else if ()
+                            //{
+                            //
+                            //}
+
+                            //if (standingTime > 0 && attackingCombo < 4)
+                            //{
+                            //    
+                            //}
+                            //
+                            //else if (standingTime <= 0 && attackingCombo < 4)
+                            //{
+                            //    
+                            //}
+                            //
+                            //else if (attackingCombo == 4)
+                            //{
+                            //    EnterCharacterState(CharacterState.Advancing);
+                            //}
                         }
                         else
                             EnterCharacterState(CharacterState.Dead);
@@ -519,7 +542,7 @@ namespace PrototipoMecanica4
 
                             else if (attackingTime <= 0 && attackingCombo < 4)
                             {
-                                EnterCharacterState(CharacterState.Standing);
+                                EnterCharacterState(CharacterState.PreparingAttack);
                             }
 
                             else if (attackingCombo == 4)
@@ -571,13 +594,9 @@ namespace PrototipoMecanica4
                     }
                     break;
 
-                case CharacterState.Retreating:
-                    { }
-                    break;
-
                 case CharacterState.PreparingAttack:
                     {
-                        attackingTime = 0.25f;
+                        standingTime = 0.2f;
                     }
                     break;
 

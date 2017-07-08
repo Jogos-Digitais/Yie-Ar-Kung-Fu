@@ -18,6 +18,8 @@ namespace PrototipoMecanica4
         private float advanceZone = 0f; //Distância de avanço da IA, vai alternando
         private float runDistance = 0f; //Distância de corrida, multiplicar por pontos de vida perdidos
 
+        float standingTime; //Valor de tempo para calcular tempo parado
+
         float movingTime; //valor de tempo para calcular movimento
         int framePersistance; //Conta 10 e muda frame
         bool movingFrame = false; //Moving frame
@@ -325,7 +327,9 @@ namespace PrototipoMecanica4
             switch (currentState)
             {
                 case CharacterState.Standing:
-                    { }
+                    {
+                        standingTime = 0f;
+                    }
                     break;
 
                 case CharacterState.Moving:
@@ -384,11 +388,16 @@ namespace PrototipoMecanica4
                     {
                         if (Lifebar.instance.remainingEnemyLife() > 0)
                         {
-                            if (distance < -4 || distance > 4)
-                                EnterCharacterState(CharacterState.Moving);
+                            standingTime += deltaTime;
 
-                            else if (distance >= -3 && distance <= 3)
-                                EnterCharacterState(CharacterState.PreparingAttack);
+                            if (standingTime >= 0.2f)
+                            {
+                                if (distance < -4 || distance > 4)
+                                    EnterCharacterState(CharacterState.Moving);
+
+                                else if (distance >= -3 && distance <= 3)
+                                    EnterCharacterState(CharacterState.PreparingAttack);
+                            }
                         }
                         else
                             EnterCharacterState(CharacterState.Dead);
@@ -510,7 +519,7 @@ namespace PrototipoMecanica4
 
                             else if (attackingTime <= 0 && attackingCombo < 4)
                             {
-                                EnterCharacterState(CharacterState.PreparingAttack);
+                                EnterCharacterState(CharacterState.Standing);
                             }
 
                             else if (attackingCombo == 4)

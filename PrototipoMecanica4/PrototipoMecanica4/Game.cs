@@ -610,6 +610,14 @@ namespace PrototipoMecanica4
                     Lifebar.instance.revivePlayer();
 
             if (debugMode)
+                if (Keyboard.GetState().IsKeyDown(Keys.Subtract) && prevKeyState.IsKeyUp(Keys.Subtract))
+                    PlayerExtraLives.instance.reduceALife();
+
+            if (debugMode)
+                if (Keyboard.GetState().IsKeyDown(Keys.Add) && prevKeyState.IsKeyUp(Keys.Add))
+                    PlayerExtraLives.instance.bonusLife();
+
+            if (debugMode)
                 if (Keyboard.GetState().IsKeyDown(Keys.NumPad1) && prevKeyState.IsKeyUp(Keys.NumPad1))
                     ScoreBoard.instance.add100points();
 

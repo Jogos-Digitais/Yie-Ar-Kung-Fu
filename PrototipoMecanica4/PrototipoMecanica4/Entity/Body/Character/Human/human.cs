@@ -33,6 +33,8 @@ namespace PrototipoMecanica4
 
         public bool attacked = false; //Foi atacado?
 
+        public Texture2D lastAttack = null;
+
         //Posição hitbox
         Vector2 hitbox = Vector2.One;
 
@@ -67,17 +69,35 @@ namespace PrototipoMecanica4
                 hitX -= 55f;
 
             if (GetSprite().Equals(World.playerHighKickTexture)) //Chute alto
+            {
+                lastAttack = World.playerHighKickTexture;
                 hitbox = new Vector2(pos.X + hitX, (pos.Y - World.playerTexture.Height) + 40f);
+            }
             else if (GetSprite().Equals(World.playerPunchTexture)) //Soco
+            {
+                lastAttack = World.playerPunchTexture;
                 hitbox = new Vector2(pos.X + hitX, pos.Y - (World.playerTexture.Height / 2));
+            }
             else if (GetSprite().Equals(World.playerLowPunchTexture)) //Soco baixo
+            {
+                lastAttack = World.playerLowPunchTexture;
                 hitbox = new Vector2(pos.X + hitX, pos.Y - (World.playerTexture.Height / 3));
+            }
             else if (GetSprite().Equals(World.playerLowKickTexture)) //Chute baixo
+            {
+                lastAttack = World.playerLowKickTexture;
                 hitbox = new Vector2(pos.X + hitX, pos.Y);
+            }
             else if (GetSprite().Equals(World.playerMediumKickTexture)) //Chute médio
+            {
+                lastAttack = World.playerMediumKickTexture;
                 hitbox = new Vector2(pos.X + hitX, pos.Y);
+            }
             else if (GetSprite().Equals(World.playerFlyingKickTexture)) //Chute no salto
+            {
+                lastAttack = World.playerFlyingKickTexture;
                 hitbox = new Vector2(pos.X + hitX, pos.Y);
+            }
 
             return hitbox;
         }

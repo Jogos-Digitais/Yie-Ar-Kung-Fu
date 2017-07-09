@@ -50,6 +50,9 @@ namespace PrototipoMecanica4
             if (lifeTime <= 0)
             {
                 World.entities.Remove(this);
+
+                if (myShooter.Equals(Human.instance))
+                    World.entities.Add(new Points());
             }
         }
 

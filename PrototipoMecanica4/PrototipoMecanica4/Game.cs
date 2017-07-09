@@ -81,6 +81,22 @@ namespace PrototipoMecanica4
 
         public static Texture2D pauseTexture;
         public static Texture2D overTexture;
+        public static Texture2D perfectTexture;
+
+        #endregion
+
+        #region Sprites - Numbers
+
+        public static Texture2D N0Texture;
+        public static Texture2D N1Texture;
+        public static Texture2D N2Texture;
+        public static Texture2D N3Texture;
+        public static Texture2D N4Texture;
+        public static Texture2D N5Texture;
+        public static Texture2D N6Texture;
+        public static Texture2D N7Texture;
+        public static Texture2D N8Texture;
+        public static Texture2D N9Texture;
 
         #endregion
 
@@ -143,6 +159,8 @@ namespace PrototipoMecanica4
         //World entities
         public static List<Entity> menuEntities = new List<Entity>();
         public static List<Entity> entities = new List<Entity>();
+
+        public static Entity scoreBoard = new ScoreBoard();
 
         //Machine states
         public enum GameState { Null, Menu, StageLoad, Stage, Pause, Over };
@@ -270,6 +288,22 @@ namespace PrototipoMecanica4
 
             pauseTexture = Content.Load<Texture2D>("Sprites/Pause");
             overTexture = Content.Load<Texture2D>("Sprites/Over");
+            perfectTexture = Content.Load<Texture2D>("Sprites/Perfect");
+
+            #endregion
+
+            #region Load Sprites - Numbers
+
+            N0Texture = Content.Load<Texture2D>("Sprites/N0");
+            N1Texture = Content.Load<Texture2D>("Sprites/N1");
+            N2Texture = Content.Load<Texture2D>("Sprites/N2");
+            N3Texture = Content.Load<Texture2D>("Sprites/N3");
+            N4Texture = Content.Load<Texture2D>("Sprites/N4");
+            N5Texture = Content.Load<Texture2D>("Sprites/N5");
+            N6Texture = Content.Load<Texture2D>("Sprites/N6");
+            N7Texture = Content.Load<Texture2D>("Sprites/N7");
+            N8Texture = Content.Load<Texture2D>("Sprites/N8");
+            N9Texture = Content.Load<Texture2D>("Sprites/N9");
 
             #endregion
 
@@ -371,6 +405,8 @@ namespace PrototipoMecanica4
                         music.Stop();
 
                         entities.Clear();
+
+                        ScoreBoard.instance.resetScore();
 
                         if (SelectedOption.instance == null)
                             menuEntities.Add(new SelectedOption());
@@ -558,12 +594,32 @@ namespace PrototipoMecanica4
                 debugMode = !debugMode;
 
             if (debugMode)
-                if (Keyboard.GetState().IsKeyDown(Keys.F5))
+                if (Keyboard.GetState().IsKeyDown(Keys.F5) && prevKeyState.IsKeyUp(Keys.F5))
                     Lifebar.instance.reviveEnemy();
 
             if (debugMode)
-                if (Keyboard.GetState().IsKeyDown(Keys.F6))
+                if (Keyboard.GetState().IsKeyDown(Keys.F6) && prevKeyState.IsKeyUp(Keys.F6))
                     Lifebar.instance.revivePlayer();
+
+            if (debugMode)
+                if (Keyboard.GetState().IsKeyDown(Keys.NumPad1) && prevKeyState.IsKeyUp(Keys.NumPad1))
+                    ScoreBoard.instance.add100points();
+
+            if (debugMode)
+                if (Keyboard.GetState().IsKeyDown(Keys.NumPad2) && prevKeyState.IsKeyUp(Keys.NumPad2))
+                    ScoreBoard.instance.add200points();
+
+            if (debugMode)
+                if (Keyboard.GetState().IsKeyDown(Keys.NumPad3) && prevKeyState.IsKeyUp(Keys.NumPad3))
+                    ScoreBoard.instance.add300points();
+
+            if (debugMode)
+                if (Keyboard.GetState().IsKeyDown(Keys.NumPad5) && prevKeyState.IsKeyUp(Keys.NumPad5))
+                    ScoreBoard.instance.add5000points();
+
+            if (debugMode)
+                if (Keyboard.GetState().IsKeyDown(Keys.NumPad8) && prevKeyState.IsKeyUp(Keys.NumPad8))
+                    ScoreBoard.instance.add800points();
         }
 
         private void logicPause(GameTime gameTime)
@@ -615,6 +671,8 @@ namespace PrototipoMecanica4
             //Draw each entity
             foreach (Entity e in entities)
                 e.Draw(gameTime);
+
+            scoreBoard.Draw(gameTime);
         }
 
         private void drawPause(GameTime gameTime)

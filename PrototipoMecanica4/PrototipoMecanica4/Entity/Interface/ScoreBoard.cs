@@ -69,6 +69,9 @@ namespace PrototipoMecanica4
         {
             int tempScore = int.Parse(score) + 800;
 
+            if (tempScore > 999999)
+                tempScore = 999999;
+
             score = tempScore.ToString("000000");
 
             checkHighScore();
@@ -77,6 +80,9 @@ namespace PrototipoMecanica4
         public void add5000points() //For perfects (Position for perfect message 320x576)
         {
             int tempScore = int.Parse(score) + 5000;
+
+            if (tempScore > 999999)
+                tempScore = 999999;
 
             score = tempScore.ToString("000000");
 

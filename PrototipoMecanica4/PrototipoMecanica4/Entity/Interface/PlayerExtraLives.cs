@@ -21,11 +21,17 @@ namespace PrototipoMecanica4
         public void bonusLife()
         {
             extraLives++;
+
+            if (extraLives > 9)
+                extraLives = 9;
         }
 
         public void reduceALife()
         {
             extraLives--;
+
+            if (extraLives < 0)
+                extraLives = 0;
         }
 
         public override void Draw(GameTime gameTime)

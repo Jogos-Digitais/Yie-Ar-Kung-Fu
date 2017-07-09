@@ -412,24 +412,29 @@ namespace PrototipoMecanica4
 
                 case CharacterState.Crouching:
                     {
-                        if (Keyboard.GetState().IsKeyUp(Keys.Down))
+                        if (Lifebar.instance.remainingPlayerLife() > 0)
                         {
-                            EnterCharacterState(CharacterState.Standing);
-                        }
+                            if (Keyboard.GetState().IsKeyUp(Keys.Down))
+                            {
+                                EnterCharacterState(CharacterState.Standing);
+                            }
 
-                        if (currentState.Equals(CharacterState.Crouching) &&
-                            Keyboard.GetState().IsKeyDown(Keys.X))
-                        {
-                            previousState = currentState;
-                            EnterCharacterState(CharacterState.Punching);
-                        }
+                            if (currentState.Equals(CharacterState.Crouching) &&
+                                Keyboard.GetState().IsKeyDown(Keys.X))
+                            {
+                                previousState = currentState;
+                                EnterCharacterState(CharacterState.Punching);
+                            }
 
-                        if (currentState.Equals(CharacterState.Crouching) &&
-                            Keyboard.GetState().IsKeyDown(Keys.Z))
-                        {
-                            previousState = currentState;
-                            EnterCharacterState(CharacterState.Kicking);
+                            if (currentState.Equals(CharacterState.Crouching) &&
+                                Keyboard.GetState().IsKeyDown(Keys.Z))
+                            {
+                                previousState = currentState;
+                                EnterCharacterState(CharacterState.Kicking);
+                            }
                         }
+                        else
+                            EnterCharacterState(CharacterState.Dead);
                     }
                     break;
 

@@ -34,6 +34,11 @@ namespace PrototipoMecanica4
                 extraLives = 0;
         }
 
+        public int remainingLives()
+        {
+            return extraLives;
+        }
+
         public override void Draw(GameTime gameTime)
         {
             for (int i = 0; i < extraLives; i++)

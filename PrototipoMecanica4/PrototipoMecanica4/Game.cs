@@ -396,9 +396,11 @@ namespace PrototipoMecanica4
 
         #region FSM
 
-        float startTime = 2;
-        float loadStageTime = 2;
-        float countdownToMenu = 6;
+        float startTime = 2; //Tempo de espera para passar para o LoadStage
+        bool gameStarted = false; //Indica se o player apertou W ou Start
+        float loadStageTime = 2; //Tempo de espera na tela LoadStage até o início da partida
+        float overTime = 0.3f; //Tempo para encerrar a partida
+        float countdownToRestart = 2; //Tempo para reiniciar a partida após perder uma vida
 
         public void EnterGameState(GameState newState)
         {
@@ -511,7 +513,9 @@ namespace PrototipoMecanica4
                     break;
 
                 case GameState.Over:
-                    { }
+                    {
+                        drawOver(gameTime);
+                    }
                     break;
             }
         }
@@ -530,18 +534,39 @@ namespace PrototipoMecanica4
 
                         entities.Add(new PlayerExtraLives());
 
-                        music.Play();
+                        gameStarted = false;
+                        startTime = 2f;
                     }
                     break;
 
                 case GameState.StageLoad:
                     {
+                        Lifebar.instance.revivePlayer();
+
+                        Lifebar.instance.reviveEnemy();
+
+                        entities.Remove(Enemy.instance);
+                        entities.Remove(Human.instance);
+
+                        entities.Add(new Human(new Vector2(260, 768), new Vector2(88, 128)));
+                        entities.Add(new Enemy(new Vector2(642, 768), new Vector2(108, 160)));
+                        
                         loadStageTime = 2f;
                     }
                     break;
 
                 case GameState.Stage:
-                    { }
+                    {
+                        music.Stop();
+
+                        overTime = 0.3f;
+
+                        if (Lifebar.instance.remainingPlayerLife() == 0 && PlayerExtraLives.instance.remainingLives() == 0)
+                            overSound.Play();
+
+                        if (Lifebar.instance.remainingEnemyLife() == 0)
+                            victorySound.Play();
+                    }
                     break;
 
                 case GameState.Pause:
@@ -562,6 +587,9 @@ namespace PrototipoMecanica4
 
         private void logicMenu(GameTime gameTime)
         {
+            //Timer
+            float deltaTime = (float)gameTime.ElapsedGameTime.TotalSeconds;
+
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape) && prevKeyState.IsKeyUp(Keys.Escape))
                 Exit();
 
@@ -571,6 +599,16 @@ namespace PrototipoMecanica4
 
             if (Keyboard.GetState().IsKeyDown(Keys.Enter) && prevKeyState.IsKeyUp(Keys.Enter) ||
                 Keyboard.GetState().IsKeyDown(Keys.W) && prevKeyState.IsKeyUp(Keys.W))
+                gameStarted = true;
+
+            if (startTime > 0 && gameStarted)
+            {
+                startTime -= deltaTime;
+
+                if (music.State.Equals(SoundState.Stopped))
+                    music.Play();
+            }
+            else if (startTime <= 0 && gameStarted)
                 EnterGameState(GameState.StageLoad);
         }
 
@@ -578,6 +616,9 @@ namespace PrototipoMecanica4
         {
             //Timer
             float deltaTime = (float)gameTime.ElapsedGameTime.TotalSeconds;
+
+            if (music.State.Equals(SoundState.Stopped))
+                music.Play();
 
             if (loadStageTime > 0)
                 loadStageTime -= deltaTime;
@@ -587,6 +628,9 @@ namespace PrototipoMecanica4
 
         private void logicStage(GameTime gameTime)
         {
+            //Timer
+            float deltaTime = (float)gameTime.ElapsedGameTime.TotalSeconds;
+
             if (Keyboard.GetState().IsKeyDown(Keys.Escape) && prevKeyState.IsKeyUp(Keys.Escape))
                 EnterGameState(GameState.Menu);
 
@@ -636,6 +680,12 @@ namespace PrototipoMecanica4
             if (debugMode)
                 if (Keyboard.GetState().IsKeyDown(Keys.NumPad8) && prevKeyState.IsKeyUp(Keys.NumPad8))
                     ScoreBoard.instance.add800points();
+
+            if (Lifebar.instance.remainingPlayerLife() == 0 || Lifebar.instance.remainingEnemyLife() == 0)
+                if (overTime > 0)
+                    overTime -= deltaTime;
+                else
+                    EnterGameState(GameState.Over);
         }
 
         private void logicPause(GameTime gameTime)
@@ -650,12 +700,19 @@ namespace PrototipoMecanica4
             //Timer
             float deltaTime = (float)gameTime.ElapsedGameTime.TotalSeconds;
 
-            if (countdownToMenu > 0)
-                countdownToMenu -= deltaTime;
+            if (countdownToRestart > 0)
+                countdownToRestart -= deltaTime;
             else
             {
-                countdownToMenu = 6;
-                EnterGameState(GameState.Menu);
+                countdownToRestart = 2;
+
+                if (PlayerExtraLives.instance.remainingLives() > 0)
+                {
+                    PlayerExtraLives.instance.reduceALife();
+                    EnterGameState(GameState.StageLoad);
+                }
+                else
+                    EnterGameState(GameState.Menu);
             }
         }
 
@@ -700,7 +757,17 @@ namespace PrototipoMecanica4
 
         private void drawOver(GameTime gameTime)
         {
-            spriteBatch.Draw(overTexture, new Vector2((graphics.PreferredBackBufferWidth - pauseTexture.Width) / 2, (graphics.PreferredBackBufferHeight - pauseTexture.Height) / 2), null, Color.White, 0.0f, Vector2.Zero, Vector2.One, SpriteEffects.None, 0.3f);
+            if (PlayerExtraLives.instance.remainingLives() == 0)
+                spriteBatch.Draw(overTexture,
+                    new Vector2((graphics.PreferredBackBufferWidth - overTexture.Width) / 2,
+                    (graphics.PreferredBackBufferHeight - overTexture.Height) / 2),
+                    null,
+                    Color.White,
+                    0.0f,
+                    Vector2.Zero,
+                    Vector2.One,
+                    SpriteEffects.None,
+                    0.3f);
 
             drawStage(gameTime);
         }

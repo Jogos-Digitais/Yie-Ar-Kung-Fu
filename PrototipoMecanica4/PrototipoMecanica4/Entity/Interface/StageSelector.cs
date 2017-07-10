@@ -33,6 +33,18 @@ namespace PrototipoMecanica4
             stage = tempStage.ToString("00");
         }
 
+        public Texture2D stageImage()
+        {
+            Texture2D stageSprite = null;
+
+            int tempStage = int.Parse(stage);
+
+            if (tempStage % 2 == 0)
+                return stageSprite = World.stage2Texture;
+            else
+                return stageSprite = World.stageTexture;
+        }
+
         private Texture2D numberSprite(int number)
         {
             Texture2D numberSprite = null;

@@ -74,6 +74,7 @@ namespace PrototipoMecanica4
         public static Texture2D menuTexture;
         public static Texture2D stageLoadTexture;
         public static Texture2D stageTexture;
+        public static Texture2D stage2Texture;
 
         #endregion
 
@@ -290,6 +291,7 @@ namespace PrototipoMecanica4
             menuTexture = Content.Load<Texture2D>("Sprites/Menu");
             stageLoadTexture = Content.Load<Texture2D>("Sprites/StageLoad");
             stageTexture = Content.Load<Texture2D>("Sprites/Stage");
+            stage2Texture = Content.Load<Texture2D>("Sprites/Stage2");
 
             #endregion
 
@@ -755,7 +757,7 @@ namespace PrototipoMecanica4
         private void drawStage(GameTime gameTime)
         {
             //Draw stage
-            spriteBatch.Draw(stageTexture, new Vector2(0f, 0f), null, Color.White, 0.0f, Vector2.Zero, Vector2.One, SpriteEffects.None, 0.4f);
+            spriteBatch.Draw(StageSelector.instance.stageImage(), new Vector2(0f, 0f), null, Color.White, 0.0f, Vector2.Zero, Vector2.One, SpriteEffects.None, 0.4f);
 
             //Draw each entity
             foreach (Entity e in entities)

@@ -83,6 +83,7 @@ namespace PrototipoMecanica4
         public static Texture2D overTexture;
         public static Texture2D perfectTexture;
 
+        public static Texture2D points0Texture;
         public static Texture2D points100Texture;
         public static Texture2D points200Texture;
         public static Texture2D points300Texture;
@@ -294,6 +295,7 @@ namespace PrototipoMecanica4
             overTexture = Content.Load<Texture2D>("Sprites/Over");
             perfectTexture = Content.Load<Texture2D>("Sprites/Perfect");
 
+            points0Texture = Content.Load<Texture2D>("Sprites/points0");
             points100Texture = Content.Load<Texture2D>("Sprites/points100");
             points200Texture = Content.Load<Texture2D>("Sprites/points200");
             points300Texture = Content.Load<Texture2D>("Sprites/points300");

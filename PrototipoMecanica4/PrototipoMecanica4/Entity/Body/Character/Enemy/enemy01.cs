@@ -68,9 +68,9 @@ namespace PrototipoMecanica4
             if (GetSprite().Equals(World.enemy001KickTexture)) //Chute
                 hitbox = new Vector2(pos.X + hitX, pos.Y - 55f);
             else if (GetSprite().Equals(World.enemy001StaffAttackTexture)) //Bastão
-                hitbox = new Vector2(pos.X + hitX, pos.Y - 55f);
+                hitbox = new Vector2(pos.X + hitX, pos.Y - 60f);
             else if (GetSprite().Equals(World.enemy001LowStaffAttackTexture)) //Bastão baixo
-                hitbox = new Vector2(pos.X + hitX, pos.Y - 55f);
+                hitbox = new Vector2(pos.X + hitX, pos.Y - 35f);
 
             return hitbox;
         }
@@ -141,7 +141,16 @@ namespace PrototipoMecanica4
                     break;
 
                 case CharacterState.Attacking:
-                    currentTexture = World.enemy001KickTexture;
+                    {
+                        if (Human.instance.lastAttack == null)
+                            currentTexture = World.enemy001KickTexture;
+                        else if (Human.instance.lastAttack.Equals(World.playerPunchTexture))
+                            currentTexture = World.enemy001StaffAttackTexture;
+                        else if (Human.instance.lastAttack.Equals(World.playerMediumKickTexture))
+                            currentTexture = World.enemy001LowStaffAttackTexture;
+                        else
+                            currentTexture = World.enemy001KickTexture;
+                    }
                     break;
 
                 case CharacterState.Dead:

@@ -23,7 +23,10 @@ namespace PrototipoMecanica4
         {
             Texture2D sprite = null;
 
-            if (Human.instance.lastAttack == World.playerPunchTexture ||
+            if (Human.instance.lastAttack == null)
+                sprite = World.points0Texture;
+
+            else if (Human.instance.lastAttack == World.playerPunchTexture ||
                 Human.instance.lastAttack == World.playerLowPunchTexture)
                 sprite = World.points100Texture;
 

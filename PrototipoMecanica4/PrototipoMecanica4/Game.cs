@@ -88,6 +88,8 @@ namespace PrototipoMecanica4
         public static Texture2D points200Texture;
         public static Texture2D points300Texture;
 
+        public static Texture2D enemy001NameTexture;
+
         #endregion
 
         #region Sprites - Numbers
@@ -164,6 +166,8 @@ namespace PrototipoMecanica4
         //World entities
         public static List<Entity> menuEntities = new List<Entity>();
         public static List<Entity> entities = new List<Entity>();
+
+        public static Entity stageSelector = new StageSelector();
 
         public static Entity scoreBoard = new ScoreBoard();
 
@@ -300,6 +304,8 @@ namespace PrototipoMecanica4
             points200Texture = Content.Load<Texture2D>("Sprites/points200");
             points300Texture = Content.Load<Texture2D>("Sprites/points300");
 
+            enemy001NameTexture = Content.Load<Texture2D>("Sprites/Enemy001Name");
+
             #endregion
 
             #region Load Sprites - Numbers
@@ -417,6 +423,8 @@ namespace PrototipoMecanica4
                         music.Stop();
 
                         entities.Clear();
+
+                        StageSelector.instance.gameOver();
 
                         ScoreBoard.instance.resetScore();
 
@@ -710,7 +718,11 @@ namespace PrototipoMecanica4
 
                 if (PlayerExtraLives.instance.remainingLives() > 0)
                 {
-                    PlayerExtraLives.instance.reduceALife();
+                    if (Lifebar.instance.remainingPlayerLife() == 0)
+                        PlayerExtraLives.instance.reduceALife();
+                    else
+                        StageSelector.instance.nextStage();
+
                     EnterGameState(GameState.StageLoad);
                 }
                 else
@@ -736,6 +748,8 @@ namespace PrototipoMecanica4
         {
             //Draw stage load
             spriteBatch.Draw(stageLoadTexture, new Vector2(0f, 0f), null, Color.White, 0.0f, Vector2.Zero, Vector2.One, SpriteEffects.None, 0.4f);
+
+            StageSelector.instance.StageDraw(gameTime);
         }
 
         private void drawStage(GameTime gameTime)
@@ -746,6 +760,8 @@ namespace PrototipoMecanica4
             //Draw each entity
             foreach (Entity e in entities)
                 e.Draw(gameTime);
+
+            stageSelector.Draw(gameTime);
 
             scoreBoard.Draw(gameTime);
         }

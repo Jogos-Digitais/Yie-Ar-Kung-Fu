@@ -52,7 +52,16 @@ namespace PrototipoMecanica4
                 World.entities.Remove(this);
 
                 if (myShooter.Equals(Human.instance))
+                {
+                    if (Points.GetSprite().Equals(World.points100Texture))
+                        ScoreBoard.instance.add100points();
+                    else if (Points.GetSprite().Equals(World.points200Texture))
+                        ScoreBoard.instance.add200points();
+                    else if (Points.GetSprite().Equals(World.points300Texture))
+                        ScoreBoard.instance.add300points();
+
                     World.entities.Add(new Points());
+                }
             }
         }
 

@@ -58,6 +58,7 @@
     <Compile Include="Entity\Interface\Points.cs" />
     <Compile Include="Entity\Interface\ScoreBoard.cs" />
     <Compile Include="Entity\Interface\SelectedOption.cs" />
+    <Compile Include="Entity\Interface\StageSelector.cs" />
     <Compile Include="Game.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

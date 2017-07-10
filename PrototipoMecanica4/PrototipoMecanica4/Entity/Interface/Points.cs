@@ -19,7 +19,7 @@ namespace PrototipoMecanica4
             position.Y = position.Y - 192f;
         }
 
-        private Texture2D GetSprite()
+        public static Texture2D GetSprite()
         {
             Texture2D sprite = null;
 
@@ -48,16 +48,7 @@ namespace PrototipoMecanica4
             lifeTime -= deltaTime;
 
             if (lifeTime <= 0)
-            {
-                if (GetSprite().Equals(World.points100Texture))
-                    ScoreBoard.instance.add100points();
-                else if (GetSprite().Equals(World.points200Texture))
-                    ScoreBoard.instance.add200points();
-                else if (GetSprite().Equals(World.points300Texture))
-                    ScoreBoard.instance.add300points();
-
                 World.entities.Remove(this);
-            }
         }
 
         public override void Draw(GameTime gameTime)

@@ -28,6 +28,8 @@ namespace PrototipoMecanica4
         private float attackingTime = 0.25f; //valor de tempo para calcular ataques
         private int attackingCombo = 0; //Attacking combo
 
+        public bool hasBeenAttacked = false; //Indica se o inimigo recebeu danos, para usar em running
+
         //Último tipo de ataque do inimigo
         private int attackType = 0; //Tipo de ataque, -1 = soco, 1 = chute, 0 = outro
 

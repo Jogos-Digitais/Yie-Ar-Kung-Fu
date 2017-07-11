@@ -66,7 +66,8 @@ namespace PrototipoMecanica4
                         if (contato == false)
                         {
                             contato = true;
-                            //Enemy.instance.attacked = true;
+                            Enemy.instance.hasBeenAttacked = true;
+                            Lifebar.instance.makedContact = true;
                             Lifebar.instance.damageEnemyLife();
                             World.entities.Add(new HitContact(Human.instance, pos, GetDir(), new Vector2(32, 32)));
                         }
@@ -82,7 +83,7 @@ namespace PrototipoMecanica4
                     if (contato == false)
                     {
                         contato = true;
-                        //Human.instance.attacked = true;
+                        Lifebar.instance.makedContact = true;
                         Lifebar.instance.damagePlayerLife();
                         World.entities.Add(new HitContact(Enemy.instance, pos, GetDir(), new Vector2(32, 32)));
                     }

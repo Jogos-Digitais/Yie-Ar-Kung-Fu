@@ -13,28 +13,30 @@ namespace PrototipoMecanica4
     {
         static public Human instance = null;
 
-        float timerCounter = 0f; //Timer Counter
-        float jumpTime = 0.5f; //tempo do salto
-        float jumpHeight = 9f; //altura do salto
-        float jumpDirection = 0f; //direção do salto
-        float jumpDistance = 6.43f; //distância do salto
-        float time;  //valor de tempo para calcular o seno
-        float jumpEffectY; //efeito de pulo para o alto
-        float jumpEffectX; //efeito de pulo para a direção
-        bool jumpKick = false; //Flying kick
-        bool jumpKicked = false; //Saltou e chutou
+        private float timerCounter = 0f; //Timer Counter
+        private float jumpTime = 0.5f; //tempo do salto
+        private float jumpHeight = 9f; //altura do salto
+        private float jumpDirection = 0f; //direção do salto
+        private float jumpDistance = 6.43f; //distância do salto
+        private float time;  //valor de tempo para calcular o seno
+        private float jumpEffectY; //efeito de pulo para o alto
+        private float jumpEffectX; //efeito de pulo para a direção
+        private bool jumpKick = false; //Flying kick
+        private bool jumpKicked = false; //Saltou e chutou
         public Vector2 positionAtJump = Vector2.Zero; //Posição antes de saltar
 
-        float movingTime; //valor de tempo para calcular movimento
-        int framePersistance; //Conta 3 e muda frame
-        bool movingFrame = false; //Moving frame
+        private float standingTime = 0f; //Valor de tempo para calcular tempo parado
+ 
+        private float movingTime; //valor de tempo para calcular movimento
+        private int framePersistance; //Conta 3 e muda frame
+        private bool movingFrame = false; //Moving frame
 
-        float attackingTime = 0.25f; //valor de tempo para calcular ataques
+        private float attackingTime = 0.25f; //valor de tempo para calcular ataques
 
         public Texture2D lastAttack = null;
 
         //Posição hitbox
-        Vector2 hitbox = Vector2.One;
+        private Vector2 hitbox = Vector2.One;
 
         //Machine states
         public enum CharacterState { Null, Standing, Moving, Crouching, Jumping, Punching, Kicking, Recoiling, Dead }; //Nenhum estado, parado, movendo-se, abaixando-se, saltando, socando, chutando, absorvendo, morto
@@ -44,7 +46,7 @@ namespace PrototipoMecanica4
         public static CharacterState currentState = CharacterState.Null;
 
         //Posição antes de atacar
-        float previousPosition = 0f;
+        private float previousPosition = 0f;
 
         public Human(Vector2 initPos, Vector2 size)
             : base(initPos, size)
@@ -339,52 +341,57 @@ namespace PrototipoMecanica4
                     {
                         if (Lifebar.instance.remainingPlayerLife() > 0)
                         {
-                            if (Keyboard.GetState().IsKeyDown(Keys.Right) ||
-                                Keyboard.GetState().IsKeyDown(Keys.Left))
+                            if (standingTime > 0)
+                                standingTime -= deltaTime;
+                            else
                             {
-                                EnterCharacterState(CharacterState.Moving);
-                            }
+                                if (Keyboard.GetState().IsKeyDown(Keys.Right) ||
+                                    Keyboard.GetState().IsKeyDown(Keys.Left))
+                                {
+                                    EnterCharacterState(CharacterState.Moving);
+                                }
 
-                            if (Keyboard.GetState().IsKeyDown(Keys.Left) &&
-                                Keyboard.GetState().IsKeyDown(Keys.Up) &&
-                                pos.Y <= size.Y + (768f - size.Y))
-                            {
-                                jumpDirection = -1;
-                                EnterCharacterState(CharacterState.Jumping);
-                            }
+                                if (Keyboard.GetState().IsKeyDown(Keys.Left) &&
+                                    Keyboard.GetState().IsKeyDown(Keys.Up) &&
+                                    pos.Y <= size.Y + (768f - size.Y))
+                                {
+                                    jumpDirection = -1;
+                                    EnterCharacterState(CharacterState.Jumping);
+                                }
 
-                            else if (Keyboard.GetState().IsKeyDown(Keys.Right) &&
-                                     Keyboard.GetState().IsKeyDown(Keys.Up) &&
-                                     pos.Y <= size.Y + (768f - size.Y))
-                            {
-                                jumpDirection = 1;
-                                EnterCharacterState(CharacterState.Jumping);
-                            }
+                                else if (Keyboard.GetState().IsKeyDown(Keys.Right) &&
+                                         Keyboard.GetState().IsKeyDown(Keys.Up) &&
+                                         pos.Y <= size.Y + (768f - size.Y))
+                                {
+                                    jumpDirection = 1;
+                                    EnterCharacterState(CharacterState.Jumping);
+                                }
 
-                            else if (Keyboard.GetState().IsKeyDown(Keys.Up) &&
-                                     pos.Y <= size.Y + (768f - size.Y))
-                            {
-                                jumpDirection = 0;
-                                EnterCharacterState(CharacterState.Jumping);
-                            }
+                                else if (Keyboard.GetState().IsKeyDown(Keys.Up) &&
+                                         pos.Y <= size.Y + (768f - size.Y))
+                                {
+                                    jumpDirection = 0;
+                                    EnterCharacterState(CharacterState.Jumping);
+                                }
 
-                            if (Keyboard.GetState().IsKeyDown(Keys.Down))
-                            {
-                                EnterCharacterState(CharacterState.Crouching);
-                            }
+                                if (Keyboard.GetState().IsKeyDown(Keys.Down))
+                                {
+                                    EnterCharacterState(CharacterState.Crouching);
+                                }
 
-                            if (Keyboard.GetState().IsKeyDown(Keys.X) &&
-                                Keyboard.GetState().IsKeyUp(Keys.Z))
-                            {
-                                previousState = currentState;
-                                EnterCharacterState(CharacterState.Punching);
-                            }
+                                if (Keyboard.GetState().IsKeyDown(Keys.X) &&
+                                    Keyboard.GetState().IsKeyUp(Keys.Z))
+                                {
+                                    previousState = currentState;
+                                    EnterCharacterState(CharacterState.Punching);
+                                }
 
-                            if (Keyboard.GetState().IsKeyDown(Keys.Z) &&
-                                Keyboard.GetState().IsKeyUp(Keys.X))
-                            {
-                                previousState = currentState;
-                                EnterCharacterState(CharacterState.Kicking);
+                                if (Keyboard.GetState().IsKeyDown(Keys.Z) &&
+                                    Keyboard.GetState().IsKeyUp(Keys.X))
+                                {
+                                    previousState = currentState;
+                                    EnterCharacterState(CharacterState.Kicking);
+                                }
                             }
                         }
                         else
@@ -398,32 +405,37 @@ namespace PrototipoMecanica4
 
                         if (Lifebar.instance.remainingPlayerLife() > 0)
                         {
-                            if (Keyboard.GetState().IsKeyDown(Keys.Z) &&
-                                (Keyboard.GetState().IsKeyDown(Keys.Left) || Keyboard.GetState().IsKeyDown(Keys.Right)))
-                            {
-                                previousState = currentState;
-                                EnterCharacterState(CharacterState.Kicking);
-                            }
-
-                            else if (movingTime < 0.100)
-                            {
-                                if (movingFrame && framePersistance == 3)
-                                {
-                                    movingFrame = false;
-                                    framePersistance = 0;
-                                }
-                                else if (movingFrame == false && framePersistance == 3)
-                                {
-                                    movingFrame = true;
-                                    framePersistance = 0;
-                                }
-
-                                framePersistance++;
-                                movingTime += deltaTime;
-                            }
-
+                            if (standingTime > 0)
+                                standingTime -= deltaTime;
                             else
-                                EnterCharacterState(CharacterState.Standing);
+                            {
+                                if (Keyboard.GetState().IsKeyDown(Keys.Z) &&
+                                    (Keyboard.GetState().IsKeyDown(Keys.Left) || Keyboard.GetState().IsKeyDown(Keys.Right)))
+                                {
+                                    previousState = currentState;
+                                    EnterCharacterState(CharacterState.Kicking);
+                                }
+
+                                else if (movingTime < 0.100)
+                                {
+                                    if (movingFrame && framePersistance == 3)
+                                    {
+                                        movingFrame = false;
+                                        framePersistance = 0;
+                                    }
+                                    else if (movingFrame == false && framePersistance == 3)
+                                    {
+                                        movingFrame = true;
+                                        framePersistance = 0;
+                                    }
+
+                                    framePersistance++;
+                                    movingTime += deltaTime;
+                                }
+
+                                else
+                                    EnterCharacterState(CharacterState.Standing);
+                            }
                         }
                         else
                             EnterCharacterState(CharacterState.Dead);
@@ -434,23 +446,28 @@ namespace PrototipoMecanica4
                     {
                         if (Lifebar.instance.remainingPlayerLife() > 0)
                         {
-                            if (Keyboard.GetState().IsKeyUp(Keys.Down))
+                            if (standingTime > 0)
+                                standingTime -= deltaTime;
+                            else
                             {
-                                EnterCharacterState(CharacterState.Standing);
-                            }
+                                if (Keyboard.GetState().IsKeyUp(Keys.Down))
+                                {
+                                    EnterCharacterState(CharacterState.Standing);
+                                }
 
-                            if (currentState.Equals(CharacterState.Crouching) &&
-                                Keyboard.GetState().IsKeyDown(Keys.X))
-                            {
-                                previousState = currentState;
-                                EnterCharacterState(CharacterState.Punching);
-                            }
+                                if (currentState.Equals(CharacterState.Crouching) &&
+                                    Keyboard.GetState().IsKeyDown(Keys.X))
+                                {
+                                    previousState = currentState;
+                                    EnterCharacterState(CharacterState.Punching);
+                                }
 
-                            if (currentState.Equals(CharacterState.Crouching) &&
-                                Keyboard.GetState().IsKeyDown(Keys.Z))
-                            {
-                                previousState = currentState;
-                                EnterCharacterState(CharacterState.Kicking);
+                                if (currentState.Equals(CharacterState.Crouching) &&
+                                    Keyboard.GetState().IsKeyDown(Keys.Z))
+                                {
+                                    previousState = currentState;
+                                    EnterCharacterState(CharacterState.Kicking);
+                                }
                             }
                         }
                         else
@@ -639,12 +656,14 @@ namespace PrototipoMecanica4
 
                 case CharacterState.Punching:
                     {
+                        standingTime = 0.2f;
                         attackingTime = 0.25f;
                     }
                     break;
 
                 case CharacterState.Kicking:
                     {
+                        standingTime = 0.2f;
                         attackingTime = 0.25f;
                     }
                     break;

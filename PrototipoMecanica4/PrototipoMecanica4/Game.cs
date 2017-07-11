@@ -809,7 +809,7 @@ namespace PrototipoMecanica4
 
                 Vector2 textSize = fontNormal.MeasureString(text);
 
-                spriteBatch.DrawString(fontNormal, "GOD MODE ACTIVATED", textSize, Color.White);
+                spriteBatch.DrawString(fontNormal, "GOD MODE ACTIVATED", textSize, Color.Red);
             }
 
             //Draw each entity

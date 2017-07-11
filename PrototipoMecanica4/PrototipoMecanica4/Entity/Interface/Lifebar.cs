@@ -27,7 +27,7 @@ namespace PrototipoMecanica4
 
         public void damagePlayerLife()
         {
-            if (godMode == false)
+            if (godMode == false || godMode && ScoreBoard.instance.playerWinner)
             {
                 if (playerLife >= 1)
                     playerLife -= 1;

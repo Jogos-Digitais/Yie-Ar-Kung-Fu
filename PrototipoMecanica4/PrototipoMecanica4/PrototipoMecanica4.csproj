@@ -52,7 +52,6 @@
     <Compile Include="Entity\Body\Projectile\lamp.cs" />
     <Compile Include="Entity\Body\Projectile\sword.cs" />
     <Compile Include="Entity\Entity.cs" />
-    <Compile Include="Entity\Interface\Button.cs" />
     <Compile Include="Entity\Interface\Lifebar.cs" />
     <Compile Include="Entity\Interface\PlayerExtraLives.cs" />
     <Compile Include="Entity\Interface\Points.cs" />

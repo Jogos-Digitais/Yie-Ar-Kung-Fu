@@ -16,6 +16,10 @@ namespace PrototipoMecanica4
         private Color playerLifeColor = new Color(92, 228, 48);
         private Color enemyLifeColor = new Color(92, 228, 48);
 
+        //public bool 
+
+        public bool godMode = false;
+
         public Lifebar()
         {
             instance = this;
@@ -23,13 +27,16 @@ namespace PrototipoMecanica4
 
         public void damagePlayerLife()
         {
-            if (playerLife >= 1)
-                playerLife -= 1;
+            if (godMode == false)
+            {
+                if (playerLife >= 1)
+                    playerLife -= 1;
 
-            if (playerLife > 4)
-                playerLifeColor = new Color(92, 228, 48);
-            else
-                playerLifeColor = new Color(183, 30, 123);
+                if (playerLife > 4)
+                    playerLifeColor = new Color(92, 228, 48);
+                else
+                    playerLifeColor = new Color(183, 30, 123);
+            }
         }
 
         public int remainingPlayerLife()

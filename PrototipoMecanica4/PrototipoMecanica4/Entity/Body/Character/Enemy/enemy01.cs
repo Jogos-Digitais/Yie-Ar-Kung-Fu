@@ -18,6 +18,8 @@ namespace PrototipoMecanica4
         private float advanceZone = 0f; //Distância de avanço da IA, vai alternando
         private float runDistance = 0f; //Distância de corrida, multiplicar por pontos de vida perdidos
 
+        int attackType = 0; //Tipo de ataque, -1 = soco, 1 = chute, 0 = outro
+
         private float standingTime; //Valor de tempo para calcular tempo parado
 
         private float movingTime; //valor de tempo para calcular movimento
@@ -26,8 +28,6 @@ namespace PrototipoMecanica4
 
         private float attackingTime = 0.25f; //valor de tempo para calcular ataques
         private int attackingCombo = 0; //Attacking combo
-
-        public bool attacked = false; //Foi atacado?
 
         //Posição hitbox
         Vector2 hitbox = Vector2.One;
@@ -53,6 +53,7 @@ namespace PrototipoMecanica4
             safeZone = 104 + (Human.instance.size.X / 2) + (size.X / 2);
             dangerZone = -4 + (Human.instance.size.X / 2) + (size.X / 2); //Nunca verificar com igual, sempre menor
             advanceZone = safeZone; //Distância inicial igual a safeZone
+            runDistance = safeZone;
         }
 
         //TODO
@@ -142,14 +143,21 @@ namespace PrototipoMecanica4
 
                 case CharacterState.Attacking:
                     {
-                        if (Human.instance.lastAttack == null)
+                        if (attackType == 0)
                             currentTexture = World.enemy001KickTexture;
-                        else if (Human.instance.lastAttack.Equals(World.playerPunchTexture))
+                        else if (attackType == -1)
                             currentTexture = World.enemy001StaffAttackTexture;
-                        else if (Human.instance.lastAttack.Equals(World.playerMediumKickTexture))
+                        else if (attackType == 1)
                             currentTexture = World.enemy001LowStaffAttackTexture;
-                        else
-                            currentTexture = World.enemy001KickTexture;
+
+                        //if (Human.instance.lastAttack == null)
+                        //    
+                        //else if (Human.instance.lastAttack.Equals(World.playerPunchTexture))
+                        //    
+                        //else if (Human.instance.lastAttack.Equals(World.playerMediumKickTexture))
+                        //    
+                        //else
+                        //    currentTexture = World.enemy001KickTexture;
                     }
                     break;
 
@@ -353,7 +361,10 @@ namespace PrototipoMecanica4
                     break;
 
                 case CharacterState.PreparingAttack:
-                    { }
+                    {
+                        //if (advanceZone < dangerZone)
+                        //    advanceZone = dangerZone;
+                    }
                     break;
 
                 case CharacterState.Attacking:
@@ -411,12 +422,21 @@ namespace PrototipoMecanica4
                     {
                         if (Lifebar.instance.remainingEnemyLife() > 0)
                         {
+                            float safeDistance = Vector2.Distance(Human.instance.pos, pos);
+
                             move(deltaTime);
 
                             if (distance >= -4 && distance <= 4)
                             {
                                 EnterCharacterState(CharacterState.Standing);
                             }
+
+                            //else if (safeDistance < safeZone)
+                            //{
+                            //    advanceZone = safeDistance;
+                            //
+                            //    EnterCharacterState(CharacterState.PreparingAttack);
+                            //}
 
                             else if (movingTime < 0.200)
                             {
@@ -495,6 +515,14 @@ namespace PrototipoMecanica4
                             }
                             else
                             {
+                                if (!Human.instance.GetSprite().Equals(World.playerPunchTexture) &&
+                                    !Human.instance.GetSprite().Equals(World.playerMediumKickTexture))
+                                    attackType = 0;
+                                else if (Human.instance.GetSprite().Equals(World.playerPunchTexture))
+                                    attackType = -1;
+                                else if (Human.instance.GetSprite().Equals(World.playerMediumKickTexture))
+                                    attackType = 1;
+
                                 if (safeDistance > safeZone + 4)
                                     EnterCharacterState(CharacterState.Moving);
                                 else if (attackingCombo < 4)
@@ -620,7 +648,9 @@ namespace PrototipoMecanica4
                     break;
 
                 case CharacterState.Running:
-                    { }
+                    {
+                        runDistance += (runDistance / 2);
+                    }
                     break;
 
                 case CharacterState.Dead:

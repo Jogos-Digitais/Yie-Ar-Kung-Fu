@@ -31,8 +31,6 @@ namespace PrototipoMecanica4
 
         float attackingTime = 0.25f; //valor de tempo para calcular ataques
 
-        public bool attacked = false; //Foi atacado?
-
         public Texture2D lastAttack = null;
 
         //Posição hitbox
@@ -157,6 +155,7 @@ namespace PrototipoMecanica4
 
                         else if (previousState.Equals(CharacterState.Moving) && movingFrame)
                             currentTexture = World.playerMovingTexture;
+
                         else
                             currentTexture = World.playerTexture;
                     }
@@ -175,6 +174,7 @@ namespace PrototipoMecanica4
 
                         else if (previousState.Equals(CharacterState.Moving) && movingFrame)
                             currentTexture = World.playerMovingTexture;
+
                         else
                             currentTexture = World.playerTexture;
                     }

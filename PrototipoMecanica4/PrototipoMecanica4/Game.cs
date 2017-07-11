@@ -173,7 +173,7 @@ namespace PrototipoMecanica4
         public static Entity scoreBoard = new ScoreBoard();
 
         //Machine states
-        public enum GameState { Null, Menu, StageLoad, Stage, Pause, Over };
+        public enum GameState { Null, Menu, StageLoad, Stage, Pause, CheckPoints, Over };
 
         //Current State
         public static GameState currentState = GameState.Null;
@@ -409,6 +409,7 @@ namespace PrototipoMecanica4
         float startTime = 2; //Tempo de espera para passar para o LoadStage
         bool gameStarted = false; //Indica se o player apertou W ou Start
         float loadStageTime = 2; //Tempo de espera na tela LoadStage até o início da partida
+        float checkLifeTime = 0.5f; //Tempo de espera para checar cada ponto de vida
         float overTime = 0.3f; //Tempo para encerrar a partida
         float countdownToRestart = 2; //Tempo para reiniciar a partida após perder uma vida
 
@@ -451,6 +452,10 @@ namespace PrototipoMecanica4
                     }
                     break;
 
+                case GameState.CheckPoints:
+                    { }
+                    break;
+
                 case GameState.Over:
                     { }
                     break;
@@ -485,6 +490,12 @@ namespace PrototipoMecanica4
                     }
                     break;
 
+                case GameState.CheckPoints:
+                    {
+                        logicCheckPoints(gameTime);
+                    }
+                    break;
+                
                 case GameState.Over:
                     {
                         logicOver(gameTime);
@@ -521,6 +532,12 @@ namespace PrototipoMecanica4
                 case GameState.Pause:
                     {
                         drawPause(gameTime);
+                    }
+                    break;
+
+                case GameState.CheckPoints:
+                    {
+                        drawCheckPoints(gameTime);
                     }
                     break;
 
@@ -585,6 +602,10 @@ namespace PrototipoMecanica4
                     {
                         music.Resume();
                     }
+                    break;
+
+                case GameState.CheckPoints:
+                    { }
                     break;
 
                 case GameState.Over:
@@ -654,6 +675,14 @@ namespace PrototipoMecanica4
             foreach (Entity e in tmp)
                 e.Update(gameTime);
 
+            if (Keyboard.GetState().IsKeyDown(Keys.I) && !prevKeyState.IsKeyUp(Keys.I))
+            {
+                if (Lifebar.instance.godMode)
+                    Lifebar.instance.godMode = false;
+                else
+                    Lifebar.instance.godMode = true;
+            }
+
             if (Keyboard.GetState().IsKeyDown(Keys.F1) && !prevKeyState.IsKeyDown(Keys.F1))
                 debugMode = !debugMode;
 
@@ -707,6 +736,26 @@ namespace PrototipoMecanica4
                 EnterGameState(GameState.Stage);
         }
 
+        private void logicCheckPoints(GameTime gameTime)
+        {
+            //Timer
+            float deltaTime = (float)gameTime.ElapsedGameTime.TotalSeconds;
+
+            if (checkLifeTime > 0)
+                checkLifeTime -= deltaTime;
+            else
+            {
+                checkLifeTime = 0.5f;
+
+                if (Lifebar.instance.remainingPlayerLife() > 0)
+                {
+
+                }
+                else
+
+            }
+        }
+
         private void logicOver(GameTime gameTime)
         {
             //Timer
@@ -717,14 +766,14 @@ namespace PrototipoMecanica4
             else
             {
                 countdownToRestart = 2;
-
+            
                 if (PlayerExtraLives.instance.remainingLives() > 0)
                 {
                     if (Lifebar.instance.remainingPlayerLife() == 0)
                         PlayerExtraLives.instance.reduceALife();
                     else
                         StageSelector.instance.nextStage();
-
+            
                     EnterGameState(GameState.StageLoad);
                 }
                 else
@@ -772,6 +821,11 @@ namespace PrototipoMecanica4
         {
             spriteBatch.Draw(pauseTexture, new Vector2((graphics.PreferredBackBufferWidth - pauseTexture.Width) / 2, (graphics.PreferredBackBufferHeight - pauseTexture.Height) / 2), null, Color.White, 0.0f, Vector2.Zero, Vector2.One, SpriteEffects.None, 0.3f);
 
+            drawStage(gameTime);
+        }
+
+        private void drawCheckPoints(GameTime gameTime)
+        {
             drawStage(gameTime);
         }
 

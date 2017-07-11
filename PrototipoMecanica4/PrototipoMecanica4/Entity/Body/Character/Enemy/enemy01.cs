@@ -19,7 +19,7 @@ namespace PrototipoMecanica4
         private float safeDistance = 0f; //Distância segura atual
         private float runDistance = 0f; //Distância de corrida, multiplicar por pontos de vida perdidos
 
-        private float standingTime; //Valor de tempo para calcular tempo parado
+        private float standingTime = 0f; //Valor de tempo para calcular tempo parado
 
         private float movingTime; //valor de tempo para calcular movimento
         private int framePersistance; //Conta 10 e muda frame
@@ -394,13 +394,12 @@ namespace PrototipoMecanica4
                     {
                         if (Lifebar.instance.remainingEnemyLife() > 0)
                         {
-                            standingTime -= deltaTime;
-
-                            if (standingTime <= 0f)
+                            if (standingTime > 0)
+                                standingTime -= deltaTime;
+                            else
                             {
                                 if (distance < -4 || distance > 4)
                                     EnterCharacterState(CharacterState.Moving);
-
                                 else if (distance >= -3 && distance <= 3)
                                     EnterCharacterState(CharacterState.PreparingAttack);
                             }

@@ -11,11 +11,22 @@ namespace PrototipoMecanica4
     {
         static public ScoreBoard instance = null;
 
+        public bool playerWinner = false, perfect = false;
         private string score = "000000", highScore = "000000";
 
         public ScoreBoard()
         {
             instance = this;
+        }
+
+        public void resetPlayerWinner()
+        {
+            playerWinner = false;
+        }
+
+        public void resetPerfect()
+        {
+            perfect = false;
         }
 
         public void resetScore()

@@ -173,7 +173,7 @@ namespace PrototipoMecanica4
         public static Entity scoreBoard = new ScoreBoard();
 
         //Machine states
-        public enum GameState { Null, Menu, StageLoad, Stage, Pause, CheckPoints, Over };
+        public enum GameState { Null, Menu, StageLoad, Stage, Pause, Over };
 
         //Current State
         public static GameState currentState = GameState.Null;
@@ -411,7 +411,7 @@ namespace PrototipoMecanica4
         float loadStageTime = 2; //Tempo de espera na tela LoadStage até o início da partida
         float checkLifeTime = 0.5f; //Tempo de espera para checar cada ponto de vida
         float overTime = 0.3f; //Tempo para encerrar a partida
-        float countdownToRestart = 2; //Tempo para reiniciar a partida após perder uma vida
+        float countdownToRestart = 4; //Tempo para reiniciar a partida após perder uma vida
 
         public void EnterGameState(GameState newState)
         {
@@ -452,10 +452,6 @@ namespace PrototipoMecanica4
                     }
                     break;
 
-                case GameState.CheckPoints:
-                    { }
-                    break;
-
                 case GameState.Over:
                     { }
                     break;
@@ -487,12 +483,6 @@ namespace PrototipoMecanica4
                 case GameState.Pause:
                     {
                         logicPause(gameTime);
-                    }
-                    break;
-
-                case GameState.CheckPoints:
-                    {
-                        logicCheckPoints(gameTime);
                     }
                     break;
                 
@@ -532,12 +522,6 @@ namespace PrototipoMecanica4
                 case GameState.Pause:
                     {
                         drawPause(gameTime);
-                    }
-                    break;
-
-                case GameState.CheckPoints:
-                    {
-                        drawCheckPoints(gameTime);
                     }
                     break;
 
@@ -604,12 +588,11 @@ namespace PrototipoMecanica4
                     }
                     break;
 
-                case GameState.CheckPoints:
-                    { }
-                    break;
-
                 case GameState.Over:
-                    { }
+                    {
+                        checkLifeTime = 0.5f;
+                        countdownToRestart = 4;
+                    }
                     break;
             }
         }
@@ -675,7 +658,7 @@ namespace PrototipoMecanica4
             foreach (Entity e in tmp)
                 e.Update(gameTime);
 
-            if (Keyboard.GetState().IsKeyDown(Keys.I) && !prevKeyState.IsKeyUp(Keys.I))
+            if (Keyboard.GetState().IsKeyDown(Keys.I) && !prevKeyState.IsKeyDown(Keys.I))
             {
                 if (Lifebar.instance.godMode)
                     Lifebar.instance.godMode = false;
@@ -725,7 +708,15 @@ namespace PrototipoMecanica4
             if (Lifebar.instance.remainingPlayerLife() == 0 || Lifebar.instance.remainingEnemyLife() == 0)
                 if (overTime > 0)
                     overTime -= deltaTime;
-                else
+                else if (Lifebar.instance.remainingEnemyLife() == 0)
+                {
+                    if (Lifebar.instance.remainingPlayerLife() == 9)
+                        ScoreBoard.instance.perfect = true;
+
+                    ScoreBoard.instance.playerWinner = true;
+                    EnterGameState(GameState.Over);
+                }
+                else if (Lifebar.instance.remainingPlayerLife() == 0)
                     EnterGameState(GameState.Over);
         }
 
@@ -736,48 +727,52 @@ namespace PrototipoMecanica4
                 EnterGameState(GameState.Stage);
         }
 
-        private void logicCheckPoints(GameTime gameTime)
-        {
-            //Timer
-            float deltaTime = (float)gameTime.ElapsedGameTime.TotalSeconds;
-
-            if (checkLifeTime > 0)
-                checkLifeTime -= deltaTime;
-            else
-            {
-                checkLifeTime = 0.5f;
-
-                if (Lifebar.instance.remainingPlayerLife() > 0)
-                {
-
-                }
-                else
-
-            }
-        }
-
         private void logicOver(GameTime gameTime)
         {
             //Timer
             float deltaTime = (float)gameTime.ElapsedGameTime.TotalSeconds;
 
-            if (countdownToRestart > 0)
-                countdownToRestart -= deltaTime;
-            else
+            if (ScoreBoard.instance.playerWinner)
             {
-                countdownToRestart = 2;
-            
-                if (PlayerExtraLives.instance.remainingLives() > 0)
+                if (checkLifeTime > 0)
+                    checkLifeTime -= deltaTime;
+                else if (Lifebar.instance.remainingPlayerLife() > 0)
                 {
-                    if (Lifebar.instance.remainingPlayerLife() == 0)
-                        PlayerExtraLives.instance.reduceALife();
-                    else
-                        StageSelector.instance.nextStage();
-            
-                    EnterGameState(GameState.StageLoad);
+                    if (Lifebar.instance.remainingPlayerLife() == 9)
+                        ScoreBoard.instance.add5000points();
+
+                    Lifebar.instance.damagePlayerLife();
+                    ScoreBoard.instance.add800points();
+                    checkLifeTime = 0.5f;
                 }
                 else
-                    EnterGameState(GameState.Menu);
+                {
+                    if (countdownToRestart > 0)
+                        countdownToRestart -= deltaTime;
+                    else
+                    {
+                        StageSelector.instance.nextStage();
+                        ScoreBoard.instance.resetPlayerWinner();
+                        ScoreBoard.instance.resetPerfect();
+                        EnterGameState(GameState.StageLoad);
+                    }
+                }
+            }
+            else
+            {
+                if (countdownToRestart > 0)
+                    countdownToRestart -= deltaTime;
+                else
+                {
+                    if (PlayerExtraLives.instance.remainingLives() > 0)
+                    {
+                        PlayerExtraLives.instance.reduceALife();
+
+                        EnterGameState(GameState.StageLoad);
+                    }
+                    else
+                        EnterGameState(GameState.Menu);
+                }
             }
         }
 
@@ -808,6 +803,15 @@ namespace PrototipoMecanica4
             //Draw stage
             spriteBatch.Draw(StageSelector.instance.stageImage(), new Vector2(0f, 0f), null, Color.White, 0.0f, Vector2.Zero, Vector2.One, SpriteEffects.None, 0.4f);
 
+            if (Lifebar.instance.godMode)
+            {
+                string text = "GOD MODE ACTIVATED";
+
+                Vector2 textSize = fontNormal.MeasureString(text);
+
+                spriteBatch.DrawString(fontNormal, "GOD MODE ACTIVATED", textSize, Color.White);
+            }
+
             //Draw each entity
             foreach (Entity e in entities)
                 e.Draw(gameTime);
@@ -831,6 +835,17 @@ namespace PrototipoMecanica4
 
         private void drawOver(GameTime gameTime)
         {
+            if (ScoreBoard.instance.perfect)
+                spriteBatch.Draw(perfectTexture,
+                    new Vector2((graphics.PreferredBackBufferWidth - perfectTexture.Width) / 2, 576),
+                    null,
+                    Color.White,
+                    0.0f,
+                    Vector2.Zero,
+                    Vector2.One,
+                    SpriteEffects.None,
+                    0.0f);
+
             if (PlayerExtraLives.instance.remainingLives() == 0)
                 spriteBatch.Draw(overTexture,
                     new Vector2((graphics.PreferredBackBufferWidth - overTexture.Width) / 2,

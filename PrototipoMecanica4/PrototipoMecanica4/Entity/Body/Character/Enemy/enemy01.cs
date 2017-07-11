@@ -16,9 +16,8 @@ namespace PrototipoMecanica4
         private float safeZone = 0f; //Distância segura do player, para aproximação
         private float dangerZone = 0f; //Distância perigosa do player, para afastar-se
         private float advanceZone = 0f; //Distância de avanço da IA, vai alternando
+        private float safeDistance = 0f; //Distância segura atual
         private float runDistance = 0f; //Distância de corrida, multiplicar por pontos de vida perdidos
-
-        int attackType = 0; //Tipo de ataque, -1 = soco, 1 = chute, 0 = outro
 
         private float standingTime; //Valor de tempo para calcular tempo parado
 
@@ -29,14 +28,16 @@ namespace PrototipoMecanica4
         private float attackingTime = 0.25f; //valor de tempo para calcular ataques
         private int attackingCombo = 0; //Attacking combo
 
+        //Último tipo de ataque do inimigo
+        private int attackType = 0; //Tipo de ataque, -1 = soco, 1 = chute, 0 = outro
+
         //Posição hitbox
-        Vector2 hitbox = Vector2.One;
+        private Vector2 hitbox = Vector2.One;
 
         //Machine states
         public enum CharacterState { Null, Standing, Moving, Advancing, PreparingAttack, Attacking, Recoiling, Running, Dead }; //Nenhum estado, parado, movendo-se, avançando, preparando ataque, atacando, absorvendo, correndo, morto
 
         //Current State
-        public static CharacterState previousState = CharacterState.Null;
         public static CharacterState currentState = CharacterState.Null;
 
         public Enemy(Vector2 initPos, Vector2 size)
@@ -143,21 +144,12 @@ namespace PrototipoMecanica4
 
                 case CharacterState.Attacking:
                     {
-                        if (attackType == 0)
+                        if (attackType == 0) //Se último ataque foi diferente de soco e chute
                             currentTexture = World.enemy001KickTexture;
-                        else if (attackType == -1)
+                        else if (attackType == -1) //Se último ataque foi soco
                             currentTexture = World.enemy001StaffAttackTexture;
-                        else if (attackType == 1)
+                        else if (attackType == 1) //Se último ataque foi chute
                             currentTexture = World.enemy001LowStaffAttackTexture;
-
-                        //if (Human.instance.lastAttack == null)
-                        //    
-                        //else if (Human.instance.lastAttack.Equals(World.playerPunchTexture))
-                        //    
-                        //else if (Human.instance.lastAttack.Equals(World.playerMediumKickTexture))
-                        //    
-                        //else
-                        //    currentTexture = World.enemy001KickTexture;
                     }
                     break;
 
@@ -362,8 +354,8 @@ namespace PrototipoMecanica4
 
                 case CharacterState.PreparingAttack:
                     {
-                        //if (advanceZone < dangerZone)
-                        //    advanceZone = dangerZone;
+                        if (advanceZone < dangerZone)
+                            advanceZone = dangerZone;
                     }
                     break;
 
@@ -422,21 +414,21 @@ namespace PrototipoMecanica4
                     {
                         if (Lifebar.instance.remainingEnemyLife() > 0)
                         {
-                            float safeDistance = Vector2.Distance(Human.instance.pos, pos);
-
                             move(deltaTime);
+
+                            safeDistance = Vector2.Distance(Human.instance.pos, pos);
 
                             if (distance >= -4 && distance <= 4)
                             {
                                 EnterCharacterState(CharacterState.Standing);
                             }
 
-                            //else if (safeDistance < safeZone)
-                            //{
-                            //    advanceZone = safeDistance;
-                            //
-                            //    EnterCharacterState(CharacterState.PreparingAttack);
-                            //}
+                            else if (safeDistance < safeZone)
+                            {
+                                advanceZone = advanceZone -= size.X / 2;
+                            
+                                EnterCharacterState(CharacterState.PreparingAttack);
+                            }
 
                             else if (movingTime < 0.200)
                             {
@@ -470,6 +462,8 @@ namespace PrototipoMecanica4
                         if (Lifebar.instance.remainingEnemyLife() > 0)
                         {
                             move(deltaTime);
+
+                            safeDistance = Vector2.Distance(Human.instance.pos, pos);
 
                             if (distance >= -4 && distance <= 4)
                             {

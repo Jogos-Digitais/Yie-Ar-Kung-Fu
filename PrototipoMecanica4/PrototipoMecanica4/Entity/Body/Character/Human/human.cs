@@ -33,6 +33,8 @@ namespace PrototipoMecanica4
 
         private float attackingTime = 0.25f; //valor de tempo para calcular ataques
 
+        private float recoilingTime = 1f; //Valor de tempo para calcular congelamento
+
         public Texture2D lastAttack = null;
 
         //Posição hitbox
@@ -616,7 +618,12 @@ namespace PrototipoMecanica4
                     break;
 
                 case CharacterState.Recoiling:
-                    { }
+                    {
+                        if (recoilingTime > 0)
+                            recoilingTime -= deltaTime;
+                        else
+                            EnterCharacterState(CharacterState.Standing);
+                    }
                     break;
 
                 case CharacterState.Dead:
@@ -669,7 +676,9 @@ namespace PrototipoMecanica4
                     break;
 
                 case CharacterState.Recoiling:
-                    { }
+                    {
+                        recoilingTime = 1f;
+                    }
                     break;
 
                 case CharacterState.Dead:

@@ -16,8 +16,8 @@ namespace PrototipoMecanica4
         private float safeZone = 0f; //Distância segura do player, para aproximação
         private float dangerZone = 0f; //Distância perigosa do player, para afastar-se
         private float advanceZone = 0f; //Distância de avanço da IA, vai alternando
+        private float runZone = 0f; //Distância de corrida, multiplicar por pontos de vida perdidos
         private float safeDistance = 0f; //Distância segura atual
-        private float runDistance = 0f; //Distância de corrida, multiplicar por pontos de vida perdidos
 
         private float standingTime = 0f; //Valor de tempo para calcular tempo parado
 
@@ -28,7 +28,6 @@ namespace PrototipoMecanica4
         private float attackingTime = 0.25f; //valor de tempo para calcular ataques
         private int attackingCombo = 0; //Attacking combo
 
-        private float recoilingTime = 0.5f; //Valor de tempo para calcular congelamento
         public bool hasBeenAttacked = false; //Indica se o inimigo recebeu danos, para usar em running
 
         //Último tipo de ataque do inimigo
@@ -38,7 +37,7 @@ namespace PrototipoMecanica4
         private Vector2 hitbox = Vector2.One;
 
         //Machine states
-        public enum CharacterState { Null, Standing, Moving, Advancing, PreparingAttack, Attacking, Recoiling, Running, Dead }; //Nenhum estado, parado, movendo-se, avançando, preparando ataque, atacando, absorvendo, correndo, morto
+        public enum CharacterState { Null, Standing, Moving, Advancing, PreparingAttack, Attacking, Running, Dead }; //Nenhum estado, parado, movendo-se, avançando, preparando ataque, atacando, correndo, morto
 
         //Current State
         public static CharacterState currentState = CharacterState.Null;
@@ -57,7 +56,7 @@ namespace PrototipoMecanica4
             safeZone = 104 + (Human.instance.size.X / 2) + (size.X / 2);
             dangerZone = -4 + (Human.instance.size.X / 2) + (size.X / 2); //Nunca verificar com igual, sempre menor
             advanceZone = safeZone; //Distância inicial igual a safeZone
-            runDistance = safeZone;
+            runZone = safeZone;
         }
 
         //TODO
@@ -106,6 +105,15 @@ namespace PrototipoMecanica4
                                 positionToReturn.X = testBody.pos.X - pos.X + advanceZone; //+advanceZone
                             else
                                 positionToReturn.X = testBody.pos.X - pos.X - advanceZone; //-advanceZone
+                        }
+                        break;
+
+                    case CharacterState.Running:
+                        {
+                            if (pos.X >= Human.instance.pos.X)
+                                positionToReturn.X = testBody.pos.X - pos.X + runZone;
+                            else
+                                positionToReturn.X = testBody.pos.X - pos.X - runZone;
                         }
                         break;
                 }
@@ -322,6 +330,18 @@ namespace PrototipoMecanica4
                   0.3f
                 );
 
+                //Run zone
+                World.spriteBatch.Draw(World.debugZones,
+                  new Vector2((pos.X >= Human.instance.pos.X ? (Human.instance.pos.X - pos.X + runZone) + (pos.X - size.X / 2) : (Human.instance.pos.X - pos.X - runZone) + (pos.X + size.X / 2)), 518f),
+                  null,
+                  new Color(0.5f, 0.5f, 0f, 0.5f),
+                  0.0f,
+                  Vector2.Zero, //pivot
+                  Vector2.One, //scale
+                  SpriteEffects.None,
+                  0.3f
+                );
+
                 World.spriteBatch.DrawString(World.fontNormal, "State: " + currentState.ToString() + Environment.NewLine + "Combo: " + attackingCombo, new Vector2(this.pos.X, this.pos.Y + 20f), Color.White, 0.0f, Vector2.Zero, 1f, SpriteEffects.None, 0.0f);
             }
         }
@@ -370,12 +390,12 @@ namespace PrototipoMecanica4
                     }
                     break;
 
-                case CharacterState.Recoiling:
-                    { }
-                    break;
-
                 case CharacterState.Running:
-                    { }
+                    {
+                        int multiplicadorDistancia = 9 - Lifebar.instance.remainingEnemyLife();
+
+                        runZone += multiplicadorDistancia * 55f;
+                    }
                     break;
 
                 case CharacterState.Dead:
@@ -590,25 +610,42 @@ namespace PrototipoMecanica4
                     }
                     break;
 
-                case CharacterState.Recoiling:
-                    {
-                        if (recoilingTime > 0)
-                            recoilingTime -= deltaTime;
-                        else
-                        {
-                            if (hasBeenAttacked)
-                            {
-                                hasBeenAttacked = false;
-                                EnterCharacterState(CharacterState.Running);
-                            }
-                            else
-                                EnterCharacterState(CharacterState.Standing);
-                        }
-                    }
-                    break;
-
                 case CharacterState.Running:
-                    { }
+                    { 
+                        if (Lifebar.instance.remainingEnemyLife() > 0)
+                        {
+                            move(deltaTime);
+
+                            if (distance > runZone)
+                            {
+                                EnterCharacterState(CharacterState.Standing);
+                            }
+
+                            else if (movingTime < 0.200)
+                            {
+                                if (movingFrame && framePersistance == 10)
+                                {
+                                    movingFrame = false;
+                                }
+
+                                else if (movingFrame == false && framePersistance == 10)
+                                {
+                                    movingFrame = true;
+                                }
+
+                                framePersistance++;
+                                movingTime += deltaTime;
+                            }
+
+                            else if (movingTime > 0.200)
+                            {
+                                movingTime = 0;
+                                framePersistance = 0;
+                            }
+                        }
+                        else
+                            EnterCharacterState(CharacterState.Dead);
+                    }
                     break;
 
                 case CharacterState.Dead:
@@ -652,16 +689,8 @@ namespace PrototipoMecanica4
                     }
                     break;
 
-                case CharacterState.Recoiling:
-                    {
-                        recoilingTime = 0.5f;
-                    }
-                    break;
-
                 case CharacterState.Running:
-                    {
-                        runDistance += (runDistance / 2);
-                    }
+                    { }
                     break;
 
                 case CharacterState.Dead:

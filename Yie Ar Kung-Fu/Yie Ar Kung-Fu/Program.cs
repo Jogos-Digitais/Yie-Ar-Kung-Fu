@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Yie_Ar_Kung_Fu
+namespace YieArKungFu
 {
 #if WINDOWS || LINUX
     /// <summary>
@@ -14,7 +14,7 @@ namespace Yie_Ar_Kung_Fu
         [STAThread]
         static void Main()
         {
-            using (var game = new Game1())
+            using (var game = new World())
                 game.Run();
         }
     }

@@ -6,10 +6,10 @@
     <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
     <ProductVersion>8.0.30703</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{BB66EDA0-848F-43B2-9B6C-24493F84D753}</ProjectGuid>
+    <ProjectGuid>{6647071E-4490-48DF-90EC-CFD6D16B1B13}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Yie_Ar_Kung_Fu</RootNamespace>
+    <RootNamespace>YieArKungFu</RootNamespace>
     <AssemblyName>Yie Ar Kung-Fu</AssemblyName>
     <FileAlignment>512</FileAlignment>
     <MonoGamePlatform>Windows</MonoGamePlatform>
@@ -41,7 +41,21 @@
     <ApplicationManifest>app.manifest</ApplicationManifest>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="Game1.cs" />
+    <Compile Include="Entity\Body\Body.cs" />
+    <Compile Include="Entity\Body\Character\character.cs" />
+    <Compile Include="Entity\Body\Character\Enemy\enemy.cs" />
+    <Compile Include="Entity\Body\Character\Human\human.cs" />
+    <Compile Include="Entity\Body\Projectile\Fire.cs" />
+    <Compile Include="Entity\Body\Projectile\Hit.cs" />
+    <Compile Include="Entity\Body\Projectile\HitContact.cs" />
+    <Compile Include="Entity\Entity.cs" />
+    <Compile Include="Entity\Interface\Lifebar.cs" />
+    <Compile Include="Entity\Interface\PlayerExtraLives.cs" />
+    <Compile Include="Entity\Interface\Points.cs" />
+    <Compile Include="Entity\Interface\ScoreBoard.cs" />
+    <Compile Include="Entity\Interface\SelectedOption.cs" />
+    <Compile Include="Entity\Interface\StageSelector.cs" />
+    <Compile Include="Game.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -58,9 +72,6 @@
   <ItemGroup>
     <MonoGameContentReference Include="Content\Content.mgcb" />
     <None Include="app.manifest" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Entities\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath)\MonoGame\v3.0\MonoGame.Content.Builder.targets" />

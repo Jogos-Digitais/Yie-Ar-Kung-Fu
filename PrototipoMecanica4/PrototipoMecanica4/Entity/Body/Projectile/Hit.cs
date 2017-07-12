@@ -71,8 +71,7 @@ namespace PrototipoMecanica4
                             World.entities.Add(new HitContact(Human.instance, pos, GetDir(), new Vector2(32, 32)));
 
                             //Human.instance.EnterCharacterState(Human.CharacterState.Recoiling);
-                            World.instance.EnterGameState(World.GameState.Freezing);
-                            Enemy.instance.EnterCharacterState(Enemy.CharacterState.Standing);
+                            Enemy.instance.EnterCharacterState(Enemy.CharacterState.Running);
                         }
                     break;
                 }
@@ -88,10 +87,6 @@ namespace PrototipoMecanica4
                         contato = true;
                         Lifebar.instance.damagePlayerLife();
                         World.entities.Add(new HitContact(Enemy.instance, pos, GetDir(), new Vector2(32, 32)));
-
-                        //Human.instance.EnterCharacterState(Human.CharacterState.Recoiling);
-                        World.instance.EnterGameState(World.GameState.Freezing);
-                        //Enemy.instance.EnterCharacterState(Enemy.CharacterState.Recoiling);
                     }
                     break;
                 }

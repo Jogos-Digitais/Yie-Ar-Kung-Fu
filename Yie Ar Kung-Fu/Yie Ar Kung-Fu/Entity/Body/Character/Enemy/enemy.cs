@@ -494,7 +494,9 @@ namespace YieArKungFu
 
                             safeDistance = Vector2.Distance(Human.instance.pos, pos);
 
-                            if (distance >= -4 && distance <= 4)
+                            if ((distance >= -4 && distance <= 4) ||
+                                pos.X <= size.X / 2f + 96f ||
+                                pos.X >= size.X / 2f + (928f - size.X))
                             {
                                 EnterCharacterState(CharacterState.PreparingAttack);
                             }
@@ -591,7 +593,9 @@ namespace YieArKungFu
                         {
                             move(deltaTime);
 
-                            if (distance >= -6 && distance <= 6)
+                            if ((distance >= -6 && distance <= 6) ||
+                                pos.X <= size.X / 2f + 96f ||
+                                pos.X >= size.X / 2f + (928f - size.X))
                             {
                                 EnterCharacterState(CharacterState.Standing);
                             }

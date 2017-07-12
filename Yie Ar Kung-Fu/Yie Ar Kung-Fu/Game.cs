@@ -585,7 +585,9 @@ namespace YieArKungFu
 
                 case GameState.Stage:
                     {
-                        music.Stop();
+                        if (Lifebar.instance.remainingPlayerLife() == 0 ||
+                            Lifebar.instance.remainingEnemyLife() == 0)
+                            music.Stop();
 
                         overTime = 0.3f;
 

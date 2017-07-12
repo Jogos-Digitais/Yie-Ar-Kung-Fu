@@ -173,7 +173,7 @@ namespace PrototipoMecanica4
         public static Entity scoreBoard = new ScoreBoard();
 
         //Machine states
-        public enum GameState { Null, Menu, StageLoad, Stage, Pause, Over };
+        public enum GameState { Null, Menu, StageLoad, Stage, Freezing, Pause, Over };
 
         //Current State
         public static GameState currentState = GameState.Null;
@@ -182,8 +182,13 @@ namespace PrototipoMecanica4
 
         #region METHODS
 
+        //Objeto mundo
+        static public World instance = null;
+
         public World()
         {
+            instance = this;
+
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
 
@@ -412,6 +417,7 @@ namespace PrototipoMecanica4
         float checkLifeTime = 0.5f; //Tempo de espera para checar cada ponto de vida
         float overTime = 0.3f; //Tempo para encerrar a partida
         float countdownToRestart = 4; //Tempo para reiniciar a partida após perder uma vida
+        float freezingTime = 0.5f; //Tempo para congelar quando houver contato físico entre os personagens
 
         public void EnterGameState(GameState newState)
         {
@@ -441,6 +447,10 @@ namespace PrototipoMecanica4
                     break;
 
                 case GameState.Stage:
+                    { }
+                    break;
+
+                case GameState.Freezing:
                     { }
                     break;
 
@@ -480,6 +490,12 @@ namespace PrototipoMecanica4
                     }
                     break;
 
+                case GameState.Freezing:
+                    {
+                        logicFreezing(gameTime);
+                    }
+                    break;
+
                 case GameState.Pause:
                     {
                         logicPause(gameTime);
@@ -516,6 +532,12 @@ namespace PrototipoMecanica4
                 case GameState.Stage:
                     {
                         drawStage(gameTime);
+                    }
+                    break;
+
+                case GameState.Freezing:
+                    {
+                        drawFreezing(gameTime);
                     }
                     break;
 
@@ -579,6 +601,12 @@ namespace PrototipoMecanica4
 
                         if (Lifebar.instance.remainingEnemyLife() == 0)
                             victorySound.Play();
+                    }
+                    break;
+
+                case GameState.Freezing:
+                    {
+                        freezingTime = 0.5f;
                     }
                     break;
 
@@ -720,6 +748,17 @@ namespace PrototipoMecanica4
                     EnterGameState(GameState.Over);
         }
 
+        private void logicFreezing(GameTime gameTime)
+        {
+            //Timer
+            float deltaTime = (float)gameTime.ElapsedGameTime.TotalSeconds;
+
+            freezingTime -= deltaTime;
+
+            if (freezingTime <= 0)
+                EnterGameState(GameState.Stage);
+        }
+
         private void logicPause(GameTime gameTime)
         {
             if (Keyboard.GetState().IsKeyDown(Keys.Enter) && prevKeyState.IsKeyUp(Keys.Enter) ||
@@ -819,6 +858,11 @@ namespace PrototipoMecanica4
             stageSelector.Draw(gameTime);
 
             scoreBoard.Draw(gameTime);
+        }
+
+        private void drawFreezing(GameTime gameTime)
+        {
+            drawStage(gameTime);
         }
 
         private void drawPause(GameTime gameTime)

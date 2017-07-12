@@ -716,3 +716,15 @@
 /processorParam:Quality=Best
 /build:Sounds/wrongHitSound.wav
 
+#begin Sounds/perfectSound.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Sounds/perfectSound.wav
+
+#begin Sounds/endFightPointsSound.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Sounds/endFightPointsSound.wav
+

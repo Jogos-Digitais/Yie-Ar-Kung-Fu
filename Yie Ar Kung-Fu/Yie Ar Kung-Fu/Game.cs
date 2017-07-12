@@ -130,32 +130,8 @@ namespace YieArKungFu
         public static SoundEffect wrongHitSound;
         public static SoundEffect lowLifeSound;
 
-        //private SoundEffect sound005;
-        //private SoundEffect sound006;
-        //private SoundEffect sound007;
-        //private SoundEffect sound008;
-        //private SoundEffect sound009;
-        //private SoundEffect sound010;
-        //private SoundEffect sound011;
-        //private SoundEffect sound012;
-        //private SoundEffect sound013;
-        //private SoundEffect sound014;
-        //private SoundEffect sound015;
-        //private SoundEffect sound016;
-        //private SoundEffect sound017;
-        //private SoundEffect sound018;
-        //private SoundEffect sound019;
-        //private SoundEffect sound020;
-        //private SoundEffect sound021;
-        //private SoundEffect sound022;
-        //private SoundEffect sound023;
-        //private SoundEffect sound024;
-        //private SoundEffect sound025;
-        //private SoundEffect sound026;
-        //private SoundEffect sound027;
-        //private SoundEffect sound028;
-        //private SoundEffect sound029;
-        //private SoundEffect sound030;
+        private SoundEffect perfectSound;
+        private SoundEffect endFightPointsSound;
 
         private SoundEffectInstance music;
 
@@ -354,33 +330,8 @@ namespace YieArKungFu
             wrongHitSound = Content.Load<SoundEffect>("Sounds/wrongHitSound");
             lowLifeSound = Content.Load<SoundEffect>("Sounds/lowLifeSound");
 
-            //sound004 = Content.Load<SoundEffect>("Sounds/");
-            //sound005 = Content.Load<SoundEffect>("Sounds/");
-            //sound006 = Content.Load<SoundEffect>("Sounds/");
-            //sound007 = Content.Load<SoundEffect>("Sounds/");
-            //sound008 = Content.Load<SoundEffect>("Sounds/");
-            //sound009 = Content.Load<SoundEffect>("Sounds/");
-            //sound010 = Content.Load<SoundEffect>("Sounds/");
-            //sound011 = Content.Load<SoundEffect>("Sounds/");
-            //sound012 = Content.Load<SoundEffect>("Sounds/");
-            //sound013 = Content.Load<SoundEffect>("Sounds/");
-            //sound014 = Content.Load<SoundEffect>("Sounds/");
-            //sound015 = Content.Load<SoundEffect>("Sounds/");
-            //sound016 = Content.Load<SoundEffect>("Sounds/");
-            //sound017 = Content.Load<SoundEffect>("Sounds/");
-            //sound018 = Content.Load<SoundEffect>("Sounds/");
-            //sound019 = Content.Load<SoundEffect>("Sounds/");
-            //sound020 = Content.Load<SoundEffect>("Sounds/");
-            //sound021 = Content.Load<SoundEffect>("Sounds/");
-            //sound022 = Content.Load<SoundEffect>("Sounds/");
-            //sound023 = Content.Load<SoundEffect>("Sounds/");
-            //sound024 = Content.Load<SoundEffect>("Sounds/");
-            //sound025 = Content.Load<SoundEffect>("Sounds/");
-            //sound026 = Content.Load<SoundEffect>("Sounds/");
-            //sound027 = Content.Load<SoundEffect>("Sounds/");
-            //sound028 = Content.Load<SoundEffect>("Sounds/");
-            //sound029 = Content.Load<SoundEffect>("Sounds/");
-            //sound030 = Content.Load<SoundEffect>("Sounds/");
+            perfectSound = Content.Load<SoundEffect>("Sounds/perfectSound");
+            endFightPointsSound = Content.Load<SoundEffect>("Sounds/endFightPointsSound");
         }
 
         protected override void UnloadContent()
@@ -762,8 +713,12 @@ namespace YieArKungFu
                 else if (Lifebar.instance.remainingPlayerLife() > 0)
                 {
                     if (Lifebar.instance.remainingPlayerLife() == 9)
+                    {
+                        perfectSound.Play();
                         ScoreBoard.instance.add5000points();
+                    }
 
+                    endFightPointsSound.Play();
                     Lifebar.instance.damagePlayerLife();
                     ScoreBoard.instance.add800points();
                     checkLifeTime = 0.5f;

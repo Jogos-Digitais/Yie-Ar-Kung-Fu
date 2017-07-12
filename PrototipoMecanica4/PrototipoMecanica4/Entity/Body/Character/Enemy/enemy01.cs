@@ -28,7 +28,7 @@ namespace PrototipoMecanica4
         private float attackingTime = 0.25f; //valor de tempo para calcular ataques
         private int attackingCombo = 0; //Attacking combo
 
-        private float recoilingTime = 1f; //Valor de tempo para calcular congelamento
+        private float recoilingTime = 0.5f; //Valor de tempo para calcular congelamento
         public bool hasBeenAttacked = false; //Indica se o inimigo recebeu danos, para usar em running
 
         //Último tipo de ataque do inimigo
@@ -595,7 +595,15 @@ namespace PrototipoMecanica4
                         if (recoilingTime > 0)
                             recoilingTime -= deltaTime;
                         else
-                            EnterCharacterState(CharacterState.Standing);
+                        {
+                            if (hasBeenAttacked)
+                            {
+                                hasBeenAttacked = false;
+                                EnterCharacterState(CharacterState.Running);
+                            }
+                            else
+                                EnterCharacterState(CharacterState.Standing);
+                        }
                     }
                     break;
 
@@ -646,7 +654,7 @@ namespace PrototipoMecanica4
 
                 case CharacterState.Recoiling:
                     {
-                        recoilingTime = 1f;
+                        recoilingTime = 0.5f;
                     }
                     break;
 

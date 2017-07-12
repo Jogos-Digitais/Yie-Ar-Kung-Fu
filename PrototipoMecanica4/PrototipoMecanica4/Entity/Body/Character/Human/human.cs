@@ -32,8 +32,9 @@ namespace PrototipoMecanica4
         private bool movingFrame = false; //Moving frame
 
         private float attackingTime = 0.25f; //valor de tempo para calcular ataques
+        private bool hickKicked = false; //Determina se o personagem deu chute alto
 
-        private float recoilingTime = 1f; //Valor de tempo para calcular congelamento
+        private float recoilingTime = 0.5f; //Valor de tempo para calcular congelamento
 
         public Texture2D lastAttack = null;
 
@@ -167,7 +168,8 @@ namespace PrototipoMecanica4
 
                 case CharacterState.Kicking:
                     {
-                        if (previousState.Equals(CharacterState.Moving) && (Keyboard.GetState().IsKeyDown(Keys.Left) || Keyboard.GetState().IsKeyDown(Keys.Right)))
+                        if ((previousState.Equals(CharacterState.Moving) && (Keyboard.GetState().IsKeyDown(Keys.Left) || Keyboard.GetState().IsKeyDown(Keys.Right))) ||
+                            hickKicked)
                             currentTexture = World.playerHighKickTexture;
 
                         else if (previousState.Equals(CharacterState.Standing))
@@ -310,6 +312,12 @@ namespace PrototipoMecanica4
                     {
                         if (!previousState.Equals(CharacterState.Moving) || GetSprite().Equals(World.playerHighKickTexture))
                         {
+                            if (previousState.Equals(CharacterState.Moving))
+                            {
+                                hickKicked = true;
+                                previousState = CharacterState.Standing;
+                            }
+
                             previousPosition = pos.X;
 
                             if (Enemy.instance.pos.X > pos.X)
@@ -600,7 +608,7 @@ namespace PrototipoMecanica4
 
                 case CharacterState.Kicking:
                     {
-                        if (!previousState.Equals(CharacterState.Moving) || GetSprite().Equals(World.playerHighKickTexture))
+                        if (!previousState.Equals(CharacterState.Moving) || hickKicked)
                         {
                             if (attackingTime > 0f)
                             {
@@ -672,12 +680,13 @@ namespace PrototipoMecanica4
                     {
                         standingTime = 0.2f;
                         attackingTime = 0.25f;
+                        hickKicked = false;
                     }
                     break;
 
                 case CharacterState.Recoiling:
                     {
-                        recoilingTime = 1f;
+                        recoilingTime = 0.5f;
                     }
                     break;
 

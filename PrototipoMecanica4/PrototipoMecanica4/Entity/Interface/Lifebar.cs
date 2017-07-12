@@ -16,8 +16,6 @@ namespace PrototipoMecanica4
         private Color playerLifeColor = new Color(92, 228, 48);
         private Color enemyLifeColor = new Color(92, 228, 48);
 
-        public bool makedContact = false; //Indica se o jogodor e o inimigo entraram em contato físico
-
         public bool godMode = false;
 
         public Lifebar()

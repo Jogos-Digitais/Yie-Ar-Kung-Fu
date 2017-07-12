@@ -80,6 +80,9 @@ namespace YieArKungFu
 
         #region Sprites - Messages
 
+        public static Texture2D level1Texture;
+        public static Texture2D level2Texture;
+
         public static Texture2D pauseTexture;
         public static Texture2D overTexture;
         public static Texture2D perfectTexture;
@@ -279,6 +282,9 @@ namespace YieArKungFu
 
             #region Load sprites - Messages
 
+            level1Texture = Content.Load<Texture2D>("Sprites/Level1");
+            level2Texture = Content.Load<Texture2D>("Sprites/Level2");
+
             pauseTexture = Content.Load<Texture2D>("Sprites/Pause");
             overTexture = Content.Load<Texture2D>("Sprites/Over");
             perfectTexture = Content.Load<Texture2D>("Sprites/Perfect");
@@ -369,12 +375,18 @@ namespace YieArKungFu
 
         #region FSM
 
-        float startTime = 2; //Tempo de espera para passar para o LoadStage
-        bool gameStarted = false; //Indica se o player apertou W ou Start
-        float loadStageTime = 2; //Tempo de espera na tela LoadStage até o início da partida
-        float checkLifeTime = 0.5f; //Tempo de espera para checar cada ponto de vida
-        float overTime = 0.3f; //Tempo para encerrar a partida
-        float countdownToRestart = 4; //Tempo para reiniciar a partida após perder uma vida
+        private float startTime = 2; //Tempo de espera para passar para o LoadStage
+        private bool gameStarted = false; //Indica se o player apertou W ou Start
+        private float loadStageTime = 2; //Tempo de espera na tela LoadStage até o início da partida
+        private float checkLifeTime = 0.5f; //Tempo de espera para checar cada ponto de vida
+        private float overTime = 0.3f; //Tempo para encerrar a partida
+        private float countdownToRestart = 4; //Tempo para reiniciar a partida após perder uma vida
+
+        //Animação do menu
+        private int framePersistance; //Conta 3 e muda showFrame
+        private bool showFrame = false; //Show frame
+        private bool alwaysShowLevel1Frame = true;
+        private bool alwaysShowLevel2Frame = true;
 
         public void EnterGameState(GameState newState)
         {
@@ -511,6 +523,10 @@ namespace YieArKungFu
                         entities.Add(new PlayerExtraLives());
 
                         gameStarted = false;
+
+                        alwaysShowLevel1Frame = true;
+                        alwaysShowLevel2Frame = true;
+
                         startTime = 2f;
                     }
                     break;
@@ -589,7 +605,14 @@ namespace YieArKungFu
 
             if (Keyboard.GetState().IsKeyDown(Keys.Enter) && prevKeyState.IsKeyUp(Keys.Enter) ||
                 Keyboard.GetState().IsKeyDown(Keys.W) && prevKeyState.IsKeyUp(Keys.W))
+            {
                 gameStarted = true;
+
+                if (SelectedOption.instance.levelOneSelected)
+                    alwaysShowLevel1Frame = false;
+                else
+                    alwaysShowLevel2Frame = false;
+            }
 
             if (startTime > 0 && gameStarted)
             {
@@ -762,6 +785,48 @@ namespace YieArKungFu
         {
             //Draw menu
             spriteBatch.Draw(menuTexture, new Vector2(0f, 0f), null, Color.White, 0.0f, Vector2.Zero, Vector2.One, SpriteEffects.None, 0.4f);
+
+            if (gameStarted)
+            {
+                if (showFrame && framePersistance == 3)
+                {
+                    showFrame = false;
+                    framePersistance = 0;
+                }
+                else if (showFrame == false && framePersistance == 3)
+                {
+                    showFrame = true;
+                    framePersistance = 0;
+                }
+
+                framePersistance++;
+            }
+
+            //Draw button level 1
+            if (alwaysShowLevel1Frame || (showFrame && SelectedOption.instance.levelOneSelected))
+                spriteBatch.Draw(level1Texture,
+                  new Vector2(452f, 685f),
+                  null,
+                  Color.White,
+                  0.0f,
+                  new Vector2(0, 0), //pivot
+                  new Vector2(1, 1), //scale
+                  SpriteEffects.None,
+                  0.1f
+                );
+
+            //Draw button level 2
+            if (alwaysShowLevel2Frame || (showFrame && SelectedOption.instance.levelOneSelected == false))
+                spriteBatch.Draw(level2Texture,
+                  new Vector2(452f, 749f),
+                  null,
+                  Color.White,
+                  0.0f,
+                  new Vector2(0, 0), //pivot
+                  new Vector2(1, 1), //scale
+                  SpriteEffects.None,
+                  0.1f
+                );
 
             //Draw each menu entity
             foreach (Entity e in menuEntities)

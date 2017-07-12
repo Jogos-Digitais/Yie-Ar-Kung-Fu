@@ -9,7 +9,7 @@ namespace YieArKungFu
 {
     public class PlayerExtraLives : Entity
     {
-        static public PlayerExtraLives instance = null;
+        public static PlayerExtraLives instance = null;
 
         private int extraLives = 2;
 

@@ -11,7 +11,7 @@ namespace YieArKungFu
 {
     public class Enemy : Character
     {
-        static public Enemy instance = null;
+        public static Enemy instance = null;
 
         private float safeZone = 0f; //Distância segura do player, para aproximação
         private float dangerZone = 0f; //Distância perigosa do player, para afastar-se
@@ -430,7 +430,7 @@ namespace YieArKungFu
                             {
                                 if (distance < -4 || distance > 4)
                                     EnterCharacterState(CharacterState.Moving);
-                                else if (distance >= -3 && distance <= 3)
+                                else if (distance >= -4 && distance <= 4)
                                     EnterCharacterState(CharacterState.PreparingAttack);
                             }
                         }

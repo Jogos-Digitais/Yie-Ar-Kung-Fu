@@ -80,6 +80,9 @@ namespace YieArKungFu
 
         #region Sprites - Messages
 
+        public static Texture2D level1Texture;
+        public static Texture2D level2Texture;
+
         public static Texture2D pauseTexture;
         public static Texture2D overTexture;
         public static Texture2D perfectTexture;
@@ -120,46 +123,20 @@ namespace YieArKungFu
 
         #region Sound Library
 
-        SoundEffect pauseSound;
-        SoundEffect gameMusic;
-        SoundEffect overSound;
-        SoundEffect victorySound;
-        SoundEffect lossSound;
+        private SoundEffect pauseSound;
+        private SoundEffect gameMusic;
+        private SoundEffect overSound;
+        private SoundEffect victorySound;
+        private SoundEffect lossSound;
 
-        SoundEffect hitSound;
-        SoundEffect lowLifeSound;
-        SoundEffect wrongHitSound;
+        public static SoundEffect hitSound;
+        public static SoundEffect wrongHitSound;
+        public static SoundEffect lowLifeSound;
 
+        private SoundEffect perfectSound;
+        private SoundEffect endFightPointsSound;
 
-
-        //SoundEffect sound005;
-        //SoundEffect sound006;
-        //SoundEffect sound007;
-        //SoundEffect sound008;
-        //SoundEffect sound009;
-        //SoundEffect sound010;
-        //SoundEffect sound011;
-        //SoundEffect sound012;
-        //SoundEffect sound013;
-        //SoundEffect sound014;
-        //SoundEffect sound015;
-        //SoundEffect sound016;
-        //SoundEffect sound017;
-        //SoundEffect sound018;
-        //SoundEffect sound019;
-        //SoundEffect sound020;
-        //SoundEffect sound021;
-        //SoundEffect sound022;
-        //SoundEffect sound023;
-        //SoundEffect sound024;
-        //SoundEffect sound025;
-        //SoundEffect sound026;
-        //SoundEffect sound027;
-        //SoundEffect sound028;
-        //SoundEffect sound029;
-        //SoundEffect sound030;
-
-        SoundEffectInstance music;
+        private SoundEffectInstance music;
 
         #endregion
 
@@ -305,6 +282,9 @@ namespace YieArKungFu
 
             #region Load sprites - Messages
 
+            level1Texture = Content.Load<Texture2D>("Sprites/Level1");
+            level2Texture = Content.Load<Texture2D>("Sprites/Level2");
+
             pauseTexture = Content.Load<Texture2D>("Sprites/Pause");
             overTexture = Content.Load<Texture2D>("Sprites/Over");
             perfectTexture = Content.Load<Texture2D>("Sprites/Perfect");
@@ -353,37 +333,11 @@ namespace YieArKungFu
             lossSound = Content.Load<SoundEffect>("Sounds/lossSound");
 
             hitSound = Content.Load<SoundEffect>("Sounds/hitSound");
-            lowLifeSound = Content.Load<SoundEffect>("Sounds/lowLifeSound");
             wrongHitSound = Content.Load<SoundEffect>("Sounds/wrongHitSound");
+            lowLifeSound = Content.Load<SoundEffect>("Sounds/lowLifeSound");
 
-
-            //sound004 = Content.Load<SoundEffect>("Sounds/");
-            //sound005 = Content.Load<SoundEffect>("Sounds/");
-            //sound006 = Content.Load<SoundEffect>("Sounds/");
-            //sound007 = Content.Load<SoundEffect>("Sounds/");
-            //sound008 = Content.Load<SoundEffect>("Sounds/");
-            //sound009 = Content.Load<SoundEffect>("Sounds/");
-            //sound010 = Content.Load<SoundEffect>("Sounds/");
-            //sound011 = Content.Load<SoundEffect>("Sounds/");
-            //sound012 = Content.Load<SoundEffect>("Sounds/");
-            //sound013 = Content.Load<SoundEffect>("Sounds/");
-            //sound014 = Content.Load<SoundEffect>("Sounds/");
-            //sound015 = Content.Load<SoundEffect>("Sounds/");
-            //sound016 = Content.Load<SoundEffect>("Sounds/");
-            //sound017 = Content.Load<SoundEffect>("Sounds/");
-            //sound018 = Content.Load<SoundEffect>("Sounds/");
-            //sound019 = Content.Load<SoundEffect>("Sounds/");
-            //sound020 = Content.Load<SoundEffect>("Sounds/");
-            //sound021 = Content.Load<SoundEffect>("Sounds/");
-            //sound022 = Content.Load<SoundEffect>("Sounds/");
-            //sound023 = Content.Load<SoundEffect>("Sounds/");
-            //sound024 = Content.Load<SoundEffect>("Sounds/");
-            //sound025 = Content.Load<SoundEffect>("Sounds/");
-            //sound026 = Content.Load<SoundEffect>("Sounds/");
-            //sound027 = Content.Load<SoundEffect>("Sounds/");
-            //sound028 = Content.Load<SoundEffect>("Sounds/");
-            //sound029 = Content.Load<SoundEffect>("Sounds/");
-            //sound030 = Content.Load<SoundEffect>("Sounds/");
+            perfectSound = Content.Load<SoundEffect>("Sounds/perfectSound");
+            endFightPointsSound = Content.Load<SoundEffect>("Sounds/endFightPointsSound");
         }
 
         protected override void UnloadContent()
@@ -421,12 +375,18 @@ namespace YieArKungFu
 
         #region FSM
 
-        float startTime = 2; //Tempo de espera para passar para o LoadStage
-        bool gameStarted = false; //Indica se o player apertou W ou Start
-        float loadStageTime = 2; //Tempo de espera na tela LoadStage até o início da partida
-        float checkLifeTime = 0.5f; //Tempo de espera para checar cada ponto de vida
-        float overTime = 0.3f; //Tempo para encerrar a partida
-        float countdownToRestart = 4; //Tempo para reiniciar a partida após perder uma vida
+        private float startTime = 2; //Tempo de espera para passar para o LoadStage
+        private bool gameStarted = false; //Indica se o player apertou W ou Start
+        private float loadStageTime = 2; //Tempo de espera na tela LoadStage até o início da partida
+        private float checkLifeTime = 0.5f; //Tempo de espera para checar cada ponto de vida
+        private float overTime = 0.3f; //Tempo para encerrar a partida
+        private float countdownToRestart = 4; //Tempo para reiniciar a partida após perder uma vida
+
+        //Animação do menu
+        private int framePersistance; //Conta 3 e muda showFrame
+        private bool showFrame = false; //Show frame
+        private bool alwaysShowLevel1Frame = true;
+        private bool alwaysShowLevel2Frame = true;
 
         public void EnterGameState(GameState newState)
         {
@@ -500,7 +460,7 @@ namespace YieArKungFu
                         logicPause(gameTime);
                     }
                     break;
-                
+
                 case GameState.Over:
                     {
                         logicOver(gameTime);
@@ -563,6 +523,10 @@ namespace YieArKungFu
                         entities.Add(new PlayerExtraLives());
 
                         gameStarted = false;
+
+                        alwaysShowLevel1Frame = true;
+                        alwaysShowLevel2Frame = true;
+
                         startTime = 2f;
                     }
                     break;
@@ -578,7 +542,7 @@ namespace YieArKungFu
 
                         entities.Add(new Human(new Vector2(260, 768), new Vector2(88, 128)));
                         entities.Add(new Enemy(new Vector2(642, 768), new Vector2(108, 160)));
-                        
+
                         loadStageTime = 2f;
                     }
                     break;
@@ -591,26 +555,20 @@ namespace YieArKungFu
 
                         overTime = 0.3f;
 
-
-
-                        if (Lifebar.instance.remainingPlayerLife() == 0)
+                        if (!Keyboard.GetState().IsKeyDown(Keys.Enter) && !Keyboard.GetState().IsKeyDown(Keys.W) &&
+                            !Keyboard.GetState().IsKeyDown(Keys.Escape))
                         {
-                            if (PlayerExtraLives.instance.remainingLives() == 0)
+                            if (Lifebar.instance.remainingPlayerLife() == 0)
                             {
-                                overSound.Play();
+                                if (PlayerExtraLives.instance.remainingLives() == 0)
+                                    overSound.Play();
+                                else
+                                    lossSound.Play();
                             }
-                            else
-                            {
-                                lossSound.Play();
-                                
-                            }
+
+                            if (Lifebar.instance.remainingEnemyLife() == 0)
+                                victorySound.Play();
                         }
-
-                        
-                            
-
-                        if (Lifebar.instance.remainingEnemyLife() == 0)
-                            victorySound.Play();
                     }
                     break;
 
@@ -647,7 +605,14 @@ namespace YieArKungFu
 
             if (Keyboard.GetState().IsKeyDown(Keys.Enter) && prevKeyState.IsKeyUp(Keys.Enter) ||
                 Keyboard.GetState().IsKeyDown(Keys.W) && prevKeyState.IsKeyUp(Keys.W))
+            {
                 gameStarted = true;
+
+                if (SelectedOption.instance.levelOneSelected)
+                    alwaysShowLevel1Frame = false;
+                else
+                    alwaysShowLevel2Frame = false;
+            }
 
             if (startTime > 0 && gameStarted)
             {
@@ -771,8 +736,12 @@ namespace YieArKungFu
                 else if (Lifebar.instance.remainingPlayerLife() > 0)
                 {
                     if (Lifebar.instance.remainingPlayerLife() == 9)
+                    {
+                        perfectSound.Play();
                         ScoreBoard.instance.add5000points();
+                    }
 
+                    endFightPointsSound.Play();
                     Lifebar.instance.damagePlayerLife();
                     ScoreBoard.instance.add800points();
                     checkLifeTime = 0.5f;
@@ -816,6 +785,48 @@ namespace YieArKungFu
         {
             //Draw menu
             spriteBatch.Draw(menuTexture, new Vector2(0f, 0f), null, Color.White, 0.0f, Vector2.Zero, Vector2.One, SpriteEffects.None, 0.4f);
+
+            if (gameStarted)
+            {
+                if (showFrame && framePersistance == 3)
+                {
+                    showFrame = false;
+                    framePersistance = 0;
+                }
+                else if (showFrame == false && framePersistance == 3)
+                {
+                    showFrame = true;
+                    framePersistance = 0;
+                }
+
+                framePersistance++;
+            }
+
+            //Draw button level 1
+            if (alwaysShowLevel1Frame || (showFrame && SelectedOption.instance.levelOneSelected))
+                spriteBatch.Draw(level1Texture,
+                  new Vector2(452f, 685f),
+                  null,
+                  Color.White,
+                  0.0f,
+                  new Vector2(0, 0), //pivot
+                  new Vector2(1, 1), //scale
+                  SpriteEffects.None,
+                  0.1f
+                );
+
+            //Draw button level 2
+            if (alwaysShowLevel2Frame || (showFrame && SelectedOption.instance.levelOneSelected == false))
+                spriteBatch.Draw(level2Texture,
+                  new Vector2(452f, 749f),
+                  null,
+                  Color.White,
+                  0.0f,
+                  new Vector2(0, 0), //pivot
+                  new Vector2(1, 1), //scale
+                  SpriteEffects.None,
+                  0.1f
+                );
 
             //Draw each menu entity
             foreach (Entity e in menuEntities)

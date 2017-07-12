@@ -9,7 +9,7 @@ namespace YieArKungFu
 {
     public class ScoreBoard : Entity
     {
-        static public ScoreBoard instance = null;
+        public static ScoreBoard instance = null;
 
         public bool playerWinner = false, perfect = false;
         private string score = "000000", highScore = "000000";

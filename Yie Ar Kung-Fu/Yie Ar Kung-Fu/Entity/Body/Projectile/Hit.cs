@@ -49,6 +49,7 @@ namespace YieArKungFu
 
             if (lifeTime <= 0)
             {
+                World.wrongHitSound.Play();
                 World.entities.Remove(this);
             }
 
@@ -92,8 +93,11 @@ namespace YieArKungFu
                 }
             }
 
-            if(contato == true)
+            if (contato == true)
+            {
+                World.hitSound.Play();
                 World.entities.Remove(this);
+            }
         }
 
         public override void Draw(GameTime gameTime)

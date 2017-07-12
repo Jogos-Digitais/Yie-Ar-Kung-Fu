@@ -9,7 +9,7 @@ namespace YieArKungFu
 {
     public class StageSelector : Entity
     {
-        static public StageSelector instance = null;
+        public static StageSelector instance = null;
 
         private string stage = "01";
 

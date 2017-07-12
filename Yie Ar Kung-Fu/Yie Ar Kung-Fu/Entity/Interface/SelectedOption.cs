@@ -9,7 +9,7 @@ namespace YieArKungFu
 {
     public class SelectedOption : Entity
     {
-        static public SelectedOption instance = null;
+        public static SelectedOption instance = null;
 
         public bool levelOneSelected = true;
 

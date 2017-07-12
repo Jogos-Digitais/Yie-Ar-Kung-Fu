@@ -11,7 +11,7 @@ namespace YieArKungFu
 {
     public class Human : Character
     {
-        static public Human instance = null;
+        public static Human instance = null;
 
         private float timerCounter = 0f; //Timer Counter
         private float jumpTime = 0.5f; //tempo do salto

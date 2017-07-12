@@ -120,46 +120,44 @@ namespace YieArKungFu
 
         #region Sound Library
 
-        SoundEffect pauseSound;
-        SoundEffect gameMusic;
-        SoundEffect overSound;
-        SoundEffect victorySound;
-        SoundEffect lossSound;
+        private SoundEffect pauseSound;
+        private SoundEffect gameMusic;
+        private SoundEffect overSound;
+        private SoundEffect victorySound;
+        private SoundEffect lossSound;
 
-        SoundEffect hitSound;
-        SoundEffect lowLifeSound;
-        SoundEffect wrongHitSound;
+        public static SoundEffect hitSound;
+        public static SoundEffect wrongHitSound;
+        public static SoundEffect lowLifeSound;
 
+        //private SoundEffect sound005;
+        //private SoundEffect sound006;
+        //private SoundEffect sound007;
+        //private SoundEffect sound008;
+        //private SoundEffect sound009;
+        //private SoundEffect sound010;
+        //private SoundEffect sound011;
+        //private SoundEffect sound012;
+        //private SoundEffect sound013;
+        //private SoundEffect sound014;
+        //private SoundEffect sound015;
+        //private SoundEffect sound016;
+        //private SoundEffect sound017;
+        //private SoundEffect sound018;
+        //private SoundEffect sound019;
+        //private SoundEffect sound020;
+        //private SoundEffect sound021;
+        //private SoundEffect sound022;
+        //private SoundEffect sound023;
+        //private SoundEffect sound024;
+        //private SoundEffect sound025;
+        //private SoundEffect sound026;
+        //private SoundEffect sound027;
+        //private SoundEffect sound028;
+        //private SoundEffect sound029;
+        //private SoundEffect sound030;
 
-
-        //SoundEffect sound005;
-        //SoundEffect sound006;
-        //SoundEffect sound007;
-        //SoundEffect sound008;
-        //SoundEffect sound009;
-        //SoundEffect sound010;
-        //SoundEffect sound011;
-        //SoundEffect sound012;
-        //SoundEffect sound013;
-        //SoundEffect sound014;
-        //SoundEffect sound015;
-        //SoundEffect sound016;
-        //SoundEffect sound017;
-        //SoundEffect sound018;
-        //SoundEffect sound019;
-        //SoundEffect sound020;
-        //SoundEffect sound021;
-        //SoundEffect sound022;
-        //SoundEffect sound023;
-        //SoundEffect sound024;
-        //SoundEffect sound025;
-        //SoundEffect sound026;
-        //SoundEffect sound027;
-        //SoundEffect sound028;
-        //SoundEffect sound029;
-        //SoundEffect sound030;
-
-        SoundEffectInstance music;
+        private SoundEffectInstance music;
 
         #endregion
 
@@ -353,9 +351,8 @@ namespace YieArKungFu
             lossSound = Content.Load<SoundEffect>("Sounds/lossSound");
 
             hitSound = Content.Load<SoundEffect>("Sounds/hitSound");
-            lowLifeSound = Content.Load<SoundEffect>("Sounds/lowLifeSound");
             wrongHitSound = Content.Load<SoundEffect>("Sounds/wrongHitSound");
-
+            lowLifeSound = Content.Load<SoundEffect>("Sounds/lowLifeSound");
 
             //sound004 = Content.Load<SoundEffect>("Sounds/");
             //sound005 = Content.Load<SoundEffect>("Sounds/");
@@ -500,7 +497,7 @@ namespace YieArKungFu
                         logicPause(gameTime);
                     }
                     break;
-                
+
                 case GameState.Over:
                     {
                         logicOver(gameTime);
@@ -578,7 +575,7 @@ namespace YieArKungFu
 
                         entities.Add(new Human(new Vector2(260, 768), new Vector2(88, 128)));
                         entities.Add(new Enemy(new Vector2(642, 768), new Vector2(108, 160)));
-                        
+
                         loadStageTime = 2f;
                     }
                     break;
@@ -591,26 +588,20 @@ namespace YieArKungFu
 
                         overTime = 0.3f;
 
-
-
-                        if (Lifebar.instance.remainingPlayerLife() == 0)
+                        if (!Keyboard.GetState().IsKeyDown(Keys.Enter) && !Keyboard.GetState().IsKeyDown(Keys.W) &&
+                            !Keyboard.GetState().IsKeyDown(Keys.Escape))
                         {
-                            if (PlayerExtraLives.instance.remainingLives() == 0)
+                            if (Lifebar.instance.remainingPlayerLife() == 0)
                             {
-                                overSound.Play();
+                                if (PlayerExtraLives.instance.remainingLives() == 0)
+                                    overSound.Play();
+                                else
+                                    lossSound.Play();
                             }
-                            else
-                            {
-                                lossSound.Play();
-                                
-                            }
+
+                            if (Lifebar.instance.remainingEnemyLife() == 0)
+                                victorySound.Play();
                         }
-
-                        
-                            
-
-                        if (Lifebar.instance.remainingEnemyLife() == 0)
-                            victorySound.Play();
                     }
                     break;
 

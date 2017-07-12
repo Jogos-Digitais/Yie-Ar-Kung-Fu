@@ -9,7 +9,7 @@ namespace YieArKungFu
 {
     public class Lifebar : Entity
     {
-        static public Lifebar instance = null;
+        public static Lifebar instance = null;
 
         private int playerLife = 9;
         private int enemyLife = 9;
@@ -32,6 +32,11 @@ namespace YieArKungFu
 
                 if (playerLife > 4)
                     playerLifeColor = new Color(92, 228, 48);
+                else if (playerLife == 4 && !ScoreBoard.instance.playerWinner)
+                {
+                    World.lowLifeSound.Play();
+                    playerLifeColor = new Color(183, 30, 123);
+                }
                 else
                     playerLifeColor = new Color(183, 30, 123);
             }

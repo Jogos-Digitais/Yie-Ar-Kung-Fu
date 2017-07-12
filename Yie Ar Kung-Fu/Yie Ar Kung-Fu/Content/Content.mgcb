@@ -692,3 +692,27 @@
 /processorParam:TextureFormat=Color
 /build:Sprites/Stage2.png
 
+#begin Sounds/lossSound.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Sounds/lossSound.wav
+
+#begin Sounds/hitSound.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Sounds/hitSound.wav
+
+#begin Sounds/lowLifeSound.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Sounds/lowLifeSound.wav
+
+#begin Sounds/wrongHitSound.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Sounds/wrongHitSound.wav
+

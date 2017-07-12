@@ -124,6 +124,14 @@ namespace YieArKungFu
         SoundEffect gameMusic;
         SoundEffect overSound;
         SoundEffect victorySound;
+        SoundEffect lossSound;
+
+        SoundEffect hitSound;
+        SoundEffect lowLifeSound;
+        SoundEffect wrongHitSound;
+
+
+
         //SoundEffect sound005;
         //SoundEffect sound006;
         //SoundEffect sound007;
@@ -342,6 +350,13 @@ namespace YieArKungFu
             gameMusic = Content.Load<SoundEffect>("Sounds/gameMusic");
             overSound = Content.Load<SoundEffect>("Sounds/overSound");
             victorySound = Content.Load<SoundEffect>("Sounds/victorySound");
+            lossSound = Content.Load<SoundEffect>("Sounds/lossSound");
+
+            hitSound = Content.Load<SoundEffect>("Sounds/hitSound");
+            lowLifeSound = Content.Load<SoundEffect>("Sounds/lowLifeSound");
+            wrongHitSound = Content.Load<SoundEffect>("Sounds/wrongHitSound");
+
+
             //sound004 = Content.Load<SoundEffect>("Sounds/");
             //sound005 = Content.Load<SoundEffect>("Sounds/");
             //sound006 = Content.Load<SoundEffect>("Sounds/");
@@ -574,8 +589,23 @@ namespace YieArKungFu
 
                         overTime = 0.3f;
 
-                        if (Lifebar.instance.remainingPlayerLife() == 0 && PlayerExtraLives.instance.remainingLives() == 0)
-                            overSound.Play();
+
+
+                        if (Lifebar.instance.remainingPlayerLife() == 0)
+                        {
+                            if (PlayerExtraLives.instance.remainingLives() == 0)
+                            {
+                                overSound.Play();
+                            }
+                            else
+                            {
+                                lossSound.Play();
+                                
+                            }
+                        }
+
+                        
+                            
 
                         if (Lifebar.instance.remainingEnemyLife() == 0)
                             victorySound.Play();
